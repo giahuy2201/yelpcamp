@@ -1,0 +1,31 @@
+{
+  "name": "yelpcamp",
+  "version": "1.0.0",
+  "description": "A YelpCamp project inspired by Colt Steele from Udemy",
+  "main": "index.js",
+  "scripts": {
+    "test": "nodemon"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/giahuy2201/yelpcamp.git"
+  },
+  "keywords": [
+    "yelpcamp",
+    "node",
+    "mongodb",
+    "express"
+  ],
+  "author": "giahuy2201",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/giahuy2201/yelpcamp/issues"
+  },
+  "homepage": "https://github.com/giahuy2201/yelpcamp#readme",
+  "dependencies": {
+    "body-parser": "^1.18.3",
+    "ejs": "^2.6.1",
+    "express": "^4.16.4",
+    "mongoose": "^5.3.7"
+  }
+}

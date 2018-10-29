@@ -1,0 +1,19 @@
+<% include ./partials/header %>
+
+<form action="/campgrounds" method="POST">
+    <h1>Create a campground</h1>
+    <div class="form-group">
+        <label for="nameInput">Name</label>
+        <input type="text" class="form-control" id="nameInput" name="name" placeholder="Yosemite" required>
+    </div>
+    <div class="form-group">
+        <label for="imageInput">Image</label>
+        <input type="text" class="form-control" id="imageInput" name="image" placeholder="http://image.com/yosemite.png"
+            required>
+    </div>
+    <div class="form-group">
+        <input class="btn btn-success" type="submit">
+    </div>
+</form>
+
+<% include ./partials/footer %>

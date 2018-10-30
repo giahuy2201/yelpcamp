@@ -1,32 +1,61 @@
-# yelpcamp
-My YelpCamp project credited by Colt Steele from Udemy
+# YelpCamp
+My YelpCamp project credited by Colt Steele from Udemy allows users to add campgrounds, react and more fun stuffs to do.
 
 ## yelpcamp 1.0.0
-    > In this version, you can:
-    >   1. Create new campground
-    >   2. See all campgrounds
+In this version, you can:
+1. Create new campground
+2. See all campgrounds
 
-    ### 1. Add routing
-        * GET home `/`
-        * GET campgrounds `/campgrounds`
-            - have a generic campground array to test
-            - pass `campgrounds` variable
-        * GET campground new `/campgrounds/new`
-        * POST `/campgrounds`
-            - add it to array
-            - redirect to campgrounds
-        * GET other `/crazy_stuff`
-            - send a message
-    ### 2. Add page views
-        * header & footer
-            - bootstrap
-            - navbar
-            - links
-        * landing
-            - link to campgrounds
-        * campgrounds
-            - jumbotron & button add new
-            - grid of campgrounds
-        * campgrounds/new
-            - form
+### 1. Add routing
+* GET home `/`
+* GET campgrounds `/campgrounds`
+    - have a generic campground array to test
+    - pass `campgrounds` variable
+* GET campground new `/campgrounds/new`
+* POST `/campgrounds`
+    - add it to array
+    - redirect to campgrounds
+* GET other `/crazy_stuff`
+    - send a message
+### 2. Add page views
+* header & footer
+    - bootstrap
+    - navbar
+    - links
+* landing
+    - link to campgrounds
+* campgrounds
+    - jumbotron & button add new
+    - grid of campgrounds
+* campgrounds/new
+    - form
 
+## yelpcamp 1.3.0
+Implemented features
+1. mongodb local database
+In this version, you can:
+1. Access a campground page
+2. Edit, remove a campground
+
+### 1. Add routing
+* GET campground page `/campgrounds/:id`
+    - get the id
+    - find the campground
+    - pass the found campground to a file
+* GET campground edit `/campgrounds/:id/edit`
+    - pass a specific `campground` variable
+* PUT campground update`/campgrounds/:id`
+    - create a new campground var with data from the form
+    - find that campground with update that campground
+    - redirect to that campground page
+* DELETE campground delete `/campgrounds/:id`
+    - delete that campground using its id
+### 2. Add page views
+* edit
+    - displace a form
+    - retrieve data from campground variable
+### 3. Config mongoose
+* mongoose connect
+* add campground model
+* rewrite the campgrounds POST handler
+* rewrite the campgrounds GET handler

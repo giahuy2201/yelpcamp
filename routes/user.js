@@ -12,15 +12,18 @@ router.get('/register', (req, res) => {
 });
 
 // Register authentication
-router.post('/register', (req, res) => {
+router.post('/', (req, res) => { // DOUBLE CHECK THIS
     User.register(new User({
-        username: req.body.username
-    }), req.body.password, (err, user) => {
+        name: req.body.name,
+        username: req.body.username,
+        photo: req.body.photo
+    }), req.body.password, (err, newUser) => {
         if (err) {
             console.log(err);
             res.redirect('back');
         } else {
             passport.authenticate('local')(req, res, () => {
+                // console.log(newUser)
                 res.redirect('/campgrounds');
             })
         }

@@ -33,6 +33,7 @@ In this version, you can:
 ## yelpcamp 1.3.0
 Implemented features
 1. mongodb local database
+
 In this version, you can:
 1. Access a campground page
 2. Edit, remove a campground
@@ -59,3 +60,17 @@ In this version, you can:
 * add campground model
 * rewrite the campgrounds POST handler
 * rewrite the campgrounds GET handler
+
+## yelpcamp 2.1.0
+Implementation
+1. Add description, price
+2. Restyle show page, campgrounds
+3. User model
+4. Comment model
+5. Login, register with passportjs
+6. refactor the code
+
+In this version, you can:
+1. Create campground with description and price
+2. Login, register, logout
+3. Comment on campgrounds

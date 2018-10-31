@@ -1,4 +1,4 @@
-<% include ./partials/header %>
+<% include ../partials/header %>
 
 <form class="my-4" action="/campgrounds" method="POST">
     <h1>Create a campground</h1>
@@ -12,8 +12,17 @@
             required>
     </div>
     <div class="form-group">
+        <label for="descriptionInput">Description</label>
+        <input type="text" class="form-control" id="descriptionInput" name="description" placeholder="This is the best mountain ever!"
+            required>
+    </div>
+    <div class="form-group">
+        <label for="priceInput">Price</label>
+        <input type="number" class="form-control" id="priceInput" name="price" min="0.01" step="0.01" value="9.00">
+    </div>
+    <div class="form-group my-4">
         <input class="btn btn-success" type="submit">
     </div>
 </form>
 
-<% include ./partials/footer %>
+<% include ../partials/footer %>

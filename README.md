@@ -74,3 +74,12 @@ In this version, you can:
 1. Create campground with description and price
 2. Login, register, logout
 3. Comment on campgrounds
+
+### yelpcamp 2.4.0
+Implementation
+1. add middleware to grant permission
+2. add name, photo, created campground to author
+3. add author to campground
+4. allow to edit, remove comment
+5. add css to style comments
+

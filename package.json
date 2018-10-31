@@ -1,6 +1,6 @@
 {
   "name": "yelpcamp",
-  "version": "2.1.0",
+  "version": "2.4.0",
   "description": "A YelpCamp project inspired by Colt Steele from Udemy",
   "main": "index.js",
   "scripts": {

@@ -21,6 +21,8 @@
                 <div class="card-text">
                     <%=campground.description%>
                 </div>
+                <p class="mt-3"><em>Created by <strong>
+                            <%=campground.author.username%></strong></em></p>
                 <hr>
                 <div class="mt-2">
                     <a class="btn btn-success btn-sm" href="/campgrounds/<%=campground._id%>/edit">Edit</a>
@@ -31,7 +33,7 @@
             </div>
         </div>
         <!-- COMMENTS -->
-        <div class="card card-body my-4">
+        <div class="card card-body my-4 bg-light">
             <div class="text-right">
                 <a class="btn btn-success" href="/campgrounds/<%=campground._id%>/comments/new">Add
                     new comment</a>

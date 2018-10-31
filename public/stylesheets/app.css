@@ -1,0 +1,21 @@
+.media img {
+    height: 45px;
+    width: 45px;
+}
+
+.profilePhoto {
+    height: 250px;
+    width: 250px;
+}
+
+.fixed-ratio {
+    width: 100%;
+    object-fit: contain;
+
+}
+
+#profilePanel {
+    /* background: pink; */
+    max-width: 900px;
+    margin: 0 auto;
+}

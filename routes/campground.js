@@ -2,6 +2,7 @@ var express = require('express');
 
 // include models
 var Campground = require('../models/campground'),
+    User = require('../models/user'),
     middleware = require('../middleware');
 
 var router = express.Router();
@@ -35,16 +36,27 @@ router.post('/', middleware.isLoggedIn, (req, res) => {
         description: req.body.description,
         price: req.body.price,
     };
-    Campground.create(newCampground, (err, campground) => {
+    User.findById(req.user._id, (err, foundUser) => {
         if (err) {
             console.log(err);
             res.redirect('back');
         } else {
-            // update author
-            campground.author = req.user;
-            campground.save();
-            // console.log(campground);
-            res.redirect('/campgrounds');
+            Campground.create(newCampground, (err, newCampground) => {
+                if (err) {
+                    console.log(err);
+                    res.redirect('back');
+                } else {
+                    // update author
+                    newCampground.author = req.user;
+                    newCampground.save();
+                    // update campground
+                    foundUser.campgrounds.push(newCampground);
+                    foundUser.save();
+                    // console.log(newCampground);
+                    console.log(foundUser);
+                    res.redirect('/campgrounds');
+                }
+            })
         }
     })
 })

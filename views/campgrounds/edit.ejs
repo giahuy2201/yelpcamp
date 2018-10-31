@@ -1,9 +1,7 @@
 <% include ../partials/header %>
 
 <form class="my-4" action="/campgrounds/<%=campground._id%>?_method=PUT" method="POST">
-    <h1>Edit campground
-        <%=campground.name%>
-    </h1>
+    <h1>Edit campground</h1>
     <div class="form-group">
         <label for="nameInput">Name</label>
         <input type="text" class="form-control" id="nameInput" name="campground[name]" value="<%=campground.name%>"

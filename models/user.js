@@ -5,6 +5,11 @@ var mongoose = require('mongoose'),
 var userSchema = new mongoose.Schema({
     name: String,
     photo: String,
+    bio: String,
+    campgrounds: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Campground'
+    }]
 });
 
 userSchema.plugin(passportLocalMongoose);

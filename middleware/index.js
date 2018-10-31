@@ -1,6 +1,7 @@
 // include models
 var Comment = require('../models/comment'),
-    Campground = require('../models/campground');
+    Campground = require('../models/campground'),
+    User = require('../models/user');
 
 var middlewareObj = {};
 
@@ -34,6 +35,21 @@ middlewareObj.checkCommentOwnership = function (req, res, next) {
                 next();
             } else { // no permision
                 res.redirect('/campgrounds/' + req.params.id);
+            }
+        })
+    } else {
+        res.redirect('/users/login');
+    }
+}
+
+middlewareObj.checkProfileOwnership = function (req, res, next) {
+    if (req.isAuthenticated()) { // user has logged in
+        User.findById(req.params.id, (err, foundUser) => {
+            if (foundUser._id.equals(req.user._id)) { // authorized
+                // console.log(foundUser);
+                next();
+            } else { // no permision
+                res.redirect('/users/' + req.params.id);
             }
         })
     } else {

@@ -1,0 +1,49 @@
+<% include ../partials/header %>
+
+<div id="profilePanel">
+    <div class="row my-4">
+        <div class="col-md-4">
+            <img class="rounded fixed-ratio profilePhoto" src="<%=user.photo%>">
+        </div>
+        <div class="col-md-8">
+            <div>
+                <a class="text-primary float-right mt-3" href="/users/<%=user._id%>/edit">Edit profile</a>
+                <h1>
+                    <%=user.name%>
+                </h1>
+                <p>6 campgrounds 12 comments</p>
+                <h4>
+                    <%=user.username%>
+                </h4>
+                <p>
+                    <%=user.bio%>
+                </p>
+                <a class="text-success pt-3" href="/users/<%=user._id%>/reset">Change password</a>
+            </div>
+        </div>
+    </div>
+    <hr>
+    <div class="row my-4">
+        <!-- CREATED CAMPGROUNDS -->
+        <% if(user.campgrounds.length>0){ %>
+        <% user.campgrounds.forEach((campground)=>{ %>
+        <div class="col-lg-4 col-md-6">
+            <a href="/campgrounds/<%=campground._id%>">
+                <div class="card my-2">
+                    <img class="card-img-top" src="<%=campground.image%>">
+                    <div class="card-body text-dark">
+                        <h2 class="card-title text-center">
+                            <%=campground.name%>
+                        </h2>
+                    </div>
+                </div>
+            </a>
+        </div>
+        <% }) %>
+        <% }else{ %>
+        <p class="text-center w-100">No campgrounds found!</p>
+        <% } %>
+    </div>
+</div>
+
+<% include ../partials/footer %>

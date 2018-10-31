@@ -78,8 +78,9 @@ In this version, you can:
 ### yelpcamp 2.4.0
 Implementation
 1. add middleware to grant permission
-2. add name, photo, created campground to author
+2. add name, photo, bio, created campground to author
 3. add author to campground
 4. allow to edit, remove comment
-5. add css to style comments
+5. allow to edit user profile
+6. add css to style comments
 

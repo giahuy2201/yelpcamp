@@ -33,6 +33,7 @@ app.use(session({ // MUST BE PLACED BEFORE BODYPARSER
     saveUninitialized: false
 }));
 app.set('view engine', 'ejs');
+app.use(express.static(__dirname + '/public')); // for import stylesheets
 app.use(methodOverride('_method'));
 app.use(bodyParser.urlencoded({
     extended: true

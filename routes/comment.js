@@ -2,13 +2,15 @@ var express = require('express');
 
 // include models
 var Comment = require('../models/comment'),
-    Campground = require('../models/campground');
+    Campground = require('../models/campground'),
+    middleware = require('../middleware');
 
 var router = express.Router({
     mergeParams: true
 });
 
-router.get('/new', (req, res) => {
+// Comment new
+router.get('/new', middleware.isLoggedIn, (req, res) => {
     Campground.findById(req.params.id, (err, foundCampground) => {
         if (err) {
             console.log(err);
@@ -21,7 +23,8 @@ router.get('/new', (req, res) => {
     })
 });
 
-router.post('/', (req, res) => {
+// Comment create
+router.post('/', middleware.isLoggedIn, (req, res) => {
     // find the campground to associate
     Campground.findById(req.params.id, (err, foundCampground) => {
         if (err) {
@@ -44,6 +47,45 @@ router.post('/', (req, res) => {
                     res.redirect('/campgrounds/' + req.params.id);
                 }
             })
+        }
+    })
+});
+
+// Comment edit
+router.get('/:commentId/edit', middleware.checkCommentOwnership, (req, res) => {
+    Comment.findById(req.params.commentId, (err, foundComment) => {
+        if (err) {
+            console.log(err);
+            res.redirect('back');
+        } else {
+            res.render('comments/edit', {
+                campgroundId: req.params.id,
+                comment: foundComment
+            });
+        }
+    })
+})
+
+// Comment update
+router.put('/:commentId', middleware.checkCommentOwnership, (req, res) => {
+    Comment.findByIdAndUpdate(req.params.commentId, req.body.comment, (err, updatedComment) => {
+        if (err) {
+            console.log(err);
+            res.redirect('back');
+        } else {
+            res.redirect('/campgrounds/' + req.params.id);
+        }
+    })
+})
+
+// Comment delete
+router.delete('/:commentId', middleware.checkCommentOwnership, (req, res) => {
+    Comment.findByIdAndRemove(req.params.commentId, (err) => {
+        if (err) {
+            console.log(err);
+            res.redirect('back');
+        } else {
+            res.redirect('/campgrounds/' + req.params.id);
         }
     })
 })

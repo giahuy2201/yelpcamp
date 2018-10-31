@@ -48,7 +48,17 @@
                     <h5 class="mt-0">
                         <%=comment.author.username%>
                     </h5>
-                    <%=comment.text%>
+                    <p>
+                        <%=comment.text%>
+                    </p>
+
+                    <div class="mt-2">
+                        <a class="btn btn-success btn-sm" href="/campgrounds/<%=campground._id%>/comments/<%=comment._id%>/edit">Edit</a>
+                        <form class="d-inline float-right" action="/campgrounds/<%=campground._id%>/comments/<%=comment._id%>?_method=DELETE"
+                            method="POST">
+                            <input class="btn btn-danger btn-sm" type="submit" value="Delete">
+                        </form>
+                    </div>
                 </div>
             </div>
             <% }) %>

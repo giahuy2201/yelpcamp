@@ -18,7 +18,22 @@ middlewareObj.checkCampgroundOwnership = function (req, res, next) {
                 // console.log(foundCampground);
                 next();
             } else { // no permision
-                res.redirect('/campgrounds/' + foundCampground._id);
+                res.redirect('/campgrounds/' + req.params.id);
+            }
+        })
+    } else {
+        res.redirect('/users/login');
+    }
+}
+
+middlewareObj.checkCommentOwnership = function (req, res, next) {
+    if (req.isAuthenticated()) { // user has logged in
+        Comment.findById(req.params.commentId).populate('author').exec((err, foundComment) => {
+            if (foundComment.author._id.equals(req.user._id)) { // authorized
+                // console.log(foundComment);
+                next();
+            } else { // no permision
+                res.redirect('/campgrounds/' + req.params.id);
             }
         })
     } else {

@@ -6,7 +6,11 @@ var commentSchema = new mongoose.Schema({
     author: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User'
-    }
+    },
+    created: {
+        type: Date,
+        default: Date.now
+    },
 });
 
 // create comment model

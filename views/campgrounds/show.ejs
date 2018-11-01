@@ -23,7 +23,10 @@
                 </div>
                 <p class="mt-3"><em>Created by <strong>
                             <a href="/users/<%=campground.author._id%>">
-                                <%=campground.author.name%></a></strong></em></p>
+                                <%=campground.author.name%></a></strong> on
+                        <%=campground.created.toDateString()%> at
+                        <%=campground.created.getHours()%>:
+                        <%=campground.created.getMinutes()%></em></p>
                 <% if(currentUser && campground.author._id.equals(currentUser._id)){ %>
                 <hr>
                 <div class="mt-2">
@@ -48,6 +51,9 @@
             <div class="media">
                 <img class="mr-3 rounded-circle my-2" src="<%=comment.author.photo%>">
                 <div class="media-body">
+                    <p class="float-right">
+                        <%=comment.created.toDateString()%>
+                    </p>
                     <h5 class="mt-0">
                         <%=comment.author.name%>
                     </h5>

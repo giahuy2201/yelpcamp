@@ -19,3 +19,15 @@
     max-width: 900px;
     margin: 0 auto;
 }
+
+.signinPanel {
+    /* background: pink; */
+    max-width: 400px;
+    margin: 0 auto;
+}
+
+.createCampgroundPanel {
+    /* background: pink; */
+    max-width: 500px;
+    margin: 0 auto;
+}

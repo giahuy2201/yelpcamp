@@ -84,3 +84,9 @@ Implementation
 5. allow to edit user profile
 6. add css to style comments
 
+# yelpcamp 3.2.0
+1. add date created to campground,comment
+2. allow to change password
+3. style the login, register, new campground, edit
+4. flash-message
+5. address the next link after login

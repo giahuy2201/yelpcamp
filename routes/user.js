@@ -27,7 +27,7 @@ router.post('/', (req, res) => { // DOUBLE CHECK THIS
             passport.authenticate('local')(req, res, () => {
                 // console.log(newUser);
                 req.flash('success', 'Successfully! Welcome to YelpCamp, ' + req.body.name);
-                res.redirect('/campgrounds');
+                res.redirect(middleware.beforeLogin);
             })
         }
     })

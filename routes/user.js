@@ -21,7 +21,7 @@ router.post('/', (req, res) => { // DOUBLE CHECK THIS
         bio: req.body.bio,
     }), req.body.password, (err, newUser) => {
         if (err) {
-                        req.flash('error', 'Something went wrong! Try again later');
+            req.flash('error', 'Something went wrong! Try again later');
             res.redirect('back');
         } else {
             passport.authenticate('local')(req, res, () => {
@@ -57,7 +57,7 @@ router.get('/logout', (req, res) => {
 router.get('/:id', (req, res) => {
     User.findById(req.params.id).populate('campgrounds').exec((err, foundUser) => {
         if (err) {
-                        req.flash('error', 'Something went wrong! Try again later');
+            req.flash('error', 'Something went wrong! Try again later');
             res.redirect('back');
         } else {
             res.render('users/show', {
@@ -71,7 +71,7 @@ router.get('/:id', (req, res) => {
 router.get('/:id/edit', middleware.checkProfileOwnership, (req, res) => {
     User.findById(req.params.id, (err, foundUser) => {
         if (err) {
-                        req.flash('error', 'Something went wrong! Try again later');
+            req.flash('error', 'Something went wrong! Try again later');
             res.redirect('back');
         } else {
             res.render('users/edit', {
@@ -90,11 +90,38 @@ router.put('/:id', middleware.checkProfileOwnership, (req, res) => {
     };
     User.findByIdAndUpdate(req.params.id, newUser, (err, updatedUser) => {
         if (err) {
-                        req.flash('error', 'Something went wrong! Try again later');
+            req.flash('error', 'Something went wrong! Try again later');
             res.redirect('back');
         } else {
             // console.log(updatedUser);
             res.redirect('/users/' + req.params.id);
+        }
+    })
+});
+
+// User change password
+router.get('/:id/reset', middleware.checkProfileOwnership, (req, res) => {
+    res.render('users/reset', {
+        userId: req.params.id
+    });
+});
+
+// User reset password
+router.post('/:id/reset', middleware.checkProfileOwnership, (req, res) => {
+    User.findById(req.params.id, (err, foundUser) => {
+        if (err) {
+            req.flash('error', 'Something went wrong! Try again later');
+            res.redirect('back');
+        } else {
+            foundUser.changePassword(req.body.oldPassword, req.body.newPassword, (err, updatedUser) => {
+                if (err) {
+                    req.flash('error', 'Old password does not matched!');
+                    res.redirect('back');
+                } else {
+                    req.flash('success', 'Successfully changed your password');
+                    res.redirect('/users/' + req.params.id);
+                }
+            })
         }
     })
 })

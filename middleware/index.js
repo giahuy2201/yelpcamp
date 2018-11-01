@@ -9,7 +9,7 @@ middlewareObj.isLoggedIn = function (req, res, next) {
     if (req.isAuthenticated()) {
         return next();
     }
-    req.flash('error', 'Please login first!');
+    req.flash('error', 'You need to be logged in to do that');
     res.redirect('/users/login');
 };
 
@@ -25,7 +25,7 @@ middlewareObj.checkCampgroundOwnership = function (req, res, next) {
             }
         })
     } else {
-        req.flash('error', 'Please login first!');
+        req.flash('error', 'You need to be logged in to do that');
         res.redirect('/users/login');
     }
 }
@@ -42,7 +42,7 @@ middlewareObj.checkCommentOwnership = function (req, res, next) {
             }
         })
     } else {
-        req.flash('error', 'Please login first!');
+        req.flash('error', 'You need to be logged in to do that');
         res.redirect('/users/login');
     }
 }
@@ -59,7 +59,7 @@ middlewareObj.checkProfileOwnership = function (req, res, next) {
             }
         })
     } else {
-        req.flash('error', 'Please login first!');
+        req.flash('error', 'You need to be logged in to do that');
         res.redirect('/users/login');
     }
 }

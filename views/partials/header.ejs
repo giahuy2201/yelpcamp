@@ -47,11 +47,11 @@
                         <a class="nav-link" href="/users/register">Register</a>
                     </li> -->
                     <li class="nav-item">
-                        <a class="nav-link" href="/users/login">Join us</a>
+                        <a class="nav-link" href="/users/login"><i class="fas fa-sign-in-alt"></i> Join us</a>
                     </li>
                     <% }else{ %>
                     <li class="nav-item">
-                        <a class="nav-link" href="/users/<%=currentUser._id%>">Signed in as
+                        <a class="nav-link" href="/users/<%=currentUser._id%>">signed in as
                             <strong>
                                 <%=currentUser.name%></strong></a>
                     </li>

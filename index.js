@@ -10,7 +10,8 @@ var express = require('express'),
     session = require('express-session'),
     passport = require('passport'),
     localStrategy = require('passport-local'),
-    mongoose = require('mongoose');
+    mongoose = require('mongoose'),
+    flash = require('connect-flash');
 
 // include models
 var User = require('./models/user');
@@ -25,7 +26,10 @@ var app = express();
 mongoose.connect(DATABASE, {
     useNewUrlParser: true
 });
-mongoose.set('useFindAndModify', false); // deal with the DeprecationWarning
+
+// deal with the DeprecationWarning
+mongoose.set('useFindAndModify', false);
+mongoose.set('useCreateIndex', true);
 
 app.use(session({ // MUST BE PLACED BEFORE BODYPARSER
     secret: 'buithuyan',
@@ -34,6 +38,7 @@ app.use(session({ // MUST BE PLACED BEFORE BODYPARSER
 }));
 app.set('view engine', 'ejs');
 app.use(express.static(__dirname + '/public')); // for import stylesheets
+app.use(flash());
 app.use(methodOverride('_method'));
 app.use(bodyParser.urlencoded({
     extended: true
@@ -49,6 +54,8 @@ passport.deserializeUser(User.deserializeUser());
 // some global variables available in all routes
 app.use((req, res, next) => {
     res.locals.currentUser = req.user;
+    res.locals.error = req.flash('error');
+    res.locals.success = req.flash('success');
     next();
 })
 

@@ -21,11 +21,12 @@ router.post('/', (req, res) => { // DOUBLE CHECK THIS
         bio: req.body.bio,
     }), req.body.password, (err, newUser) => {
         if (err) {
-            console.log(err);
+                        req.flash('error', 'Something went wrong! Try again later');
             res.redirect('back');
         } else {
             passport.authenticate('local')(req, res, () => {
-                // console.log(newUser)
+                // console.log(newUser);
+                req.flash('success', 'Successfully! Welcome to YelpCamp, ' + req.body.name);
                 res.redirect('/campgrounds');
             })
         }
@@ -41,11 +42,14 @@ router.get('/login', (req, res) => {
 router.post('/login', passport.authenticate('local', {
     successRedirect: '/campgrounds',
     failureRedirect: '/users/login',
+    failureMessage: true,
+    failureFlash: true,
 }));
 
 // Logout
 router.get('/logout', (req, res) => {
     req.logout();
+    req.flash('success', 'Logged you out! Bye bye ');
     res.redirect('/campgrounds');
 });
 
@@ -53,7 +57,7 @@ router.get('/logout', (req, res) => {
 router.get('/:id', (req, res) => {
     User.findById(req.params.id).populate('campgrounds').exec((err, foundUser) => {
         if (err) {
-            console.log(err);
+                        req.flash('error', 'Something went wrong! Try again later');
             res.redirect('back');
         } else {
             res.render('users/show', {
@@ -67,7 +71,7 @@ router.get('/:id', (req, res) => {
 router.get('/:id/edit', middleware.checkProfileOwnership, (req, res) => {
     User.findById(req.params.id, (err, foundUser) => {
         if (err) {
-            console.log(err);
+                        req.flash('error', 'Something went wrong! Try again later');
             res.redirect('back');
         } else {
             res.render('users/edit', {
@@ -86,7 +90,7 @@ router.put('/:id', middleware.checkProfileOwnership, (req, res) => {
     };
     User.findByIdAndUpdate(req.params.id, newUser, (err, updatedUser) => {
         if (err) {
-            console.log(err);
+                        req.flash('error', 'Something went wrong! Try again later');
             res.redirect('back');
         } else {
             // console.log(updatedUser);

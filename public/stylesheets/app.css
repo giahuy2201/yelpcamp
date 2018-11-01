@@ -31,3 +31,8 @@
     max-width: 500px;
     margin: 0 auto;
 }
+
+a:hover {
+    text-decoration: none;
+    color: black
+}

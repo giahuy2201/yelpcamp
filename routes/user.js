@@ -39,12 +39,25 @@ router.get('/login', (req, res) => {
 });
 
 // Login authentication
-router.post('/login', passport.authenticate('local', {
-    successRedirect: '/campgrounds',
-    failureRedirect: '/users/login',
-    failureMessage: true,
-    failureFlash: true,
-}));
+router.post('/login', (req, res, next) => { // DIVE DEEP LATER
+    passport.authenticate('local', (err, user, info) => {
+        if (err) {
+            req.flash('error', 'Something went wrong! Try again later');
+            return res.redirect('back');
+        }
+        if (!user) {
+            req.flash('error', info.message);
+            return res.redirect('back');
+        }
+        req.logIn(user, (err) => {
+            if (err) {
+                req.flash('error', 'Something went wrong! Try again later');
+                return res.redirect('back');
+            }
+            return res.redirect(middleware.beforeLogin); // back to the last page
+        })
+    })(req, res, next);
+});
 
 // Logout
 router.get('/logout', (req, res) => {
@@ -68,7 +81,7 @@ router.get('/:id', (req, res) => {
 });
 
 // User edit
-router.get('/:id/edit', middleware.checkProfileOwnership, (req, res) => {
+router.get('/:id/edit', middleware.isLoggedIn, middleware.checkProfileOwnership, (req, res) => {
     User.findById(req.params.id, (err, foundUser) => {
         if (err) {
             req.flash('error', 'Something went wrong! Try again later');
@@ -82,7 +95,7 @@ router.get('/:id/edit', middleware.checkProfileOwnership, (req, res) => {
 });
 
 // User update
-router.put('/:id', middleware.checkProfileOwnership, (req, res) => {
+router.put('/:id', middleware.isLoggedIn, middleware.checkProfileOwnership, (req, res) => {
     var newUser = {
         name: req.body.name,
         photo: req.body.photo,
@@ -100,14 +113,14 @@ router.put('/:id', middleware.checkProfileOwnership, (req, res) => {
 });
 
 // User change password
-router.get('/:id/reset', middleware.checkProfileOwnership, (req, res) => {
+router.get('/:id/reset', middleware.isLoggedIn, middleware.checkProfileOwnership, (req, res) => {
     res.render('users/reset', {
         userId: req.params.id
     });
 });
 
 // User reset password
-router.post('/:id/reset', middleware.checkProfileOwnership, (req, res) => {
+router.post('/:id/reset', middleware.isLoggedIn, middleware.checkProfileOwnership, (req, res) => {
     User.findById(req.params.id, (err, foundUser) => {
         if (err) {
             req.flash('error', 'Something went wrong! Try again later');

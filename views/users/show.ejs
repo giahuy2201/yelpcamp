@@ -7,8 +7,6 @@
         </div>
         <div class="col-md-8">
             <div>
-                <a class="text-primary float-right mt-3" href="/users/<%=user._id%>/edit">Edit profile</a>
-                <a class="text-success float-right mt-3 mr-2" href="/users/<%=user._id%>/reset">Change password</a>
                 <h1>
                     <%=user.name%>
                 </h1>
@@ -20,6 +18,10 @@
                 <p>
                     <%=user.bio%>
                 </p>
+                <% if(currentUser && user._id.equals(currentUser._id)){ %>
+                <a class="text-primary mr-1" href="/users/<%=user._id%>/edit">Edit profile</a>
+                <a class="text-success" href="/users/<%=user._id%>/reset">Change password</a>
+                <% } %>
             </div>
         </div>
     </div>

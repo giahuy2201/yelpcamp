@@ -86,7 +86,7 @@ router.get('/:id', (req, res) => {
 });
 
 // Campground edit
-router.get('/:id/edit', middleware.checkCampgroundOwnership, (req, res) => {
+router.get('/:id/edit', middleware.isLoggedIn, middleware.checkCampgroundOwnership, (req, res) => {
     Campground.findById(req.params.id, (err, foundCampground) => {
         if (err) {
             req.flash('error', 'Something went wrong! Try again later');
@@ -100,7 +100,7 @@ router.get('/:id/edit', middleware.checkCampgroundOwnership, (req, res) => {
 });
 
 // Campground update
-router.put('/:id', middleware.checkCampgroundOwnership, (req, res) => {
+router.put('/:id', middleware.isLoggedIn, middleware.checkCampgroundOwnership, (req, res) => {
     Campground.findByIdAndUpdate(req.params.id, req.body.campground, (err, campground) => {
         if (err) {
             req.flash('error', 'Something went wrong! Try again later');
@@ -112,7 +112,7 @@ router.put('/:id', middleware.checkCampgroundOwnership, (req, res) => {
 });
 
 // Campground delete
-router.delete('/:id', middleware.checkCampgroundOwnership, middleware.isLoggedIn, (req, res) => {
+router.delete('/:id', middleware.isLoggedIn, middleware.checkCampgroundOwnership, middleware.isLoggedIn, (req, res) => {
     Campground.findByIdAndRemove(req.params.id, (err) => {
         if (err) {
             req.flash('error', 'Something went wrong! Try again later');

@@ -55,7 +55,8 @@
                         <%=comment.created.toDateString()%>
                     </p>
                     <h5 class="mt-0">
-                        <%=comment.author.name%>
+                        <a href="/users/<%=comment.author._id%>">
+                            <%=comment.author.name%></a>
                     </h5>
                     <p>
                         <%=comment.text%>

@@ -13,7 +13,7 @@ var router = express.Router({
 router.get('/new', middleware.isLoggedIn, (req, res) => {
     Campground.findById(req.params.id, (err, foundCampground) => {
         if (err) {
-                        req.flash('error', 'Something went wrong! Try again later');
+            req.flash('error', 'Something went wrong! Try again later');
             res.redirect('back');
         } else {
             res.render('comments/new', {
@@ -28,13 +28,13 @@ router.post('/', middleware.isLoggedIn, (req, res) => {
     // find the campground to associate
     Campground.findById(req.params.id, (err, foundCampground) => {
         if (err) {
-                        req.flash('error', 'Something went wrong! Try again later');
+            req.flash('error', 'Something went wrong! Try again later');
             res.redirect('back');
         } else {
             // create a comment object
             Comment.create(req.body.comment, (err, newComment) => {
                 if (err) {
-                                req.flash('error', 'Something went wrong! Try again later');
+                    req.flash('error', 'Something went wrong! Try again later');
                     res.redirect('back');
                 } else {
                     // update the comment's author
@@ -52,10 +52,10 @@ router.post('/', middleware.isLoggedIn, (req, res) => {
 });
 
 // Comment edit
-router.get('/:commentId/edit', middleware.checkCommentOwnership, (req, res) => {
+router.get('/:commentId/edit', middleware.isLoggedIn, middleware.checkCommentOwnership, (req, res) => {
     Comment.findById(req.params.commentId, (err, foundComment) => {
         if (err) {
-                        req.flash('error', 'Something went wrong! Try again later');
+            req.flash('error', 'Something went wrong! Try again later');
             res.redirect('back');
         } else {
             res.render('comments/edit', {
@@ -67,10 +67,10 @@ router.get('/:commentId/edit', middleware.checkCommentOwnership, (req, res) => {
 })
 
 // Comment update
-router.put('/:commentId', middleware.checkCommentOwnership, (req, res) => {
+router.put('/:commentId', middleware.isLoggedIn, middleware.checkCommentOwnership, (req, res) => {
     Comment.findByIdAndUpdate(req.params.commentId, req.body.comment, (err, updatedComment) => {
         if (err) {
-                        req.flash('error', 'Something went wrong! Try again later');
+            req.flash('error', 'Something went wrong! Try again later');
             res.redirect('back');
         } else {
             res.redirect('/campgrounds/' + req.params.id);
@@ -79,10 +79,10 @@ router.put('/:commentId', middleware.checkCommentOwnership, (req, res) => {
 })
 
 // Comment delete
-router.delete('/:commentId', middleware.checkCommentOwnership, (req, res) => {
+router.delete('/:commentId', middleware.isLoggedIn, middleware.checkCommentOwnership, (req, res) => {
     Comment.findByIdAndRemove(req.params.commentId, (err) => {
         if (err) {
-                        req.flash('error', 'Something went wrong! Try again later');
+            req.flash('error', 'Something went wrong! Try again later');
             res.redirect('back');
         } else {
             res.redirect('/campgrounds/' + req.params.id);

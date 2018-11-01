@@ -75,7 +75,7 @@ In this version, you can:
 2. Login, register, logout
 3. Comment on campgrounds
 
-### yelpcamp 2.4.0
+## yelpcamp 2.4.0
 Implementation
 1. add middleware to grant permission
 2. add name, photo, bio, created campground to author
@@ -84,9 +84,10 @@ Implementation
 5. allow to edit user profile
 6. add css to style comments
 
-# yelpcamp 3.2.0
+## yelpcamp 3.2.0
 1. add date created to campground,comment
 2. allow to change password
 3. style the login, register, new campground, edit
 4. flash-message
 5. address the next link after login
+6. style the campgrounds hover animation 

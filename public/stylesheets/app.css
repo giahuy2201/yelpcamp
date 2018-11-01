@@ -36,3 +36,8 @@ a:hover {
     text-decoration: none;
     color: black
 }
+
+.campgroundCard:hover {
+    box-shadow: 1px 1px 10px rgb(200, 200, 200);
+    transition: 0.3s;
+}

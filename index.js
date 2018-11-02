@@ -11,7 +11,8 @@ var express = require('express'),
     passport = require('passport'),
     localStrategy = require('passport-local'),
     mongoose = require('mongoose'),
-    flash = require('connect-flash');
+    flash = require('connect-flash'),
+    timeago = require('timeago.js');
 
 // include models
 var User = require('./models/user');
@@ -43,6 +44,10 @@ app.use(methodOverride('_method'));
 app.use(bodyParser.urlencoded({
     extended: true
 }));
+// 
+Date.prototype.toAgo = function () {
+    return timeago().format(this);
+};
 
 // passport setup
 app.use(passport.initialize());
@@ -56,7 +61,6 @@ app.use((req, res, next) => {
     res.locals.currentUser = req.user;
     res.locals.error = req.flash('error');
     res.locals.success = req.flash('success');
-    res.locals.beforeLogin = '/campgrounds';
     next();
 })
 

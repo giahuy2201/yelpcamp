@@ -22,6 +22,8 @@ router.post('/', (req, res) => { // DOUBLE CHECK THIS
     }), req.body.password, (err, newUser) => {
         if (err) {
             req.flash('error', 'Something went wrong! Try again later');
+            console.log(err);
+            console.log('*** User create routing');
             res.redirect('back');
         } else {
             passport.authenticate('local')(req, res, () => {
@@ -43,6 +45,8 @@ router.post('/login', (req, res, next) => { // DIVE DEEP LATER
     passport.authenticate('local', (err, user, info) => {
         if (err) {
             req.flash('error', 'Something went wrong! Try again later');
+            console.log(err);
+            console.log('*** User login routing');
             return res.redirect('back');
         }
         if (!user) {
@@ -52,6 +56,8 @@ router.post('/login', (req, res, next) => { // DIVE DEEP LATER
         req.logIn(user, (err) => {
             if (err) {
                 req.flash('error', 'Something went wrong! Try again later');
+                console.log(err);
+                console.log('*** User login routing');
                 return res.redirect('back');
             }
             return res.redirect(middleware.beforeLogin); // back to the last page
@@ -63,14 +69,17 @@ router.post('/login', (req, res, next) => { // DIVE DEEP LATER
 router.get('/logout', (req, res) => {
     req.logout();
     req.flash('success', 'Logged you out! Bye bye ');
-    res.redirect('/campgrounds');
+    res.redirect(middleware.beforeLogin); // back to what they were on
 });
 
 // User show
 router.get('/:id', (req, res) => {
+    middleware.beforeLogin = req.originalUrl; // save url in case user want to login
     User.findById(req.params.id).populate('campgrounds').exec((err, foundUser) => {
         if (err) {
             req.flash('error', 'Something went wrong! Try again later');
+            console.log(err);
+            console.log('*** User show routing');
             res.redirect('back');
         } else {
             res.render('users/show', {
@@ -85,6 +94,8 @@ router.get('/:id/edit', middleware.isLoggedIn, middleware.checkProfileOwnership,
     User.findById(req.params.id, (err, foundUser) => {
         if (err) {
             req.flash('error', 'Something went wrong! Try again later');
+            console.log(err);
+            console.log('*** User edit routing');
             res.redirect('back');
         } else {
             res.render('users/edit', {
@@ -104,6 +115,8 @@ router.put('/:id', middleware.isLoggedIn, middleware.checkProfileOwnership, (req
     User.findByIdAndUpdate(req.params.id, newUser, (err, updatedUser) => {
         if (err) {
             req.flash('error', 'Something went wrong! Try again later');
+            console.log(err);
+            console.log('*** User update routing');
             res.redirect('back');
         } else {
             // console.log(updatedUser);
@@ -124,6 +137,8 @@ router.post('/:id/reset', middleware.isLoggedIn, middleware.checkProfileOwnershi
     User.findById(req.params.id, (err, foundUser) => {
         if (err) {
             req.flash('error', 'Something went wrong! Try again later');
+            console.log(err);
+            console.log('*** User reset routing');
             res.redirect('back');
         } else {
             foundUser.changePassword(req.body.oldPassword, req.body.newPassword, (err, updatedUser) => {

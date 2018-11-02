@@ -1,6 +1,6 @@
 {
   "name": "yelpcamp",
-  "version": "2.4.0",
+  "version": "4.0.0",
   "description": "A YelpCamp project inspired by Colt Steele from Udemy",
   "main": "index.js",
   "scripts": {
@@ -32,6 +32,7 @@
     "mongoose": "^5.3.7",
     "passport": "^0.4.0",
     "passport-local": "^1.0.0",
-    "passport-local-mongoose": "^5.0.1"
+    "passport-local-mongoose": "^5.0.1",
+    "timeago.js": "^4.0.0-beta.1"
   }
 }

@@ -9,9 +9,12 @@ var router = express.Router();
 
 // Campgrounds page
 router.get('/', (req, res) => {
+    middleware.beforeLogin = req.originalUrl; // save url in case user want to login
     Campground.find((err, campgrounds) => {
         if (err) {
             req.flash('error', 'Something went wrong! Try again later');
+            console.log(err);
+            console.log('*** Campground index routing');
             res.redirect('back');
         } else {
             // render index page
@@ -39,11 +42,15 @@ router.post('/', middleware.isLoggedIn, (req, res) => {
     User.findById(req.user._id, (err, foundUser) => {
         if (err) {
             req.flash('error', 'Something went wrong! Try again later');
+            console.log(err);
+            console.log('*** Campground create routing');
             res.redirect('back');
         } else {
             Campground.create(newCampground, (err, newCampground) => {
                 if (err) {
                     req.flash('error', 'Something went wrong! Try again later');
+                    console.log(err);
+                    console.log('*** Campground create routing');
                     res.redirect('back');
                 } else {
                     // update author
@@ -64,6 +71,7 @@ router.post('/', middleware.isLoggedIn, (req, res) => {
 
 // Campground show
 router.get('/:id', (req, res) => {
+    middleware.beforeLogin = req.originalUrl; // save url in case user want to login
     Campground.findById(req.params.id).populate([{
         path: 'comments',
         populate: {
@@ -75,11 +83,12 @@ router.get('/:id', (req, res) => {
     }]).exec((err, foundCampground) => {
         if (err) {
             req.flash('error', 'Something went wrong! Try again later');
+            console.log(err);
+            console.log('*** Campground show routing');
             res.redirect('back');
         } else {
-            // console.log(foundCampground);
             res.render('campgrounds/show', {
-                campground: foundCampground
+                campground: foundCampground,
             });
         }
     })
@@ -90,6 +99,8 @@ router.get('/:id/edit', middleware.isLoggedIn, middleware.checkCampgroundOwnersh
     Campground.findById(req.params.id, (err, foundCampground) => {
         if (err) {
             req.flash('error', 'Something went wrong! Try again later');
+            console.log(err);
+            console.log('*** Campground edit routing');
             res.redirect('back');
         } else {
             res.render('campgrounds/edit', {
@@ -104,6 +115,8 @@ router.put('/:id', middleware.isLoggedIn, middleware.checkCampgroundOwnership, (
     Campground.findByIdAndUpdate(req.params.id, req.body.campground, (err, campground) => {
         if (err) {
             req.flash('error', 'Something went wrong! Try again later');
+            console.log(err);
+            console.log('*** Campground update routing');
             res.redirect('back');
         } else {
             res.redirect('/campgrounds');
@@ -116,6 +129,8 @@ router.delete('/:id', middleware.isLoggedIn, middleware.checkCampgroundOwnership
     Campground.findByIdAndRemove(req.params.id, (err) => {
         if (err) {
             req.flash('error', 'Something went wrong! Try again later');
+            console.log(err);
+            console.log('*** Campground delete routing');
             res.redirect('back');
         } else {
             req.flash('success', 'Campground deleted!');

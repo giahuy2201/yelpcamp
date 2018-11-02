@@ -3,14 +3,15 @@ var Comment = require('../models/comment'),
     Campground = require('../models/campground'),
     User = require('../models/user');
 
-var middlewareObj = {};
+var middlewareObj = {
+    beforeLogin: '/campgrounds',
+};
 
 middlewareObj.isLoggedIn = function (req, res, next) {
     if (req.isAuthenticated()) {
         return next();
     }
-    middlewareObj.beforeLogin = req.originalUrl; // save the route to redirect after user login
-    // console.log(req.originalUrl);
+    middlewareObj.beforeLogin = req.originalUrl; // save the route to redirect after user asked to login
     req.flash('error', 'You need to be logged in to do that');
     res.redirect('/users/login');
 };

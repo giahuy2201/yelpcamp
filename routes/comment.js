@@ -14,6 +14,8 @@ router.get('/new', middleware.isLoggedIn, (req, res) => {
     Campground.findById(req.params.id, (err, foundCampground) => {
         if (err) {
             req.flash('error', 'Something went wrong! Try again later');
+            console.log(err);
+            console.log('*** Comment new routing');
             res.redirect('back');
         } else {
             res.render('comments/new', {
@@ -29,12 +31,16 @@ router.post('/', middleware.isLoggedIn, (req, res) => {
     Campground.findById(req.params.id, (err, foundCampground) => {
         if (err) {
             req.flash('error', 'Something went wrong! Try again later');
+            console.log(err);
+            console.log('*** Comment create routing');
             res.redirect('back');
         } else {
             // create a comment object
             Comment.create(req.body.comment, (err, newComment) => {
                 if (err) {
                     req.flash('error', 'Something went wrong! Try again later');
+                    console.log(err);
+                    console.log('*** Comment create routing');
                     res.redirect('back');
                 } else {
                     // update the comment's author
@@ -56,6 +62,8 @@ router.get('/:commentId/edit', middleware.isLoggedIn, middleware.checkCommentOwn
     Comment.findById(req.params.commentId, (err, foundComment) => {
         if (err) {
             req.flash('error', 'Something went wrong! Try again later');
+            console.log(err);
+            console.log('*** Comment edit routing');
             res.redirect('back');
         } else {
             res.render('comments/edit', {
@@ -71,6 +79,8 @@ router.put('/:commentId', middleware.isLoggedIn, middleware.checkCommentOwnershi
     Comment.findByIdAndUpdate(req.params.commentId, req.body.comment, (err, updatedComment) => {
         if (err) {
             req.flash('error', 'Something went wrong! Try again later');
+            console.log(err);
+            console.log('*** Comment update routing');
             res.redirect('back');
         } else {
             res.redirect('/campgrounds/' + req.params.id);
@@ -83,6 +93,8 @@ router.delete('/:commentId', middleware.isLoggedIn, middleware.checkCommentOwner
     Comment.findByIdAndRemove(req.params.commentId, (err) => {
         if (err) {
             req.flash('error', 'Something went wrong! Try again later');
+            console.log(err);
+            console.log('*** Comment delete routing');
             res.redirect('back');
         } else {
             res.redirect('/campgrounds/' + req.params.id);

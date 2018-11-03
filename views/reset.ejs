@@ -1,7 +1,7 @@
-<% include ../partials/header %>
+<% include ./partials/header %>
 
 <div class="signinPanel">
-    <form action="/users/reset/<%=token%>" method="POST">
+    <form action="/reset/<%=token%>" method="POST">
         <h1 class="text-center">Reset your password</h1>
         <div class="form-group">
             <label for="newPasswordInput">New Password</label>
@@ -13,4 +13,4 @@
     </form>
 </div>
 
-<% include ../partials/footer %>
+<% include ./partials/footer %>

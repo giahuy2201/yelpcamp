@@ -17,8 +17,9 @@ require('dotenv').config();
 
 // include routes
 var campgroundRoute = require('./routes/campground'),
+    commentRoute = require('./routes/comment'),
     userRoute = require('./routes/user'),
-    commentRoute = require('./routes/comment');
+    rootRoute = require('./routes/index');
 
 var app = express();
 // connect to database
@@ -65,8 +66,9 @@ app.use((req, res, next) => {
 
 // add routes files
 app.use('/campgrounds', campgroundRoute);
-app.use('/users', userRoute);
 app.use('/campgrounds/:id/comments', commentRoute);
+app.use('/users', userRoute);
+app.use('/', rootRoute);
 
 // Home page
 app.get('/', (req, res) => {

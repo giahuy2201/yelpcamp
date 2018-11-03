@@ -74,8 +74,13 @@ app.get('/', (req, res) => {
     res.render('landing');
 });
 
+// About page
+app.get('/about', (req, res) => {
+    res.render('about');
+});
+
 // Other page
-app.get('/', (req, res) => {
+app.get('/:abc', (req, res) => {
     res.send('Page not found');
 });
 

@@ -1,6 +1,10 @@
 var express = require('express'),
     passport = require('passport');
 
+var async = require('async'),
+    nodemailer = require('nodemailer'),
+    crypto = require('crypto');
+
 // include model
 var User = require('../models/user'),
     middleware = require('../middleware');
@@ -17,6 +21,7 @@ router.post('/', (req, res) => { // DOUBLE CHECK THIS
     User.register(new User({
         name: req.body.name,
         username: req.body.username,
+        email: req.body.email,
         photo: req.body.photo,
         bio: req.body.bio,
     }), req.body.password, (err, newUser) => {
@@ -72,6 +77,16 @@ router.get('/logout', (req, res) => {
     res.redirect(middleware.beforeLogin); // back to what they were on
 });
 
+// Forgot password
+router.get('/forgot', (req, res) => {
+    res.render('users/forgot');
+});
+
+// Reset password
+// router.post('/reset', (req, res) => {
+
+// })
+
 // User show
 router.get('/:id', (req, res) => {
     middleware.beforeLogin = req.originalUrl; // save url in case user want to login
@@ -109,6 +124,7 @@ router.get('/:id/edit', middleware.isLoggedIn, middleware.checkProfileOwnership,
 router.put('/:id', middleware.isLoggedIn, middleware.checkProfileOwnership, (req, res) => {
     var newUser = {
         name: req.body.name,
+        email: req.body.email, // Delete later
         photo: req.body.photo,
         bio: req.body.bio,
     };

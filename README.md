@@ -93,6 +93,9 @@ Implementation
 6. style the campgrounds hover animation 
 
 ## yelpcamp 4.0.0
+1. add timeago
 1. add landing, about
 2. add forgot password
 3. add cloudinary
+
+# delete email edit

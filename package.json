@@ -4,7 +4,7 @@
   "description": "A YelpCamp project inspired by Colt Steele from Udemy",
   "main": "index.js",
   "scripts": {
-    "test": "nodemon",
+    "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node index.js"
   },
   "repository": {

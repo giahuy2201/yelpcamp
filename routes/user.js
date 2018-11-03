@@ -83,9 +83,127 @@ router.get('/forgot', (req, res) => {
 });
 
 // Reset password
-// router.post('/reset', (req, res) => {
+router.post('/reset', (req, res, next) => {
+    async.waterfall([
+        function (done) {
+            crypto.randomBytes(20, function (err, buf) {
+                var token = buf.toString('hex');
+                done(err, token);
+            });
+        },
+        function (token, done) {
+            // console.log(token);
+            User.findOne({
+                email: req.body.email
+            }, function (err, foundUser) {
+                if (!foundUser) {
+                    req.flash('error', 'No account with that email address exists.');
+                    return res.redirect('/users/forgot');
+                }
 
-// })
+                foundUser.resetPasswordToken = token;
+                foundUser.resetPasswordExpires = Date.now() + 3600000;
+
+                foundUser.save(function (err) {
+                    done(err, token, foundUser);
+                });
+            });
+        },
+        function (token, user, done) {
+            var smtpTransport = nodemailer.createTransport({
+                service: 'Gmail',
+                auth: {
+                    user: process.env.EMAIL,
+                    pass: process.env.PASS,
+                }
+            });
+            var mailOptions = {
+                to: user.email,
+                from: process.env.EMAIL,
+                subject: 'YelpCamp Password Reset',
+                text: 'You are receiving this because you (or someone else) requested the reset of you YelpCamp acount\'s password.\n' +
+                    'Please click the following link, or paste it into your browser to compete the process\n' +
+                    'http://' + req.header('host') + '/users/reset/' + token + '\n\n' +
+                    'If you did not request this, please ignore this email and you password will remain unchanged.',
+            };
+            smtpTransport.sendMail(mailOptions, function (err) {
+                req.flash('success', 'An e-mail has been sent to ' + user.email + ' with further instructions.');
+                done(err, 'done');
+            });
+        }
+    ], function (err) {
+        if (err) {
+            return next(err);
+        };
+        res.redirect('/users/forgot');
+    });
+});
+
+// Reset password with token
+router.get('/reset/:token', (req, res) => {
+    User.findOne({
+        resetPasswordToken: req.params.token
+    }, (err, foundUser) => {
+        if (!foundUser) {
+            req.flash('error', 'Password reset token is invalid or expired.');
+            return res.redirect('/users/forgot');
+        }
+        res.render('users/reset', {
+            token: req.params.token
+        });
+    })
+});
+
+router.post('/reset/:token', (req, res) => {
+    async.waterfall([
+        function (done) {
+            User.findOne({
+                resetPasswordToken: req.params.token,
+                resetPasswordExpires: {
+                    $gt: Date.now()
+                }
+            }, (err, foundUser) => {
+                if (!foundUser) {
+                    req.flash('error', 'Password reset token is invalid or expired.');
+                    return res.redirect('back');
+                }
+
+                foundUser.setPassword(req.body.newPassword, (err) => {
+                    foundUser.resetPasswordToken = undefined;
+                    foundUser.resetPasswordExpires = undefined;
+
+                    foundUser.save((err) => {
+                        req.logIn(foundUser, (err) => {
+                            done(err, foundUser);
+                        });
+                    });
+                });
+            });
+        },
+        function (user, done) {
+            var smtpTransport = nodemailer.createTransport({
+                service: 'Gmail',
+                auth: {
+                    user: process.env.EMAIL,
+                    pass: process.env.PASS,
+                }
+            });
+            var mailOptions = {
+                to: user.email,
+                from: process.env.EMAIL,
+                subject: 'YelpCamp password has been changed',
+                text: 'Hello, ' + user.name +
+                    '\nThis is a confirmation that your password of your YelpCamp account ' + user.username + ' has just been changed.\n',
+            };
+            smtpTransport.sendMail(mailOptions, function (err) {
+                req.flash('success', 'Success! Your password has been changed.');
+                done(err);
+            });
+        }
+    ], function (err) {
+        res.redirect('/campgrounds');
+    })
+})
 
 // User show
 router.get('/:id', (req, res) => {
@@ -142,14 +260,14 @@ router.put('/:id', middleware.isLoggedIn, middleware.checkProfileOwnership, (req
 });
 
 // User change password
-router.get('/:id/reset', middleware.isLoggedIn, middleware.checkProfileOwnership, (req, res) => {
-    res.render('users/reset', {
+router.get('/:id/change', middleware.isLoggedIn, middleware.checkProfileOwnership, (req, res) => {
+    res.render('users/change', {
         userId: req.params.id
     });
 });
 
 // User reset password
-router.post('/:id/reset', middleware.isLoggedIn, middleware.checkProfileOwnership, (req, res) => {
+router.post('/:id/change', middleware.isLoggedIn, middleware.checkProfileOwnership, (req, res) => {
     User.findById(req.params.id, (err, foundUser) => {
         if (err) {
             req.flash('error', 'Something went wrong! Try again later');

@@ -1,8 +1,3 @@
-// const
-const PORT = process.env.PORT || 3000,
-    HOST = process.env.HOST || 'localhost',
-    DATABASE = process.env.DATABASE || 'mongodb://localhost/yelpcamp1';
-
 // require libs
 var express = require('express'),
     bodyParser = require('body-parser'),
@@ -17,6 +12,9 @@ var express = require('express'),
 // include models
 var User = require('./models/user');
 
+// libs for env
+require('dotenv').config();
+
 // include routes
 var campgroundRoute = require('./routes/campground'),
     userRoute = require('./routes/user'),
@@ -24,7 +22,7 @@ var campgroundRoute = require('./routes/campground'),
 
 var app = express();
 // connect to database
-mongoose.connect(DATABASE, {
+mongoose.connect(process.env.DATABASE, {
     useNewUrlParser: true
 });
 
@@ -33,18 +31,19 @@ mongoose.set('useFindAndModify', false);
 mongoose.set('useCreateIndex', true);
 
 app.use(session({ // MUST BE PLACED BEFORE BODYPARSER
-    secret: 'buithuyan',
+    secret: process.env.SESSION_SECRET,
     resave: false,
     saveUninitialized: false
 }));
 app.set('view engine', 'ejs');
-app.use(express.static(__dirname + '/public')); // for import stylesheets
+app.use(express.static('public')); // for import stylesheets
 app.use(flash());
 app.use(methodOverride('_method'));
 app.use(bodyParser.urlencoded({
     extended: true
 }));
-// 
+
+// Add method to Javascript primitive Date type
 Date.prototype.toAgo = function () {
     return timeago().format(this);
 };
@@ -85,6 +84,6 @@ app.get('/:abc', (req, res) => {
 });
 
 // start server
-app.listen(PORT, HOST, () => {
-    console.log('Server running at http://' + HOST + ':' + PORT);
+app.listen(process.env.PORT, process.env.HOST, () => {
+    console.log('Server running at http://' + process.env.HOST + ':' + process.env.PORT);
 });

@@ -9,6 +9,9 @@
             <div>
                 <h1>
                     <%=user.name%>
+                    <% if(user.isAdmin){ %>
+                        <i class="fas fa-key"></i>
+                    <% } %>
                 </h1>
                 <p>
                     <%=user.campgrounds.length%> campgrounds 12 comments</p>

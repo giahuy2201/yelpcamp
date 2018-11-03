@@ -53,7 +53,11 @@
                         <%=comment.created.toAgo()%>
                     </p>
                     <h5 class="mt-0">
-                        <a href="/users/<%=comment.author._id%>">
+                        <a href="/users/<%=comment.author._id%>"
+                        <% if(comment.author.isAdmin){ %>
+                            class="admin"
+                        <%}%>
+                        >
                             <%=comment.author.name%></a>
                     </h5>
                     <p>

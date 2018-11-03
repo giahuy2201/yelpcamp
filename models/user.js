@@ -21,6 +21,10 @@ var userSchema = new mongoose.Schema({
     }],
     resetPasswordToken: String,
     resetPasswordExpires: Date,
+    isAdmin: {
+        type: Boolean,
+        default: false
+    }
 });
 
 userSchema.plugin(passportLocalMongoose);

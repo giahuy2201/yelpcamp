@@ -70,21 +70,6 @@ app.use('/campgrounds/:id/comments', commentRoute);
 app.use('/users', userRoute);
 app.use('/', rootRoute);
 
-// Home page
-app.get('/', (req, res) => {
-    res.render('landing');
-});
-
-// About page
-app.get('/about', (req, res) => {
-    res.render('about');
-});
-
-// Other page
-app.get('/:abc', (req, res) => {
-    res.send('Page not found');
-});
-
 // start server
 app.listen(process.env.PORT, process.env.HOST, () => {
     console.log('Server running at http://' + process.env.HOST + ':' + process.env.PORT);

@@ -1,3 +1,13 @@
+.fa-key {
+    color: gold;
+    font-size: 0.6em;
+}
+
+.admin {
+    color: goldenrod;
+    font-size: 1.2em;
+}
+
 .media img {
     height: 45px;
     width: 45px;

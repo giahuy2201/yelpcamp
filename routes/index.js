@@ -18,25 +18,28 @@ router.get('/register', (req, res) => {
 
 // Register authentication
 router.post('/users', (req, res) => { // DOUBLE CHECK THIS
-    User.register(new User({
+    var newUser = new User({
         name: req.body.name,
         username: req.body.username,
         email: req.body.email,
         photo: req.body.photo,
         bio: req.body.bio,
-    }), req.body.password, (err, newUser) => {
-        if (err) {
+    });
+    if (req.body.admin === process.env.ADMIN_CODE) {
+        newUser.isAdmin = true;
+    }
+    User.register(newUser, req.body.password, (err, newUser) => {
+        if (err || !newUser) {
             req.flash('error', 'Something went wrong! Try again later');
             console.log(err);
             console.log('*** User create routing');
-            res.redirect('back');
-        } else {
-            passport.authenticate('local')(req, res, () => {
-                // console.log(newUser);
-                req.flash('success', 'Successfully! Welcome to YelpCamp, ' + req.body.name);
-                res.redirect(middleware.beforeLogin);
-            })
+            return res.redirect('back');
         }
+        passport.authenticate('local')(req, res, () => {
+            // console.log(newUser);
+            req.flash('success', 'Successfully! Welcome to YelpCamp, ' + req.body.name);
+            res.redirect(middleware.beforeLogin);
+        })
     })
 })
 
@@ -203,6 +206,22 @@ router.post('/reset/:token', (req, res) => {
     ], function (err) {
         res.redirect('/campgrounds');
     })
+});
+
+
+// Home page
+router.get('/', (req, res) => {
+    res.render('../views/landing');
+});
+
+// About page
+router.get('/about', (req, res) => {
+    res.render('../views/about');
+});
+
+// Other page
+router.get('/:abc', (req, res) => {
+    res.send('Page not found');
 });
 
 module.exports = router;

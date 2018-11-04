@@ -96,6 +96,3 @@ Implementation
 1. add timeago
 1. add landing, about
 2. add forgot password
-3. add cloudinary
-
-# delete email edit

@@ -3,15 +3,83 @@
 <% include ../partials/alerts %>
 
 <div class="row">
-    <div class="col-md-3 d-none d-md-block">
-        <p class="lead">YelpCamp</p>
-        <div class="list-group">
-            <li class="list-group-item active">Info 1</li>
-            <li class="list-group-item">Info 2</li>
-            <li class="list-group-item">Info 3</li>
+    <div class="col-md-3 d-none d-lg-block">
+        <div class="card">
+            <div class="card-header p-1" id="addressHeading">
+                <h5 class="mb-0">
+                    <a class="btn btn-link text-truncate text-left d-block"  data-toggle="collapse" data-target="#mapCollapse" aria-expanded="true" aria-controls="mapCollapse">
+                    <i class="fas fa-map-marker-alt"></i> <%=campground.location%>
+                </a>
+                </h5>
+            </div>
+            <div id="mapCollapse" class="collapse show" aria-labelledby="addressHeading">
+                <div class="card-body" id="map"></div>
+            </div>
+        </div>
+        <!-- Website -->
+        <% if(campground.website){ %>
+            <div class="card card-header p-1 mt-3">
+                <a class="btn text-truncate text-left text-dark d-block" href="http://<%=campground.website%>">
+                <i class="fas fa-globe-americas"></i> <%=campground.website%></a>
+            </div>
+        <% } %>
+        <!-- Telephone -->
+        <div class="card card-header p-1 mt-3">
+            <a class="btn btn-link text-truncate text-left d-block">
+            <i class="fas fa-phone"></i> <%=campground.telephone%></a>
+        </div>
+        <!-- hours -->
+        <div class="card mt-3">
+            <div class="card-header p-1" id="hoursHeading">
+                <h5 class="mb-0">
+                    <a class="btn btn-link text-truncate text-left d-block"  data-toggle="collapse" data-target="#hoursCollapse" aria-expanded="true" aria-controls="hoursCollapse">
+                    <i class="fas fa-clock"></i> Open now: 8a.m.-10p.m.
+                </a>
+                </h5>
+            </div>
+            <div id="hoursCollapse" class="collapse" aria-labelledby="hoursHeading">
+                <div class="card-body py-2">
+                    <p class="w-50 d-inline-block m-0">Sunday</p><p class="w-50 d-inline">8a.m.-10p.m.</p>
+                    <hr class="my-2">
+                    <p class="w-50 d-inline-block m-0">Monday</p><p class="w-50 d-inline">8a.m.-10p.m.</p>
+                    <hr class="my-2">
+                    <p class="w-50 d-inline-block m-0">Tuesday</p><p class="w-50 d-inline">8a.m.-10p.m.</p>
+                    <hr class="my-2">
+                    <p class="w-50 d-inline-block m-0">Wednesday</p><p class="w-50 d-inline">8a.m.-10p.m.</p>
+                    <hr class="my-2">
+                    <p class="w-50 d-inline-block m-0">Thursday</p><p class="w-50 d-inline">8a.m.-10p.m.</p>
+                    <hr class="my-2">
+                    <p class="w-50 d-inline-block m-0">Friday</p><p class="w-50 d-inline">8a.m.-10p.m.</p>
+                    <hr class="my-2">
+                    <p class="w-50 d-inline-block m-0">Saturday</p><p class="w-50 d-inline">8a.m.-10p.m.</p>
+                </div>
+            </div>
+        </div>
+        <!-- Rating -->
+        <div class="card mt-3">
+            <div class="card-body">
+                <h1 class="text-center">4.8</h1>
+                <div class="mt-0 text-center">
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="far fa-star"></i>
+                </div>
+                <div class="text-center">Based on 112 review(s)</div>
+            </div>
+            <div class="card-header" id="ratingHeading">
+                <div class="mt-0 text-center" id="userRating">
+                    <i class="far fa-star"></i>
+                    <i class="far fa-star"></i>
+                    <i class="far fa-star"></i>
+                    <i class="far fa-star"></i>
+                    <i class="far fa-star"></i>
+                </div>
+            </div>
         </div>
     </div>
-    <div class="col-md-9 col-12">
+    <div class="col-lg-9 col-12">
         <div class="card">
             <img class="card-img-top" src="<%=campground.image%>">
             <div class="card-body">
@@ -83,5 +151,35 @@
         </div>
     </div>
 </div>
+
+<script>
+    function initMap(){
+        var lat = <%=campground.lat%>;
+        var lng = <%=campground.lng%>;
+        var center = {lat:lat,lng:lng};
+        var map = new google.maps.Map(document.getElementById('map'),{
+            zoom:12,
+            center:center,
+            scrollwheel:false,
+            disableDefaultUI:true,
+        });
+        var contentString = `
+            <strong><%=campground.name%><br />
+            <%=campground.location%></strong>
+            <p><%=campground.description%></p>
+        `
+        var infowindow = new google.maps.InfoWindow({
+            content:contentString,
+        });
+        var marker = new google.maps.Marker({
+            position:center,
+            map:map,
+        });
+        marker.addListener('click',function(){
+            infowindow.open(map,marker);
+        });
+    }
+</script>
+<script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAH0BO3hfiIG3FqLyFa577XcVo1RrztZGw&callback=initMap"></script>
 
 <% include ../partials/footer %>

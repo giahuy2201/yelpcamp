@@ -20,6 +20,19 @@
             required>
     </div>
     <div class="form-group">
+        <label for="locationInput">Location</label>
+        <input type="text" class="form-control" id="locationInput" name="location" value="<%=campground.location%>"
+            required>
+    </div>
+    <div class="form-group">
+        <label for="websiteInput">Website</label>
+        <input type="text" class="form-control" id="websiteInput" name="campground[website]" value="<%=campground.website%>">
+    </div>
+    <div class="form-group">
+        <label for="telephoneInput">Telephone</label>
+        <input type="text" class="form-control" id="telephoneInput" name="campground[telephone]" value="<%=campground.telephone%>" required>
+    </div>
+    <div class="form-group">
         <label for="priceInput">Price</label>
         <input type="number" class="form-control" id="priceInput" name="campground[price]" min="0.01" step="0.01" value="<%=campground.price%>">
     </div>

@@ -1,7 +1,7 @@
 <% include ../partials/header %>
-<% include ../partials/navbar %>
+<% include ../partials/alerts %>
 
-<div class="card card-body bg-light py-1 createCampgroundPanel">
+<div class="bg-light createCampgroundPanel">
     <form class="my-4" action="/campgrounds" method="POST">
         <h1 class="text-center">Create campground</h1>
         <div class="form-group">
@@ -10,13 +10,23 @@
         </div>
         <div class="form-group">
             <label for="imageInput">Image</label>
-            <input type="text" class="form-control" id="imageInput" name="image" placeholder="http://image.com/yosemite.png"
-                required>
+            <input type="text" class="form-control" id="imageInput" name="image" placeholder="http://image.com/yosemite.png" required>
         </div>
         <div class="form-group">
             <label for="descriptionInput">Description</label>
-            <input type="text" class="form-control" id="descriptionInput" name="description" placeholder="This is the best mountain ever!"
-                required>
+            <input type="text" class="form-control" id="descriptionInput" name="description" placeholder="This is the best mountain ever!" required>
+        </div>
+        <div class="form-group">
+            <label for="locationInput">Location</label>
+            <input type="text" class="form-control" id="locationInput" name="location" placeholder="1100 Saint-Catherine" required>
+        </div>
+        <div class="form-group">
+            <label for="websiteInput">Website</label>
+            <input type="text" class="form-control" id="websiteInput" name="website" placeholder="yosemite.com">
+        </div>
+        <div class="form-group">
+            <label for="telephoneInput">Telephone</label>
+            <input type="text" class="form-control" id="telephoneInput" name="telephone" placeholder="(514) 123 4567" required>
         </div>
         <div class="form-group">
             <label for="priceInput">Price</label>
@@ -27,5 +37,6 @@
         </div>
     </form>
 </div>
+<a class="text-center d-block mt-3" href="/campgrounds">Go back</a>
 
 <% include ../partials/footer %>

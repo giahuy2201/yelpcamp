@@ -1,3 +1,42 @@
-<h1>Landing</h1>
-<p>Tons of campgrounds</p>
-<a href="/campgrounds">Visit camprounds</a>
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>YelpCamp</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO"
+        crossorigin="anonymous">
+    <link rel="stylesheet" type="text/css" href="/stylesheets/landing.css" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/modernizr/2.8.3/modernizr.min.js" type="text/javascript" async></script>
+</head>
+
+<body>
+    <div class="container">
+        <% if(error && error.length > 0){ %>
+        <div class="alert alert-danger">
+            <%= error %>
+        </div>
+        <% } %>
+        <% if(success && success.length > 0){ %>
+        <div class="alert alert-success">
+            <%= success %>
+        </div>
+        <% } %>
+    </div>
+
+    <div id="landing-header">
+        <h1>Welcome to YelpCamp!</h1>
+        <a class="btn btn-success btn-lg" href="/campgrounds">View All Campgrounds</a>
+    </div>
+
+    <ul class="slideshow">
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+    </ul>
+
+    <% include partials/footer %>

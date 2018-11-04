@@ -7,90 +7,34 @@ var User = require('../models/user'),
 
 var router = express.Router();
 
-// Register route
-router.get('/register', (req, res) => {
-    res.render('users/register');
-});
-
-// Register authentication
-router.post('/', (req, res) => { // DOUBLE CHECK THIS
-    User.register(new User({
-        name: req.body.name,
-        username: req.body.username,
-        photo: req.body.photo,
-        bio: req.body.bio,
-    }), req.body.password, (err, newUser) => {
-        if (err) {
-            req.flash('error', 'Something went wrong! Try again later');
-            res.redirect('back');
-        } else {
-            passport.authenticate('local')(req, res, () => {
-                // console.log(newUser);
-                req.flash('success', 'Successfully! Welcome to YelpCamp, ' + req.body.name);
-                res.redirect(middleware.beforeLogin);
-            })
-        }
-    })
-})
-
-// Login route
-router.get('/login', (req, res) => {
-    res.render('users/login');
-});
-
-// Login authentication
-router.post('/login', (req, res, next) => { // DIVE DEEP LATER
-    passport.authenticate('local', (err, user, info) => {
-        if (err) {
-            req.flash('error', 'Something went wrong! Try again later');
-            return res.redirect('back');
-        }
-        if (!user) {
-            req.flash('error', info.message);
-            return res.redirect('back');
-        }
-        req.logIn(user, (err) => {
-            if (err) {
-                req.flash('error', 'Something went wrong! Try again later');
-                return res.redirect('back');
-            }
-            return res.redirect(middleware.beforeLogin); // back to the last page
-        })
-    })(req, res, next);
-});
-
-// Logout
-router.get('/logout', (req, res) => {
-    req.logout();
-    req.flash('success', 'Logged you out! Bye bye ');
-    res.redirect('/campgrounds');
-});
-
 // User show
 router.get('/:id', (req, res) => {
+    middleware.beforeLogin = req.originalUrl; // save url in case user want to login
     User.findById(req.params.id).populate('campgrounds').exec((err, foundUser) => {
-        if (err) {
-            req.flash('error', 'Something went wrong! Try again later');
-            res.redirect('back');
-        } else {
-            res.render('users/show', {
-                user: foundUser
-            });
+        if (err || !foundUser) {
+            req.flash('error', 'User not found!');
+            console.log(err);
+            console.log('*** User show routing');
+            return res.redirect('/campgrounds');
         }
+        res.render('users/show', {
+            user: foundUser
+        });
     })
 });
 
 // User edit
 router.get('/:id/edit', middleware.isLoggedIn, middleware.checkProfileOwnership, (req, res) => {
     User.findById(req.params.id, (err, foundUser) => {
-        if (err) {
-            req.flash('error', 'Something went wrong! Try again later');
-            res.redirect('back');
-        } else {
-            res.render('users/edit', {
-                user: foundUser
-            });
+        if (err || !foundUser) {
+            req.flash('error', 'User not found!');
+            console.log(err);
+            console.log('*** User edit routing');
+            return res.redirect('/campgrounds');
         }
+        res.render('users/edit', {
+            user: foundUser
+        });
     })
 });
 
@@ -98,44 +42,50 @@ router.get('/:id/edit', middleware.isLoggedIn, middleware.checkProfileOwnership,
 router.put('/:id', middleware.isLoggedIn, middleware.checkProfileOwnership, (req, res) => {
     var newUser = {
         name: req.body.name,
+        email: req.body.email, // Delete later
         photo: req.body.photo,
         bio: req.body.bio,
+        isAdmin: false,
     };
+    if (req.body.admin === process.env.ADMIN_CODE) {
+        newUser.isAdmin = true;
+    }
     User.findByIdAndUpdate(req.params.id, newUser, (err, updatedUser) => {
-        if (err) {
-            req.flash('error', 'Something went wrong! Try again later');
-            res.redirect('back');
-        } else {
-            // console.log(updatedUser);
-            res.redirect('/users/' + req.params.id);
+        if (err || !foundUser) {
+            req.flash('error', 'User not found!');
+            console.log(err);
+            console.log('*** User update routing');
+            return res.redirect('/campgrounds');
         }
+        // console.log(updatedUser);
+        res.redirect('/users/' + req.params.id);
     })
 });
 
 // User change password
-router.get('/:id/reset', middleware.isLoggedIn, middleware.checkProfileOwnership, (req, res) => {
-    res.render('users/reset', {
+router.get('/:id/change', middleware.isLoggedIn, middleware.checkProfileOwnership, (req, res) => {
+    res.render('users/change', {
         userId: req.params.id
     });
 });
 
 // User reset password
-router.post('/:id/reset', middleware.isLoggedIn, middleware.checkProfileOwnership, (req, res) => {
+router.post('/:id/change', middleware.isLoggedIn, middleware.checkProfileOwnership, (req, res) => {
     User.findById(req.params.id, (err, foundUser) => {
-        if (err) {
-            req.flash('error', 'Something went wrong! Try again later');
-            res.redirect('back');
-        } else {
-            foundUser.changePassword(req.body.oldPassword, req.body.newPassword, (err, updatedUser) => {
-                if (err) {
-                    req.flash('error', 'Old password does not matched!');
-                    res.redirect('back');
-                } else {
-                    req.flash('success', 'Successfully changed your password');
-                    res.redirect('/users/' + req.params.id);
-                }
-            })
+        if (err || !foundUser) {
+            req.flash('error', 'User not found!');
+            console.log(err);
+            console.log('*** User reset routing');
+            return res.redirect('/campgrounds');
         }
+        foundUser.changePassword(req.body.oldPassword, req.body.newPassword, (err, updatedUser) => {
+            if (err) {
+                req.flash('error', 'Old password does not matched!');
+                return res.redirect('/campgrounds');
+            }
+            req.flash('success', 'Successfully changed your password');
+            res.redirect('/users/' + req.params.id);
+        })
     })
 })
 

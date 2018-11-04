@@ -91,3 +91,8 @@ Implementation
 4. flash-message
 5. address the next link after login
 6. style the campgrounds hover animation 
+
+## yelpcamp 4.0.0
+1. add timeago
+1. add landing, about
+2. add forgot password

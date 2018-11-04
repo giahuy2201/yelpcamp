@@ -9,6 +9,9 @@
             <div>
                 <h1>
                     <%=user.name%>
+                    <% if(user.isAdmin){ %>
+                        <i class="fas fa-key"></i>
+                    <% } %>
                 </h1>
                 <p>
                     <%=user.campgrounds.length%> campgrounds 12 comments</p>
@@ -20,7 +23,7 @@
                 </p>
                 <% if(currentUser && user._id.equals(currentUser._id)){ %>
                 <a class="text-primary mr-1" href="/users/<%=user._id%>/edit">Edit profile</a>
-                <a class="text-success" href="/users/<%=user._id%>/reset">Change password</a>
+                <a class="text-success" href="/users/<%=user._id%>/change">Change password</a>
                 <% } %>
             </div>
         </div>

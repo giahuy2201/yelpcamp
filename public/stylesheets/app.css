@@ -1,3 +1,13 @@
+.fa-key {
+    color: gold;
+    font-size: 0.6em;
+}
+
+.admin {
+    color: goldenrod;
+    font-size: 1.2em;
+}
+
 .media img {
     height: 45px;
     width: 45px;
@@ -40,4 +50,17 @@ a:hover {
 .campgroundCard:hover {
     box-shadow: 1px 1px 10px rgb(200, 200, 200);
     transition: 0.3s;
+}
+
+.myphoto {
+    background: url(blah.jpg) 50% 50% no-repeat;
+    /* 50% 50% centers image in div */
+    border: none;
+    border-radius: 8px;
+    width: 250px;
+    height: 250px;
+}
+
+.about {
+    text-align: center;
 }

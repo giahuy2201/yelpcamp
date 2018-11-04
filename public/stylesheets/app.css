@@ -32,8 +32,11 @@
 
 .signinPanel {
     /* background: pink; */
-    max-width: 400px;
+    max-width: 450px;
     margin: 0 auto;
+    border: 1px solid rgb(217, 217, 217);
+    padding: 30px;
+    border-radius: 4px;
 }
 
 .createCampgroundPanel {
@@ -63,4 +66,5 @@ a:hover {
 
 .about {
     text-align: center;
+    padding-top: 10%;
 }

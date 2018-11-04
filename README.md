@@ -96,3 +96,11 @@ Implementation
 1. add timeago
 1. add landing, about
 2. add forgot password
+
+## yelpcamp 4.8.0
+1. add web, tel
+2. style the show page
+3. add open hours
+4. add map
+5. add reviews stars
+6. remove navbar from sign in, up & add go back

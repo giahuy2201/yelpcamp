@@ -12,6 +12,9 @@ var express = require('express'),
 // include models
 var User = require('./models/user');
 
+// include middleware
+var middleware = require('./middleware');
+
 // libs for env
 require('dotenv').config();
 
@@ -59,6 +62,7 @@ passport.deserializeUser(User.deserializeUser());
 // some global variables available in all routes
 app.use((req, res, next) => {
     res.locals.currentUser = req.user;
+    res.locals.back = middleware.beforeLogin;
     res.locals.error = req.flash('error');
     res.locals.success = req.flash('success');
     next();

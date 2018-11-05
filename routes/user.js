@@ -51,7 +51,7 @@ router.put('/:id', middleware.isLoggedIn, middleware.checkProfileOwnership, (req
         newUser.isAdmin = true;
     }
     User.findByIdAndUpdate(req.params.id, newUser, (err, updatedUser) => {
-        if (err || !foundUser) {
+        if (err || !updatedUser) {
             req.flash('error', 'User not found!');
             console.log(err);
             console.log('*** User update routing');

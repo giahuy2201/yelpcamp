@@ -17,6 +17,18 @@ var options = {
 };
 var geocoder = nodeGeocoder(options);
 
+// weekdays
+// var weekdays = {
+//     's': 'Sunday',
+//     'm': 'Monday',
+//     't': 'Tuesday',
+//     'w': 'Wednesday',
+//     'r': 'Thursday',
+//     'f': 'Friday',
+//     'c': 'Saturday',
+// }
+var weekdays = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+
 // Campgrounds page
 router.get('/', (req, res) => {
     middleware.beforeLogin = req.originalUrl; // save url in case user want to login
@@ -36,7 +48,9 @@ router.get('/', (req, res) => {
 
 // Campgrounds new
 router.get('/new', middleware.isLoggedIn, (req, res) => {
-    res.render('campgrounds/new');
+    res.render('campgrounds/new', {
+        weekdays: weekdays
+    });
 });
 
 // Campground create
@@ -46,10 +60,20 @@ router.post('/', middleware.isLoggedIn, (req, res) => {
             req.flash('error', 'Invalid address');
             return res.redirect('/campgrounds/new');
         }
-        console.log(data[0]);
+        // console.log(data[0]);
         var lat = data[0].latitude;
         var lng = data[0].longitude;
         var location = data[0].formattedAddress;
+        // get hours
+        var hours = {};
+        // console.log(req.body.dayCheck);
+        for (var i in req.body.dayCheck) {
+            var day = {
+                open: req.body.dayOpenTime[i],
+                close: req.body.dayCloseTime[i],
+            }
+            hours[i] = day;
+        }
         // make campground variable
         var newCampground = {
             name: req.body.name,
@@ -61,6 +85,7 @@ router.post('/', middleware.isLoggedIn, (req, res) => {
             lat: lat,
             lng: lng,
             location: location,
+            hours: hours,
         };
         // start doing this
         User.findById(req.user._id, (err, foundUser) => {
@@ -112,6 +137,7 @@ router.get('/:id', (req, res) => {
         }
         res.render('campgrounds/show', {
             campground: foundCampground,
+            weekdays: weekdays
         });
     })
 });
@@ -126,7 +152,8 @@ router.get('/:id/edit', middleware.isLoggedIn, middleware.checkCampgroundOwnersh
             return res.redirect('/campgrounds');
         }
         res.render('campgrounds/edit', {
-            campground: foundCampground
+            campground: foundCampground,
+            weekdays: weekdays
         });
     })
 });
@@ -144,6 +171,16 @@ router.put('/:id', middleware.isLoggedIn, middleware.checkCampgroundOwnership, (
         updatedCampground.lat = data[0].latitude;
         updatedCampground.lng = data[0].longitude;
         updatedCampground.location = data[0].formattedAddress;
+        // get hours
+        var hours = {};
+        for (var i in req.body.dayCheck) {
+            var day = {
+                open: req.body.dayOpenTime[i],
+                close: req.body.dayCloseTime[i],
+            }
+            hours[i] = day;
+        }
+        updatedCampground.hours = hours;
 
         Campground.findByIdAndUpdate(req.params.id, updatedCampground, (err, updatedCampground) => {
             if (err || !updatedCampground) {

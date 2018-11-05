@@ -15,6 +15,14 @@ var campgroundSchema = new mongoose.Schema({
         type: Date,
         default: Date.now,
     },
+    ratings: [{
+        author: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'User'
+        },
+        rate: Number,
+    }],
+    hours: {}, // doublecheck later
     comments: [{
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Comment'

@@ -51,6 +51,30 @@ app.use(bodyParser.urlencoded({
 Date.prototype.toAgo = function () {
     return timeago().format(this);
 };
+// to get a formated Hours String for display business hours
+String.prototype.toTime = function () {
+    var h = Math.trunc(this);
+    var m = (this - h) * 60;
+    var hours = h + ':' + m;
+    if (m == 0) {
+        hours += '0';
+    }
+    return hours;
+};
+// convert hour & minute to number
+Date.prototype.toNumber = function () {
+    var hour = this.getHours();
+    var minute = this.getMinutes();
+    return num = hour + minute / 60;
+}
+// check if this is in period
+Date.prototype.inPeriod = function (open, close) {
+    var now = new Date();
+    if (open <= now.toNumber() && close >= now.toNumber()) {
+        return true;
+    }
+    return false;
+};
 
 // passport setup
 app.use(passport.initialize());

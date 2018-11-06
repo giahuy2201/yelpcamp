@@ -11,17 +11,9 @@ var router = express.Router({
 
 // Comment new
 router.get('/new', middleware.isLoggedIn, (req, res) => {
-    Campground.findById(req.params.id, (err, foundCampground) => {
-        if (err || !foundCampground) {
-            req.flash('error', 'Campground not found!');
-            console.log(err);
-            console.log('*** Comment new routing');
-            return res.redirect('/campgrounds');
-        }
-        res.render('comments/new', {
-            campground: foundCampground
-        });
-    })
+    return res.send({
+        isLoggedIn: true,
+    });
 });
 
 // Comment create

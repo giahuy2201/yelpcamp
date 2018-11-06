@@ -113,11 +113,17 @@
         <!-- COMMENTS -->
         <div class="card card-body my-4 bg-light">
             <div class="text-right">
-                <a class="btn btn-success" href="/campgrounds/<%=campground._id%>/comments/new">Add
+                <a class="btn btn-success" id="addCommentButton" href="/campgrounds/<%=campground._id%>/comments/new">Add
                     new comment</a>
                 <h5 class="float-left my-1">Comments</h5>
             </div>
             <hr>
+            <div id="newForm" class="d-none">
+            <form class="form mb-3" style="display:flex" action="/campgrounds/<%=campground._id%>/comments" method="POST">
+                <input type="text" class="form-control" id="textInput" name="comment[text]" placeholder="Enter your comment here" required>
+                <input class="btn btn-success ml-3" type="submit">
+            </form>
+            </div>
             <% if(campground.comments.length > 0){ %>
             <% campground.comments.forEach((comment)=>{ %>
             <div class="media">

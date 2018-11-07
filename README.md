@@ -103,4 +103,5 @@ Implementation
 3. add open hours
 4. add map
 5. add reviews stars
-6. remove navbar from sign in, up & add go back
+6. remove navbar from sign in, up & add go
+7. add ratings

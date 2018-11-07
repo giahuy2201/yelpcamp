@@ -15,7 +15,8 @@ var campgroundSchema = new mongoose.Schema({
         type: Date,
         default: Date.now,
     },
-    ratings: {}, // object (username) as a key
+    ratings: {},
+    // object (username) as a key
     hours: {}, // doublecheck later
     comments: [{
         type: mongoose.Schema.Types.ObjectId,

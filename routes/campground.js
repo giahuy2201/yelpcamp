@@ -17,16 +17,6 @@ var options = {
 };
 var geocoder = nodeGeocoder(options);
 
-// weekdays
-// var weekdays = {
-//     's': 'Sunday',
-//     'm': 'Monday',
-//     't': 'Tuesday',
-//     'w': 'Wednesday',
-//     'r': 'Thursday',
-//     'f': 'Friday',
-//     'c': 'Saturday',
-// }
 var weekdays = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
 
 // Campgrounds page
@@ -190,8 +180,10 @@ router.put('/:id', middleware.isLoggedIn, middleware.checkCampgroundOwnership, (
                 return res.redirect('/campgrounds');
             }
             res.redirect('/campgrounds/' + req.params.id);
+
         })
-    })
+    });
+
 });
 
 // Campground delete
@@ -207,5 +199,4 @@ router.delete('/:id', middleware.isLoggedIn, middleware.checkCampgroundOwnership
         res.redirect('/campgrounds');
     })
 });
-
 module.exports = router;

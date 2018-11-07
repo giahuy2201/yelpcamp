@@ -183,7 +183,6 @@ router.put('/:id', middleware.isLoggedIn, middleware.checkCampgroundOwnership, (
 
         })
     });
-
 });
 
 // Campground delete

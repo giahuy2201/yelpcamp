@@ -1,5 +1,12 @@
 $(document).ready(function () {
 
+    function showAlert(message) {
+        $('#errorAlert').removeClass('d-none');
+        $('#errorAlert').addClass('d-block');
+
+        $('#errorAlert').text(message);
+    }
+
     $('#addCommentButton').click(function (e) {
         e.preventDefault();
         var url = this.href;
@@ -11,7 +18,7 @@ $(document).ready(function () {
                 if (data.isLoggedIn) {
                     $('#newForm').toggleClass('d-none');
                 } else {
-                    window.location.reload(true); // refresh so that user can see the message
+                    showAlert('You need to be logged in to do that!!!');
                     $('html,body').scrollTop(0);
                 }
                 console.log(data);

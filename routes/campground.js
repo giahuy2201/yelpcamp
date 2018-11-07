@@ -38,6 +38,11 @@ router.get('/', (req, res) => {
 
 // Campgrounds new
 router.get('/new', middleware.isLoggedIn, (req, res) => {
+    if (req.xhr) {
+        return res.send({
+            isLoggedIn: true
+        });
+    }
     res.render('campgrounds/new', {
         weekdays: weekdays
     });

@@ -94,8 +94,8 @@ Implementation
 
 ## yelpcamp 4.0.0
 1. add timeago
-1. add landing, about
-2. add forgot password
+2. add landing, about
+3. add forgot password
 
 ## yelpcamp 4.8.0
 1. add web, tel
@@ -105,3 +105,10 @@ Implementation
 5. add reviews stars
 6. remove navbar from sign in, up & add go
 7. add ratings
+
+## yelpcamp 6.0.0
+1. implement ajax for all flash message, and some routes
+2. add like feature, and count it in user profile,campground index
+3. implement new campground index page design
+4. Make the site robust and defensive
+5. Restyle edit, delete button

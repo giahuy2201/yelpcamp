@@ -11,12 +11,12 @@ middlewareObj.isLoggedIn = function (req, res, next) {
     if (req.isAuthenticated()) {
         return next();
     }
-    req.flash('error', 'You need to be logged in to do that');
     if (req.xhr) {
         return res.send({
             isLoggedIn: false,
         })
     }
+    req.flash('error', 'You need to be logged in to do that');
     middlewareObj.beforeLogin = req.originalUrl; // save the route to redirect after user asked to login
     res.redirect('/login');
 };

@@ -22,11 +22,12 @@ require('dotenv').config();
 var campgroundRoute = require('./routes/campground'),
     commentRoute = require('./routes/comment'),
     userRoute = require('./routes/user'),
-    rootRoute = require('./routes/index');
+    ratingRoute = require('./routes/rating'),
+    rootRoute = require('./routes');
 
 var app = express();
 // connect to database
-mongoose.connect(process.env.DATABASE, {
+mongoose.connect(process.env.DATABASE_URL, {
     useNewUrlParser: true
 });
 
@@ -95,6 +96,7 @@ app.use((req, res, next) => {
 // add routes files
 app.use('/campgrounds', campgroundRoute);
 app.use('/campgrounds/:id/comments', commentRoute);
+app.use('/campgrounds/:id/ratings', ratingRoute);
 app.use('/users', userRoute);
 app.use('/', rootRoute);
 

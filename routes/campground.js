@@ -17,16 +17,6 @@ var options = {
 };
 var geocoder = nodeGeocoder(options);
 
-// weekdays
-// var weekdays = {
-//     's': 'Sunday',
-//     'm': 'Monday',
-//     't': 'Tuesday',
-//     'w': 'Wednesday',
-//     'r': 'Thursday',
-//     'f': 'Friday',
-//     'c': 'Saturday',
-// }
 var weekdays = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
 
 // Campgrounds page

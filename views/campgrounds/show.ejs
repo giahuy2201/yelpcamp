@@ -62,26 +62,38 @@
         </div>
         <!-- Rating -->
         <div class="card mt-3">
+            <% if(campground.ratings){ %>
             <div class="card-body">
-                <h1 class="text-center" id="ratingAverage">4.8</h1>
+                <h1 class="text-center" id="ratingAverage">
+                    <%=campground.ratings.average%>
+                </h1>
                 <div class="mt-0 text-center">
-                    <i class="fas fa-star"></i>
-                    <i class="fas fa-star"></i>
-                    <i class="fas fa-star"></i>
-                    <i class="fas fa-star"></i>
-                    <i class="far fa-star"></i>
+                <% for(var i=1;i<=5;i++){ %>
+                    <% if(i<=Math.round(campground.ratings.average)){ %>
+                        <i class="fas fa-star"></i>
+                    <% }else{ %>
+                        <i class="far fa-star"></i>
+                    <% } %>
+                <% } %>
                 </div>
-                <div class="text-center">Based on 112 review(s)</div>
+                <div class="text-center">Based on <span id="ratingNumber">
+                    <%=campground.ratings.number%>
+                </span> review(s)</div>
             </div>
+            <% } %>
+            <% if(currentUser){ %>
             <div class="card-header" id="ratingHeading">
-                <div class="mt-0 text-center" id="userRating">
-                    <i class="far fa-star" data-value='1'></i>
-                    <i class="far fa-star" data-value='2'></i>
-                    <i class="far fa-star" data-value='3'></i>
-                    <i class="far fa-star" data-value='4'></i>
-                    <i class="far fa-star" data-value='5'></i>
+                <div class="text-center" id="userRating">
+                    <% for(var i=1;i<=5;i++){ %>
+                        <% if(campground.ratings && i<=Math.round(campground.ratings[currentUser._id.toString()])){ %>
+                            <a href="/campgrounds/<%=campground._id%>/ratings"><i class="fas fa-star" data-value='<%=i%>'></i></a>
+                        <% }else{ %>
+                            <a href="/campgrounds/<%=campground._id%>/ratings"><i class="far fa-star" data-value='<%=i%>'></i></a>
+                        <% } %>
+                    <% } %>
                 </div>
             </div>
+            <% } %>
         </div>
     </div>
     <div class="col-lg-9 col-12">

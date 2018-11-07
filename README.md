@@ -104,4 +104,8 @@ Implementation
 4. add map
 5. add reviews stars
 6. remove navbar from sign in, up & add go
+<<<<<<< HEAD
 7. add ratings
+=======
+7. add ratings
+>>>>>>> 80d6daaee83e27aa68d85749d48b6ba4e1f2331e

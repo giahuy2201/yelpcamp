@@ -17,8 +17,15 @@ router.get('/:id', (req, res) => {
             console.log('*** User show routing');
             return res.redirect('/campgrounds');
         }
+        // Calculate total likes
+        var likes = 0;
+        foundUser.campgrounds.forEach((campground) => {
+            likes += campground.likes.length;
+        })
+        // console.log(likes);
         res.render('users/show', {
-            user: foundUser
+            user: foundUser,
+            likes: likes,
         });
     })
 });

@@ -1,20 +1,106 @@
 <% include ../partials/header %>
+<% include ../partials/navbar %>
+<% include ../partials/alerts %>
 
 <div class="row">
-    <div class="col-md-3 d-none d-md-block">
-        <p class="lead">YelpCamp</p>
-        <div class="list-group">
-            <li class="list-group-item active">Info 1</li>
-            <li class="list-group-item">Info 2</li>
-            <li class="list-group-item">Info 3</li>
+    <div class="col-md-3 d-none d-lg-block">
+        <div class="card">
+            <div class="card-header p-1" id="addressHeading">
+                <h5 class="mb-0">
+                    <a class="btn btn-link text-truncate text-left d-block"  data-toggle="collapse" data-target="#mapCollapse" aria-expanded="true" aria-controls="mapCollapse">
+                    <i class="fas fa-map-marker-alt"></i> <%=campground.location%>
+                </a>
+                </h5>
+            </div>
+            <div id="mapCollapse" class="collapse show" aria-labelledby="addressHeading">
+                <div class="card-body" id="map"></div>
+            </div>
+        </div>
+        <!-- Website -->
+        <% if(campground.website){ %>
+            <div class="card card-header p-1 mt-3">
+                <a class="btn text-truncate text-left text-dark d-block" href="http://<%=campground.website%>">
+                <i class="fas fa-globe-americas"></i> <%=campground.website%></a>
+            </div>
+        <% } %>
+        <!-- Telephone -->
+        <div class="card card-header p-1 mt-3">
+            <a class="btn btn-link text-truncate text-left d-block">
+            <i class="fas fa-phone"></i> <%=campground.telephone%></a>
+        </div>
+        <!-- hours -->
+        <div class="card mt-3">
+            <div class="card-header p-1" id="hoursHeading">
+                <h5 class="mb-0">
+                    <a class="btn btn-link text-truncate text-left d-block"  data-toggle="collapse" data-target="#hoursCollapse" aria-expanded="true" aria-controls="hoursCollapse">
+                    <i class="fas fa-clock"></i> 
+                    <% var now = new Date()%>
+                    <% var period = campground.hours[weekdays[now.getDay()]] %>
+                    <% if(campground.hours[weekdays[now.getDay()]] && now.inPeriod(period.open,period.close)){ %>
+                        Open now
+                    <% }else{ %>
+                        Closed
+                    <% } %>
+                </a>
+                </h5>
+            </div>
+            <div id="hoursCollapse" class="collapse" aria-labelledby="hoursHeading">
+                <div class="card-body py-2">
+                    <% for(var day of weekdays){ %>
+                    <% if(day != 'Sunday'){ %>
+                        <hr class="my-2">
+                    <% } %>
+                    <p class="w-50 d-inline-block m-0"><%=day%></p>
+                    <% if(campground.hours[day]){ %>
+                        <p class="w-50 d-inline"><%=campground.hours[day].open.toTime()%> - <%=campground.hours[day].close.toTime()%></p>
+                    <% }else{ %>
+                        <p class="w-50 d-inline">Close.</p>
+                    <% } %>
+                    <% } %>
+                </div>
+            </div>
+        </div>
+        <!-- Rating -->
+        <div class="card mt-3">
+            <% if(campground.ratings){ %>
+            <div class="card-body">
+                <h1 class="text-center" id="ratingAverage">
+                    <%=campground.ratings.average%>
+                </h1>
+                <div class="mt-0 text-center">
+                <% for(var i=1;i<=5;i++){ %>
+                    <% if(i<=Math.round(campground.ratings.average)){ %>
+                        <i class="fas fa-star"></i>
+                    <% }else{ %>
+                        <i class="far fa-star"></i>
+                    <% } %>
+                <% } %>
+                </div>
+                <div class="text-center">Based on <span id="ratingNumber">
+                    <%=campground.ratings.number%>
+                </span> review(s)</div>
+            </div>
+            <% } %>
+            <% if(currentUser){ %>
+            <div class="card-header" id="ratingHeading">
+                <div class="text-center" id="userRating">
+                    <% for(var i=1;i<=5;i++){ %>
+                        <% if(campground.ratings && i<=Math.round(campground.ratings[currentUser._id.toString()])){ %>
+                            <a href="/campgrounds/<%=campground._id%>/ratings"><i class="fas fa-star" data-value='<%=i%>'></i></a>
+                        <% }else{ %>
+                            <a href="/campgrounds/<%=campground._id%>/ratings"><i class="far fa-star" data-value='<%=i%>'></i></a>
+                        <% } %>
+                    <% } %>
+                </div>
+            </div>
+            <% } %>
         </div>
     </div>
-    <div class="col-md-9 col-12">
+    <div class="col-lg-9 col-12">
         <div class="card">
             <img class="card-img-top" src="<%=campground.image%>">
             <div class="card-body">
-                <h5 class="float-right">$
-                    <%=campground.price%>/night</h5>
+                <h5 class="float-right">$<%=campground.price%>/night</h5>
                 <h4 class="card-title">
                     <%=campground.name%>
                 </h4>
@@ -39,11 +125,17 @@
         <!-- COMMENTS -->
         <div class="card card-body my-4 bg-light">
             <div class="text-right">
-                <a class="btn btn-success" href="/campgrounds/<%=campground._id%>/comments/new">Add
+                <a class="btn btn-success" id="addCommentButton" href="/campgrounds/<%=campground._id%>/comments/new">Add
                     new comment</a>
                 <h5 class="float-left my-1">Comments</h5>
             </div>
             <hr>
+            <div id="newForm" class="d-none">
+            <form class="form mb-3" style="display:flex" action="/campgrounds/<%=campground._id%>/comments" method="POST">
+                <input type="text" class="form-control" id="textInput" name="comment[text]" placeholder="Enter your comment here" required>
+                <input class="btn btn-success ml-3" type="submit">
+            </form>
+            </div>
             <% if(campground.comments.length > 0){ %>
             <% campground.comments.forEach((comment)=>{ %>
             <div class="media">
@@ -81,5 +173,35 @@
         </div>
     </div>
 </div>
+
+<script>
+    function initMap(){
+        var lat = <%=campground.lat%>;
+        var lng = <%=campground.lng%>;
+        var center = {lat:lat,lng:lng};
+        var map = new google.maps.Map(document.getElementById('map'),{
+            zoom:12,
+            center:center,
+            scrollwheel:false,
+            disableDefaultUI:true,
+        });
+        var contentString = `
+            <strong><%=campground.name%><br />
+            <%=campground.location%></strong>
+            <p><%=campground.description%></p>
+        `
+        var infowindow = new google.maps.InfoWindow({
+            content:contentString,
+        });
+        var marker = new google.maps.Marker({
+            position:center,
+            map:map,
+        });
+        marker.addListener('click',function(){
+            infowindow.open(map,marker);
+        });
+    }
+</script>
+<script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAH0BO3hfiIG3FqLyFa577XcVo1RrztZGw&callback=initMap"></script>
 
 <% include ../partials/footer %>

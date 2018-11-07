@@ -1,6 +1,7 @@
 <% include ../partials/header %>
+<% include ../partials/alerts %>
 
-<div class="card card-body bg-light py-1 createCampgroundPanel">
+<div class="bg-light createCampgroundPanel">
     <form class="my-4" action="/campgrounds" method="POST">
         <h1 class="text-center">Create campground</h1>
         <div class="form-group">
@@ -9,22 +10,70 @@
         </div>
         <div class="form-group">
             <label for="imageInput">Image</label>
-            <input type="text" class="form-control" id="imageInput" name="image" placeholder="http://image.com/yosemite.png"
-                required>
+            <input type="text" class="form-control" id="imageInput" name="image" placeholder="http://image.com/yosemite.png" required>
         </div>
         <div class="form-group">
             <label for="descriptionInput">Description</label>
-            <input type="text" class="form-control" id="descriptionInput" name="description" placeholder="This is the best mountain ever!"
-                required>
+            <input type="text" class="form-control" id="descriptionInput" name="description" placeholder="This is the best mountain ever!" required>
+        </div>
+        <div class="form-group">
+            <label for="locationInput">Location</label>
+            <input type="text" class="form-control" id="locationInput" name="location" placeholder="1100 Saint-Catherine" required>
+        </div>
+        <div class="form-group">
+            <label for="websiteInput">Website</label>
+            <input type="text" class="form-control" id="websiteInput" name="website" placeholder="yosemite.com">
+        </div>
+        <div class="form-group">
+            <label for="telephoneInput">Telephone</label>
+            <input type="text" class="form-control" id="telephoneInput" name="telephone" placeholder="(514) 123 4567" required>
         </div>
         <div class="form-group">
             <label for="priceInput">Price</label>
             <input type="number" class="form-control" id="priceInput" name="price" min="0.01" step="0.01" value="9.00">
+        </div>
+        <div class="form-group">
+            <label for="priceInput">Hours</label>
+            <div class="card">
+                <div class="card-header p-1" id="hoursHeading">
+                    <h5 class="mb-0">
+                        <a class="btn btn-link text-truncate text-left d-block"  data-toggle="collapse" data-target="#hoursCollapse" aria-expanded="true" aria-controls="hoursCollapse">Select business hours
+                    </a>
+                    </h5>
+                </div>
+                <div id="hoursCollapse" class="collapse show" aria-labelledby="hoursHeading">
+                    <div class="card-body py-2">
+                        <% for(var day of weekdays){ %>
+                            <% if(day != 'Sunday'){ %>
+                                <hr class="my-2">
+                            <% } %>
+                            <div class="w-50 d-inline-block">
+                                <input type="checkbox" class="form-check-input ml-1" name="dayCheck[<%=day%>]">
+                                <label class="my-0 mx-4"><%=day%></label>
+                            </div>
+                            <div class="w-50 d-inline">
+                                <select class="form-control d-inline-block" name="dayOpenTime[<%=day%>]">
+                                <% for(var h=6;h<12;h+=0.5){ %>
+                                    <option value="<%=h%>"><%=h.toString().toTime()%></option>
+                                <% } %>
+                                </select>
+                                 - 
+                                <select class="form-control d-inline-block" name="dayCloseTime[<%=day%>]">
+                                <% for(var h=12;h<23;h+=0.5){ %>
+                                    <option value="<%=h%>"><%=h.toString().toTime()%></option>
+                                <% } %>
+                                </select>
+                            </div>
+                        <% } %>
+                    </div>
+                </div>
+            </div>
         </div>
         <div class="form-group my-4 text-center">
             <input class="btn btn-success" type="submit">
         </div>
     </form>
 </div>
+<a class="text-center d-block mt-3" href="/campgrounds">Go back</a>
 
 <% include ../partials/footer %>

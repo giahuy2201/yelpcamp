@@ -3,11 +3,19 @@
     font-size: 0.6em;
 }
 
+.fa-star {
+    color: gold;
+    font-size: 1.6em;
+}
+
 .admin {
     color: goldenrod;
     font-size: 1.2em;
 }
 
+#map {
+    height: 200px;
+}
 .media img {
     height: 45px;
     width: 45px;
@@ -32,14 +40,21 @@
 
 .signinPanel {
     /* background: pink; */
-    max-width: 400px;
+    max-width: 450px;
     margin: 0 auto;
+    border: 1px solid rgb(217, 217, 217);
+    padding: 30px;
+    border-radius: 4px;
 }
 
 .createCampgroundPanel {
     /* background: pink; */
     max-width: 500px;
-    margin: 0 auto;
+    margin: 5% auto;
+    margin-bottom: 0;
+    border: 1px solid rgb(217, 217, 217);
+    border-radius: 4px;
+    padding: 20px;
 }
 
 a:hover {
@@ -63,4 +78,10 @@ a:hover {
 
 .about {
     text-align: center;
+    padding-top: 10%;
+}
+
+select.form-control {
+    width: 70px;
+    height: 30px;
 }

@@ -1,6 +1,6 @@
 {
   "name": "yelpcamp",
-  "version": "4.0.0",
+  "version": "4.8.0",
   "description": "A YelpCamp project inspired by Colt Steele from Udemy",
   "main": "index.js",
   "scripts": {
@@ -33,6 +33,7 @@
     "express-session": "^1.15.6",
     "method-override": "^3.0.0",
     "mongoose": "^5.3.7",
+    "node-geocoder": "^3.22.0",
     "nodemailer": "^4.6.8",
     "passport": "^0.4.0",
     "passport-local": "^1.0.0",

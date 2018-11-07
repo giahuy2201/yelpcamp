@@ -12,6 +12,9 @@ var express = require('express'),
 // include models
 var User = require('./models/user');
 
+// include middleware
+var middleware = require('./middleware');
+
 // libs for env
 require('dotenv').config();
 
@@ -19,11 +22,12 @@ require('dotenv').config();
 var campgroundRoute = require('./routes/campground'),
     commentRoute = require('./routes/comment'),
     userRoute = require('./routes/user'),
-    rootRoute = require('./routes/index');
+    ratingRoute = require('./routes/rating'),
+    rootRoute = require('./routes');
 
 var app = express();
 // connect to database
-mongoose.connect(process.env.DATABASE, {
+mongoose.connect(process.env.DATABASE_URL, {
     useNewUrlParser: true
 });
 
@@ -48,6 +52,30 @@ app.use(bodyParser.urlencoded({
 Date.prototype.toAgo = function () {
     return timeago().format(this);
 };
+// to get a formated Hours String for display business hours
+String.prototype.toTime = function () {
+    var h = Math.trunc(this);
+    var m = (this - h) * 60;
+    var hours = h + ':' + m;
+    if (m == 0) {
+        hours += '0';
+    }
+    return hours;
+};
+// convert hour & minute to number
+Date.prototype.toNumber = function () {
+    var hour = this.getHours();
+    var minute = this.getMinutes();
+    return num = hour + minute / 60;
+}
+// check if this is in period
+Date.prototype.inPeriod = function (open, close) {
+    var now = new Date();
+    if (open <= now.toNumber() && close >= now.toNumber()) {
+        return true;
+    }
+    return false;
+};
 
 // passport setup
 app.use(passport.initialize());
@@ -59,6 +87,7 @@ passport.deserializeUser(User.deserializeUser());
 // some global variables available in all routes
 app.use((req, res, next) => {
     res.locals.currentUser = req.user;
+    res.locals.back = middleware.beforeLogin;
     res.locals.error = req.flash('error');
     res.locals.success = req.flash('success');
     next();
@@ -67,6 +96,7 @@ app.use((req, res, next) => {
 // add routes files
 app.use('/campgrounds', campgroundRoute);
 app.use('/campgrounds/:id/comments', commentRoute);
+app.use('/campgrounds/:id/ratings', ratingRoute);
 app.use('/users', userRoute);
 app.use('/', rootRoute);
 

@@ -8,7 +8,7 @@ var router = express.Router({
 });
 
 // Rating get
-router.get('/', middleware.isLoggedIn, (req, res) => {
+router.get('/ratings', middleware.isLoggedIn, (req, res) => {
     Campground.findById(req.params.id, (err, foundCampground) => {
         if (err || !foundCampground) {
             req.flash('error', 'Campground not found!');
@@ -27,7 +27,7 @@ router.get('/', middleware.isLoggedIn, (req, res) => {
 })
 
 // Rating create
-router.post('/', middleware.isLoggedIn, (req, res) => {
+router.post('/ratings', middleware.isLoggedIn, (req, res) => {
     Campground.findById(req.params.id, (err, foundCampground) => {
         if (err || !foundCampground) {
             req.flash('error', 'Campground not found!');
@@ -64,6 +64,35 @@ router.post('/', middleware.isLoggedIn, (req, res) => {
             number: foundCampground.ratings['number'],
         });
     });
+});
+
+router.post('/likes', middleware.isLoggedIn, (req, res) => {
+    Campground.findById(req.params.id, (err, foundCampground) => {
+        if (err || !foundCampground) {
+            req.flash('error', 'Campground not found!');
+            console.log(err);
+            console.log('*** Rating create routing');
+            return res.redirect('/campgrounds');
+        }
+        var liked = true;
+        var likes = foundCampground.likes;
+        // console.log(likes);
+        var present = likes.indexOf(req.user._id);
+        // console.log(present);
+        if (present != -1) {
+            likes.splice(present, 1);
+            liked = false;
+        } else {
+            likes.push(req.user._id);
+        }
+        foundCampground.likes = likes;
+        foundCampground.save();
+        return res.send({
+            number: likes.length,
+            liked: liked,
+            isLoggedIn: true,
+        })
+    })
 })
 
 module.exports = router;

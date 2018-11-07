@@ -96,7 +96,7 @@ app.use((req, res, next) => {
 // add routes files
 app.use('/campgrounds', campgroundRoute);
 app.use('/campgrounds/:id/comments', commentRoute);
-app.use('/campgrounds/:id/ratings', ratingRoute);
+app.use('/campgrounds/:id', ratingRoute);
 app.use('/users', userRoute);
 app.use('/', rootRoute);
 

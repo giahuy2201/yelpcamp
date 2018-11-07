@@ -69,6 +69,33 @@ $(document).ready(() => {
                 window.location.reload(true);
             }
         })
+    });
+
+    // Likes
+    $('#likeButton').on('click', function (e) {
+        e.preventDefault();
+        var url = this.href
+        console.log(url);
+        // post this
+        $.ajax({
+            url: url,
+            method: 'POST',
+            contentType: 'application/json',
+            success: function (data) {
+                if (data.isLoggedIn) {
+                    if (data.number && data.liked) {
+                        var text = data.number + ' likes <i class="fas fa-heart"></i>';
+                    } else {
+                        var text = 'Like <i class="far fa-heart"></i>'
+                    }
+                    $('#likeButton').html(text);
+                } else {
+                    showAlert('You need to be logged in to do that!!!');
+                    $('html,body').scrollTop(0);
+                }
+                console.log(data);
+            }
+        })
     })
 
 });

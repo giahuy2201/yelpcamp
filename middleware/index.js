@@ -17,8 +17,8 @@ middlewareObj.isLoggedIn = function (req, res, next) {
         })
     }
     req.flash('error', 'You need to be logged in to do that');
-    middlewareObj.beforeLogin = req.originalUrl; // save the route to redirect after user asked to login
-    res.redirect('/login');
+    // middlewareObj.beforeLogin = req.originalUrl; // save the route to redirect after user asked to login
+    res.redirect(middlewareObj.beforeLogin);
 };
 
 middlewareObj.checkCampgroundOwnership = function (req, res, next) {

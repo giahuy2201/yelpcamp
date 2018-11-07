@@ -15,6 +15,7 @@ var campgroundSchema = new mongoose.Schema({
         type: Date,
         default: Date.now,
     },
+    likes: [String], // store user id who liked this
     ratings: {},
     // object (username) as a key
     hours: {}, // doublecheck later

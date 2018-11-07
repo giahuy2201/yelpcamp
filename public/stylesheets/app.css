@@ -8,14 +8,19 @@
     font-size: 1.6em;
 }
 
+.fa-heart {
+    color: rgb(240, 84, 106);
+    font-size: 1.2em;
+}
+
 .admin {
     color: goldenrod;
-    font-size: 1.2em;
 }
 
 #map {
     height: 200px;
 }
+
 .media img {
     height: 45px;
     width: 45px;
@@ -55,6 +60,30 @@
     border: 1px solid rgb(217, 217, 217);
     border-radius: 4px;
     padding: 20px;
+}
+
+a {
+    color: black;
+}
+
+.card-body a.btn-link,
+.card-body button.btn-link {
+    color: grey;
+}
+
+button i.fa-trash-alt,
+a i.fa-edit {
+    font-size: 1.2em;
+}
+
+a i.fa-edit:hover,
+a i.fa-pencil-alt:hover {
+    color: green;
+}
+
+button i.fa-trash-alt:hover,
+button i.fa-times:hover {
+    color: red;
 }
 
 a:hover {

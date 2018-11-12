@@ -1,9 +1,0 @@
-<% include ../partials/header %>
-<% include ../partials/navbar %>
-
-<form class="" action="/campgrounds/<%=campgroundId%>/comments/<%=comment._id%>?_method=PUT" method="POST">
-    <input type="text" class="form-control" id="textInput" name="comment[text]" value="<%=comment.text%>" required>
-    <input class="btn btn-success" type="submit">
-</form>
-
-<% include ../partials/footer %>

@@ -1,5 +1,5 @@
-body {
-    padding-top: 60px;
+.mainContainer {
+    padding-top: 80px;
 }
 
 .fa-key {
@@ -51,6 +51,11 @@ body {
 #profilePanel {
     /* background: pink; */
     max-width: 900px;
+    margin: 0 auto;
+}
+
+.alertForm {
+    max-width: 450px;
     margin: 0 auto;
 }
 

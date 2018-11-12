@@ -57,15 +57,15 @@ I always welcome everyone to fix me and make it more structured and organized.
 2. add like feature, and count it in user profile,campground index
 3. implement ajax for all flash message, and some routes
 4. implement new campground index page design
-
-
-4. Make the site robust and defensive
-6. restyle home page
-7. add admin permission
+5. retype password to confirm
+6. only people other than author can rate campgrounds
+7. restyle home page
 8. fix long comments
+9. fix campground,comment delete
+
+### working on
+4. Make the site robust and defensive
+7. add admin permission
 9. fix choosing hours
-10. add call feature
-11. only people other than author can rate campgrounds
 12. add email verification
 13. add favicon
-14. retype password to confirm

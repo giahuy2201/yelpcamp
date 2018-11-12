@@ -96,12 +96,26 @@ router.put('/:commentId', middleware.isLoggedIn, middleware.checkCommentOwnershi
 router.delete('/:commentId', middleware.isLoggedIn, middleware.checkCommentOwnership, (req, res) => {
     Comment.findByIdAndRemove(req.params.commentId, (err) => {
         if (err) {
-            req.flash('error', 'Campground not found!');
+            req.flash('error', 'Comment not found!');
             console.log(err);
             console.log('*** Comment delete routing');
             return res.redirect('/campgrounds');
         }
-        res.redirect('/campgrounds/' + req.params.id);
+        Campground.findById(req.params.id, (err, foundCampground) => {
+            if (err) {
+                req.flash('error', 'Campground not found!');
+                console.log(err);
+                console.log('*** Comment delete in Camgpround routing');
+                return res.redirect('/campgrounds');
+            }
+            // delete the reference in the carrying campground
+            var deletedCommentIndex = foundCampground.comments.indexOf(req.params.commentId);
+            // console.log(deletedCommentIndex);
+            foundCampground.comments.splice(deletedCommentIndex, 1);
+            foundCampground.save();
+            // console.log(foundCampground);
+            res.redirect('/campgrounds/' + req.params.id);
+        })
     })
 })
 

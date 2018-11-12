@@ -212,8 +212,22 @@ router.delete('/:id', middleware.isLoggedIn, middleware.checkCampgroundOwnership
             console.log('*** Campground delete routing');
             return res.redirect('/campgrounds');
         }
-        req.flash('success', 'Campground deleted!');
-        res.redirect('/campgrounds');
+        User.findById(req.user._id, (err, foundUser) => {
+            if (err) {
+                req.flash('error', 'Something went wrong!');
+                console.log(err);
+                console.log('*** Campground delete in User routing');
+                return res.redirect('/campgrounds');
+            }
+            // delete the reference in the carrying user
+            var campgroundIndex = foundUser.campgrounds.indexOf(req.params.id);
+            // console.log(campgroundIndex);
+            foundUser.campgrounds.splice(campgroundIndex, 1);
+            foundUser.save();
+            // console.log(foundUser);
+            req.flash('success', 'Campground deleted!');
+            res.redirect('/campgrounds');
+        })
     })
 });
 module.exports = router;

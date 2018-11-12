@@ -37,6 +37,11 @@ router.post('/ratings', middleware.isLoggedIn, (req, res) => {
         }
         var rate = Number(req.query.rating);
 
+        if (foundCampground.author.equals(req.user._id)) { // not allow authors to rate their campground
+            console.log('***');
+            return;
+        }
+
         var key = req.user._id.toString(); // key as a variable
         var updatedRatings = {};
         for (var id in foundCampground.ratings) {

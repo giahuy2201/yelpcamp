@@ -35,11 +35,14 @@
             <div class="card campgroundCard my-2">
                 <img class="card-img-top" src="<%=campground.image%>">
                 <div class="cardHover">
-                    <% if(campground.likes.length){ %>
                     <div class="likesHover">
+                    <% if(campground.likes.length){ %>
                         <%=campground.likes.length%> <i class="fas fa-heart"></i>
-                    </div>
                     <% } %>
+                    <% if(campground.comments.length){ %>
+                        <%=campground.comments.length%> <i class="far fa-comment-alt"></i>
+                    <% } %>
+                    </div>
                     <div class="nameHover">
                         <h2><%=campground.name%></h2>
                     </div>

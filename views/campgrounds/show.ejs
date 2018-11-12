@@ -82,7 +82,7 @@
                 </span> review(s)</div>
             </div>
             <% } %>
-            <% if(currentUser){ %>
+            <% if(currentUser && !campground.author._id.equals(currentUser._id)){ %>
             <div class="card-header" id="ratingHeading">
                 <div class="text-center" id="userRating">
                     <% for(var i=1;i<=5;i++){ %>

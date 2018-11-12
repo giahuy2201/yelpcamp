@@ -21,6 +21,11 @@
     color: goldenrod;
 }
 
+#captionCarousel {
+    text-shadow: 1px 1px 3px grey;
+
+}
+
 #map {
     height: 200px;
 }

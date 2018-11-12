@@ -1,4 +1,5 @@
 var mongoose = require('mongoose');
+var random = require('mongoose-simple-random');
 
 // create campground schema
 var campgroundSchema = new mongoose.Schema({
@@ -28,6 +29,7 @@ var campgroundSchema = new mongoose.Schema({
         ref: 'User'
     }
 });
+campgroundSchema.plugin(random);
 
 // create campground model
 module.exports = mongoose.model('Campground', campgroundSchema);

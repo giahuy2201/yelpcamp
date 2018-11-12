@@ -56,9 +56,9 @@ I always welcome everyone to fix me and make it more structured and organized.
 1. Restyle edit, delete button
 2. add like feature, and count it in user profile,campground index
 3. implement ajax for all flash message, and some routes
+4. implement new campground index page design
 
 
-3. implement new campground index page design
 4. Make the site robust and defensive
 6. restyle home page
 7. add admin permission

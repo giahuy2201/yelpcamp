@@ -31,9 +31,21 @@ router.get('/', (req, res) => {
         }
         // console.log(campgrounds);
         // render index page
-        res.render('campgrounds/index', {
-            campgrounds: campgrounds
-        });
+        // get some random for carousel
+        Campground.findRandom({}, {}, {
+            limit: 3
+        }, (err, randomCampgounds) => {
+            if (err) {
+                console.log(err);
+                console.log("*** Find random campgrounds");
+                return;
+            }
+            // console.log(randomCampgounds);
+            res.render('campgrounds/index', {
+                campgrounds: campgrounds,
+                carousel: randomCampgounds,
+            });
+        })
     })
 });
 

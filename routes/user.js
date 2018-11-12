@@ -1,9 +1,29 @@
 var express = require('express'),
-    passport = require('passport');
+    passport = require('passport'),
+    multer = require('multer'),
+    cloudinary = require('cloudinary');
 
 // include model
 var User = require('../models/user'),
     middleware = require('../middleware');
+
+// Image upload settings
+var storage = multer.diskStorage({
+    filename: function (req, file, callback) {
+        callback(null, Date.now() + file.originalname);
+    }
+});
+var imageFilter = function (req, file, callback) {
+    // accept image only
+    if (!file.originalname.match(/\.(jpg|jpeg|png|gif)$/i)) {
+        return callback(new Error('Only image files are allowed!'), false);
+    }
+    callback(null, true);
+}
+var upload = multer({
+    storage: storage,
+    fileFilter: imageFilter
+});
 
 var router = express.Router();
 
@@ -46,7 +66,7 @@ router.get('/:id/edit', middleware.isLoggedIn, middleware.checkProfileOwnership,
 });
 
 // User update
-router.put('/:id', middleware.isLoggedIn, middleware.checkProfileOwnership, (req, res) => {
+router.put('/:id', middleware.isLoggedIn, middleware.checkProfileOwnership, upload.single('photo'), (req, res) => {
     var newUser = {
         name: req.body.name,
         email: req.body.email, // Delete later
@@ -65,7 +85,21 @@ router.put('/:id', middleware.isLoggedIn, middleware.checkProfileOwnership, (req
             return res.redirect('/campgrounds');
         }
         // console.log(updatedUser);
-        res.redirect('/users/' + req.params.id);
+        // upload image
+        var publicId = updatedUser._id;
+        cloudinary.v2.uploader.upload(req.file.path, {
+            public_id: publicId,
+            invalidate: true,
+        }, (err, uploadedImage) => {
+            if (err) {
+                updatedUser.save();
+                req.flash('error', 'Something went wrong with your image!');
+                return res.redirect('/campgrounds');
+            }
+            updatedUser.photo = uploadedImage.secure_url;
+            updatedUser.save();
+            return res.redirect('/campgrounds');
+        });
     })
 });
 

@@ -2,19 +2,20 @@
 
 
 <h1 class="text-center my-4">YelpCamp</h1>
+<div class="container">
 <div class="alertForm">
     <% include ../partials/alerts %>
 </div>
 <div class="bg-light createCampgroundPanel">
-    <form action="/campgrounds" method="POST">
+    <form action="/campgrounds" method="POST" enctype="multipart/form-data">
         <h2>Create a campground</h2>
         <div class="form-group">
             <label for="nameInput">Name</label>
             <input type="text" class="form-control" id="nameInput" name="name" placeholder="Yosemite" required>
         </div>
-        <div class="form-group">
-            <label for="imageInput">Image</label>
-            <input type="text" class="form-control" id="imageInput" name="image" placeholder="http://image.com/yosemite.png" required>
+        <div class="custom-file mb-3">
+            <input type="file" class="custom-file-input" id="imageInput" name="image" accept="image/*" required>
+            <label class="custom-file-label" for="imageInput">Choose photo</label>
         </div>
         <div class="form-group">
             <label for="descriptionInput">Description</label>
@@ -79,5 +80,6 @@
     </form>
 </div>
 <a class="text-center d-block my-3" href="/campgrounds">Go back</a>
+</div>
 
 <% include ../partials/footer %>

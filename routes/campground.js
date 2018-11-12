@@ -1,12 +1,12 @@
 var express = require('express'),
-    nodeGeocoder = require('node-geocoder');
+    nodeGeocoder = require('node-geocoder'),
+    multer = require('multer'),
+    cloudinary = require('cloudinary');
 
 // include models
 var Campground = require('../models/campground'),
     User = require('../models/user'),
     middleware = require('../middleware');
-
-var router = express.Router();
 
 // for geocoder
 var options = {
@@ -18,6 +18,26 @@ var options = {
 var geocoder = nodeGeocoder(options);
 
 var weekdays = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+
+// Image upload settings
+var storage = multer.diskStorage({
+    filename: function (req, file, callback) {
+        callback(null, Date.now() + file.originalname);
+    }
+});
+var imageFilter = function (req, file, callback) {
+    // accept image only
+    if (!file.originalname.match(/\.(jpg|jpeg|png|gif)$/i)) {
+        return callback(new Error('Only image files are allowed!'), false);
+    }
+    callback(null, true);
+}
+var upload = multer({
+    storage: storage,
+    fileFilter: imageFilter
+});
+
+var router = express.Router();
 
 // Campgrounds page
 router.get('/', (req, res) => {
@@ -62,7 +82,7 @@ router.get('/new', middleware.isLoggedIn, (req, res) => {
 });
 
 // Campground create
-router.post('/', middleware.isLoggedIn, (req, res) => {
+router.post('/', middleware.isLoggedIn, upload.single('image'), (req, res) => {
     geocoder.geocode(req.body.location, (err, data) => {
         if (err || !data.length) {
             req.flash('error', 'Invalid address');
@@ -72,6 +92,7 @@ router.post('/', middleware.isLoggedIn, (req, res) => {
         var lat = data[0].latitude;
         var lng = data[0].longitude;
         var location = data[0].formattedAddress;
+        // get image url
         // get hours
         var hours = {};
         // console.log(req.body.dayCheck);
@@ -85,7 +106,6 @@ router.post('/', middleware.isLoggedIn, (req, res) => {
         // make campground variable
         var newCampground = {
             name: req.body.name,
-            image: req.body.image,
             description: req.body.description,
             website: req.body.website,
             telephone: req.body.telephone,
@@ -112,14 +132,24 @@ router.post('/', middleware.isLoggedIn, (req, res) => {
                 }
                 // update author
                 newCampground.author = req.user;
-                newCampground.save();
                 // update campground
                 foundUser.campgrounds.push(newCampground);
                 foundUser.save();
-                // console.log(newCampground);
-                // console.log(foundUser);
-                req.flash('success', 'Your campground was added!');
-                res.redirect('/campgrounds');
+                // upload image
+                var publicId = newCampground._id;
+                cloudinary.v2.uploader.upload(req.file.path, {
+                    public_id: publicId,
+                }, (err, uploadedImage) => {
+                    if (err) {
+                        newCampground.save();
+                        req.flash('error', 'Something went wrong with your image!');
+                        return res.redirect('/campgrounds');
+                    }
+                    newCampground.image = uploadedImage.secure_url;
+                    newCampground.save();
+                    req.flash('success', 'Your campground was added!');
+                    return res.redirect('/campgrounds');
+                });
             })
         })
     })
@@ -167,7 +197,7 @@ router.get('/:id/edit', middleware.isLoggedIn, middleware.checkCampgroundOwnersh
 });
 
 // Campground update
-router.put('/:id', middleware.isLoggedIn, middleware.checkCampgroundOwnership, (req, res) => {
+router.put('/:id', middleware.isLoggedIn, middleware.checkCampgroundOwnership, upload.single('image'), (req, res) => {
     var updatedCampground = req.body.campground;
     geocoder.geocode(req.body.location, (err, data) => {
         if (err || !data.length) {
@@ -179,6 +209,10 @@ router.put('/:id', middleware.isLoggedIn, middleware.checkCampgroundOwnership, (
         updatedCampground.lat = data[0].latitude;
         updatedCampground.lng = data[0].longitude;
         updatedCampground.location = data[0].formattedAddress;
+
+        // get publicId for that old image
+        // var publicId = 
+        // cloudinary.uploader.upload(req.file.path,{})
         // get hours
         var hours = {};
         for (var i in req.body.dayCheck) {
@@ -197,7 +231,21 @@ router.put('/:id', middleware.isLoggedIn, middleware.checkCampgroundOwnership, (
                 console.log('*** Campground update routing');
                 return res.redirect('/campgrounds');
             }
-            res.redirect('/campgrounds/' + req.params.id);
+            // upload image
+            var publicId = req.params.id;
+            cloudinary.v2.uploader.upload(req.file.path, {
+                public_id: publicId,
+                invalidate: true,
+            }, (err, uploadedImage) => {
+                if (err) {
+                    updatedCampground.save();
+                    req.flash('error', 'Something went wrong with your image!');
+                    return res.redirect('/campgrounds');
+                }
+                updatedCampground.image = uploadedImage.secure_url;
+                updatedCampground.save();
+                return res.redirect('/campgrounds/' + req.params.id);
+            });
 
         })
     });

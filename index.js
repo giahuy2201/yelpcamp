@@ -7,7 +7,8 @@ var express = require('express'),
     localStrategy = require('passport-local'),
     mongoose = require('mongoose'),
     flash = require('connect-flash'),
-    timeago = require('timeago.js');
+    timeago = require('timeago.js'),
+    cloudinary = require('cloudinary');
 
 // include models
 var User = require('./models/user');
@@ -17,6 +18,13 @@ var middleware = require('./middleware');
 
 // libs for env
 require('dotenv').config();
+
+// Cloud image setting
+cloudinary.config({
+    cloud_name: process.env.CLOUD_NAME,
+    api_key: process.env.CLOUD_API_KEY,
+    api_secret: process.env.CLOUD_API_SECRET,
+});
 
 // include routes
 var campgroundRoute = require('./routes/campground'),

@@ -1,5 +1,7 @@
 var express = require('express'),
-    passport = require('passport');
+    passport = require('passport'),
+    multer = require('multer'),
+    cloudinary = require('cloudinary');
 
 var async = require('async'),
     nodemailer = require('nodemailer'),
@@ -9,6 +11,24 @@ var async = require('async'),
 var User = require('../models/user'),
     middleware = require('../middleware');
 
+// Image upload settings
+var storage = multer.diskStorage({
+    filename: function (req, file, callback) {
+        callback(null, Date.now() + file.originalname);
+    }
+});
+var imageFilter = function (req, file, callback) {
+    // accept image only
+    if (!file.originalname.match(/\.(jpg|jpeg|png|gif)$/i)) {
+        return callback(new Error('Only image files are allowed!'), false);
+    }
+    callback(null, true);
+}
+var upload = multer({
+    storage: storage,
+    fileFilter: imageFilter
+});
+
 var router = express.Router();
 
 // Register route
@@ -17,7 +37,7 @@ router.get('/register', (req, res) => {
 });
 
 // Register authentication
-router.post('/users', (req, res) => { // DOUBLE CHECK THIS
+router.post('/users', upload.single('photo'), (req, res) => { // DOUBLE CHECK THIS
     var newUser = new User({
         name: req.body.name,
         username: req.body.username,
@@ -35,11 +55,24 @@ router.post('/users', (req, res) => { // DOUBLE CHECK THIS
             console.log('*** User create routing');
             return res.redirect('back');
         }
-        passport.authenticate('local')(req, res, () => {
-            // console.log(newUser);
-            req.flash('success', 'Successfully! Welcome to YelpCamp, ' + req.body.name);
-            res.redirect(middleware.beforeLogin);
-        })
+        // upload image
+        var publicId = newUser._id;
+        cloudinary.v2.uploader.upload(req.file.path, {
+            public_id: publicId,
+        }, (err, uploadedImage) => {
+            if (err) {
+                newUser.save();
+                req.flash('error', 'Something went wrong with your image!');
+                return res.redirect('/campgrounds');
+            }
+            newUser.photo = uploadedImage.secure_url;
+            newUser.save();
+            passport.authenticate('local')(req, res, () => {
+                // console.log(newUser);
+                req.flash('success', 'Successfully! Welcome to YelpCamp, ' + req.body.name);
+                return res.redirect(middleware.beforeLogin);
+            })
+        });
     })
 })
 

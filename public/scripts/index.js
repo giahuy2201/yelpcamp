@@ -19,4 +19,13 @@ $(document).ready(() => {
         }
     })
 
+    // file input
+    $('input[type="file"]').on('change', () => {
+        if ($('input[type=file]').val()) {
+            $('.custom-file-label').text($('input[type=file]').val().split('\\').pop());
+        } else {
+            $('.custom-file-label').text('Choose photo');
+        }
+    })
+
 });

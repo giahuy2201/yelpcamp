@@ -62,6 +62,7 @@ I always welcome everyone to fix me and make it more structured and organized.
 7. restyle home page
 8. fix long comments
 9. fix campground,comment delete
+10. add cloudinary
 
 ### working on
 4. Make the site robust and defensive

@@ -1,15 +1,20 @@
 <% include ./partials/header %>
 
 <h1 class="text-center my-4">YelpCamp</h1>
+<div class="container">
 <div class="alertForm">
     <% include ./partials/alerts %>
 </div>
 <div class="signinPanel">
-    <form action="/users" method="POST">
+    <form action="/users" method="POST" enctype="multipart/form-data">
         <h2>Create an account</h2>
         <div class="form-group">
             <label for="nameInput">Full Name</label>
             <input type="text" class="form-control" id="nameInput" name="name" required>
+        </div>
+        <div class="custom-file mb-3">
+            <input type="file" class="custom-file-input" id="imageInput" name="photo" accept="image/*" required>
+            <label class="custom-file-label" for="imageInput">Choose your avatar</label>
         </div>
         <div class="form-group">
             <label for="usernameInput">Username</label>
@@ -18,10 +23,6 @@
         <div class="form-group">
             <label for="emailInput">Email</label>
             <input type="email" class="form-control" id="emailInput" name="email" required>
-        </div>
-        <div class="form-group">
-            <label for="photoInput">Profile Photo</label>
-            <input type="text" class="form-control" id="photoInput" name="photo" required>
         </div>
         <div class="form-group">
             <label for="bioInput">Bio</label>
@@ -49,5 +50,6 @@
     </form>
 </div>
 <a class="text-center d-block my-3" href="/campgrounds">Go back</a>
+</div>
 
 <% include ./partials/footer %>

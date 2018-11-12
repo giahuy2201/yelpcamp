@@ -22,13 +22,14 @@ var weekdays = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'
 // Campgrounds page
 router.get('/', (req, res) => {
     middleware.beforeLogin = req.originalUrl; // save url in case user want to login
-    Campground.find((err, campgrounds) => {
+    Campground.find().populate('author').exec((err, campgrounds) => {
         if (err) {
             req.flash('error', 'Something went wrong! Try again later');
             console.log(err);
             console.log('*** Campground index routing');
             return res.redirect('/campgrounds');
         }
+        // console.log(campgrounds);
         // render index page
         res.render('campgrounds/index', {
             campgrounds: campgrounds

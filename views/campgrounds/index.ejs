@@ -33,7 +33,21 @@
         <a href="/campgrounds/<%=campground._id%>">
             <div class="card campgroundCard my-2">
                 <img class="card-img-top" src="<%=campground.image%>">
-                <div class="card-body text-dark p-1 bg-light">
+                <div class="cardHover">
+                    <% if(campground.likes.length){ %>
+                    <div class="likesHover">
+                        <%=campground.likes.length%> <i class="fas fa-heart"></i>
+                    </div>
+                    <% } %>
+                    <div class="nameHover">
+                        <h2><%=campground.name%></h2>
+                    </div>
+                    <div class="authorHover">
+                        <img src="<%=campground.author.photo%>" class="photoHover">
+                        <%=campground.author.name%>
+                    </div>
+                </div>
+                <div class="card-body text-dark p-1 bg-light d-lg-none d-block">
                     <h5 class="card-title text-center m-0">
                         <%=campground.name%>
                     </h5>

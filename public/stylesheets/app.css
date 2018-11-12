@@ -37,6 +37,13 @@
     border-radius: 50%;
 }
 
+.photoHover {
+    height: 30px;
+    width: 30px;
+    border: 1px solid rgb(200, 200, 200);
+    border-radius: 50%;
+}
+
 .profilePhoto {
     height: 250px;
     width: 250px;
@@ -169,4 +176,37 @@ input[type="search"] {
 .vdivider {
     border-left: 1px solid rgb(221, 221, 221);
     height: 30px;
+}
+
+.cardHover {
+    display: none;
+    text-align: center;
+}
+
+.campgroundCard:hover .card-img-top {
+    opacity: 0.3;
+}
+
+.campgroundCard:hover .cardHover {
+    display: block;
+    color: black;
+}
+
+.nameHover {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.likesHover {
+    position: absolute;
+    top: 8px;
+    right: 16px;
+}
+
+.authorHover {
+    position: absolute;
+    bottom: 8px;
+    left: 10px;
 }

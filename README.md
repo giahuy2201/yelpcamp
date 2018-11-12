@@ -53,11 +53,13 @@ I always welcome everyone to fix me and make it more structured and organized.
 7. add ratings
 
 ## yelpcamp 6.0.0
-1. implement ajax for all flash message, and some routes
+1. Restyle edit, delete button
 2. add like feature, and count it in user profile,campground index
+3. implement ajax for all flash message, and some routes
+
+
 3. implement new campground index page design
 4. Make the site robust and defensive
-5. Restyle edit, delete button
 6. restyle home page
 7. add admin permission
 8. fix long comments

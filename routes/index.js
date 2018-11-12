@@ -33,7 +33,9 @@ var router = express.Router();
 
 // Register route
 router.get('/register', (req, res) => {
-    res.render('register');
+    res.render('register', {
+        title: 'Register',
+    });
 });
 
 // Register authentication
@@ -78,7 +80,9 @@ router.post('/users', upload.single('photo'), (req, res) => { // DOUBLE CHECK TH
 
 // Login route
 router.get('/login', (req, res) => {
-    res.render('login');
+    res.render('login', {
+        title: 'Login',
+    });
 });
 
 // Login authentication
@@ -115,7 +119,9 @@ router.get('/logout', (req, res) => {
 
 // Forgot password
 router.get('/forgot', (req, res) => {
-    res.render('forgot');
+    res.render('forgot', {
+        title: 'Forgot Password',
+    });
 });
 
 // Reset password
@@ -185,7 +191,8 @@ router.get('/reset/:token', (req, res) => {
             return res.redirect('/forgot');
         }
         res.render('reset', {
-            token: req.params.token
+            token: req.params.token,
+            title: 'Reset Password'
         });
     })
 });
@@ -244,17 +251,23 @@ router.post('/reset/:token', (req, res) => {
 
 // Home page
 router.get('/', (req, res) => {
-    res.render('../views/landing');
+    res.render('../views/landing', {
+        title: 'Yelpcamp',
+    });
 });
 
 // About page
 router.get('/about', (req, res) => {
-    res.render('../views/about');
+    res.render('../views/about', {
+        title: 'About Author',
+    });
 });
 
 // Other page
 router.get('/:abc', (req, res) => {
-    res.send('Page not found');
+    res.send('Page not found', {
+        title: 'Error',
+    });
 });
 
 module.exports = router;

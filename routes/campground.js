@@ -64,6 +64,7 @@ router.get('/', (req, res) => {
             res.render('campgrounds/index', {
                 campgrounds: campgrounds,
                 carousel: randomCampgounds,
+                title: 'All Campgrounds',
             });
         })
     })
@@ -77,7 +78,8 @@ router.get('/new', middleware.isLoggedIn, (req, res) => {
         });
     }
     res.render('campgrounds/new', {
-        weekdays: weekdays
+        weekdays: weekdays,
+        title: 'New Campground'
     });
 });
 
@@ -175,7 +177,8 @@ router.get('/:id', (req, res) => {
         }
         res.render('campgrounds/show', {
             campground: foundCampground,
-            weekdays: weekdays
+            weekdays: weekdays,
+            title: foundCampground.name + ' - ' + foundCampground.author.name,
         });
     })
 });
@@ -191,7 +194,8 @@ router.get('/:id/edit', middleware.isLoggedIn, middleware.checkCampgroundOwnersh
         }
         res.render('campgrounds/edit', {
             campground: foundCampground,
-            weekdays: weekdays
+            weekdays: weekdays,
+            title: foundCampground.name + ' - Edit'
         });
     })
 });

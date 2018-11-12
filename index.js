@@ -8,7 +8,8 @@ var express = require('express'),
     mongoose = require('mongoose'),
     flash = require('connect-flash'),
     timeago = require('timeago.js'),
-    cloudinary = require('cloudinary');
+    cloudinary = require('cloudinary'),
+    favicon = require('serve-favicon');
 
 // include models
 var User = require('./models/user');
@@ -84,6 +85,9 @@ Date.prototype.inPeriod = function (open, close) {
     }
     return false;
 };
+
+// add favicon
+app.use(favicon('public/favicon.ico'));
 
 // passport setup
 app.use(passport.initialize());

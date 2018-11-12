@@ -46,6 +46,7 @@ router.get('/:id', (req, res) => {
         res.render('users/show', {
             user: foundUser,
             likes: likes,
+            title: foundUser.name,
         });
     })
 });
@@ -60,7 +61,8 @@ router.get('/:id/edit', middleware.isLoggedIn, middleware.checkProfileOwnership,
             return res.redirect('/campgrounds');
         }
         res.render('users/edit', {
-            user: foundUser
+            user: foundUser,
+            title: foundUser.name + ' - Edit',
         });
     })
 });
@@ -106,7 +108,8 @@ router.put('/:id', middleware.isLoggedIn, middleware.checkProfileOwnership, uplo
 // User change password
 router.get('/:id/change', middleware.isLoggedIn, middleware.checkProfileOwnership, (req, res) => {
     res.render('users/change', {
-        userId: req.params.id
+        userId: req.params.id,
+        title: 'Chang Password',
     });
 });
 

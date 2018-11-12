@@ -1,8 +1,11 @@
 <% include ../partials/header %>
-<% include ../partials/navbar %>
 
+<h1 class="text-center my-4">YelpCamp</h1>
+<div class="alertForm">
+    <% include ../partials/alerts %>
+</div>
 <form class="signinPanel" action="/users/<%=user._id%>?_method=PUT" method="POST">
-    <h1 class="text-center">Edit profile</h1>
+    <h2>Edit Profile</h2>
     <div class="form-group">
         <label for="nameInput">Full name</label>
         <input type="text" class="form-control" id="nameInput" name="name" value="<%=user.name%>" required>
@@ -23,9 +26,10 @@
         <label for="adminCodeInput">Admin Code</label>
         <input type="text" class="form-control" id="adminCodeInput" name="admin">
     </div>
-    <div class="form-group my-4">
+    <div class="form-group my-0 mt-4">
         <input class="btn btn-success btn-block" type="submit">
     </div>
 </form>
+<a class="text-center d-block my-3" href="/campgrounds">Go back</a>
 
 <% include ../partials/footer %>

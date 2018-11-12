@@ -68,3 +68,4 @@ I always welcome everyone to fix me and make it more structured and organized.
 11. only people other than author can rate campgrounds
 12. add email verification
 13. add favicon
+14. retype password to confirm

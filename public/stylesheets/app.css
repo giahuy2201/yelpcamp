@@ -83,8 +83,7 @@
 .createCampgroundPanel {
     /* background: pink; */
     max-width: 500px;
-    margin: 5% auto;
-    margin-bottom: 0;
+    margin: 0 auto;
     border: 1px solid rgb(217, 217, 217);
     border-radius: 4px;
     padding: 20px;
@@ -214,4 +213,12 @@ input[type="search"] {
     position: absolute;
     bottom: 8px;
     left: 10px;
+}
+
+.matched {
+    border: 2px solid green !important;
+}
+
+.nmatched {
+    border: 2px solid red !important;
 }

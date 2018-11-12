@@ -235,6 +235,10 @@ router.put('/:id', middleware.isLoggedIn, middleware.checkCampgroundOwnership, u
                 console.log('*** Campground update routing');
                 return res.redirect('/campgrounds');
             }
+            if (!req.file) {
+                updatedCampground.save();
+                return res.redirect('/campgrounds/' + req.params.id);
+            }
             // upload image
             var publicId = req.params.id;
             cloudinary.v2.uploader.upload(req.file.path, {
@@ -257,15 +261,15 @@ router.put('/:id', middleware.isLoggedIn, middleware.checkCampgroundOwnership, u
 
 // Campground delete
 router.delete('/:id', middleware.isLoggedIn, middleware.checkCampgroundOwnership, middleware.isLoggedIn, (req, res) => {
-    Campground.findByIdAndRemove(req.params.id, (err) => {
-        if (err) {
+    Campground.findById(req.params.id, (err, foundCampground) => {
+        if (err || !foundCampground) {
             req.flash('error', 'Something went wrong!');
             console.log(err);
             console.log('*** Campground delete routing');
             return res.redirect('/campgrounds');
         }
-        User.findById(req.user._id, (err, foundUser) => {
-            if (err) {
+        User.findById(foundCampground.author._id, (err, foundUser) => {
+            if (err || !foundUser) {
                 req.flash('error', 'Something went wrong!');
                 console.log(err);
                 console.log('*** Campground delete in User routing');
@@ -276,9 +280,11 @@ router.delete('/:id', middleware.isLoggedIn, middleware.checkCampgroundOwnership
             // console.log(campgroundIndex);
             foundUser.campgrounds.splice(campgroundIndex, 1);
             foundUser.save();
-            // console.log(foundUser);
-            req.flash('success', 'Campground deleted!');
-            res.redirect('/campgrounds');
+            Campground.deleteOne(foundCampground, (err) => {
+                // console.log(foundUser);
+                req.flash('success', 'Campground deleted!');
+                res.redirect('/campgrounds')
+            });;
         })
     })
 });

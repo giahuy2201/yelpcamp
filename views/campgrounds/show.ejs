@@ -109,7 +109,7 @@
                     <%=campground.description%>
                 </div>
                 <% if(currentUser){ %>
-                    <% if(campground.author._id.equals(currentUser._id)){ %>
+                    <% if(campground.author._id.equals(currentUser._id) || currentUser.isAdmin){ %>
                         <form class="d-inline float-right mt-2" action="/campgrounds/<%=campground._id%>?_method=DELETE" method="POST">
                             <button class="btn btn-link" type="submit"><i class="fas fa-trash-alt"></i></button>
                         </form>
@@ -159,7 +159,7 @@
                 <div class="media-body">
                     <div class="modifyButton float-right">
                         <%=comment.created.toAgo()%>
-                        <% if(currentUser && comment.author._id.equals(currentUser._id)){ %>
+                        <% if(currentUser && (comment.author._id.equals(currentUser._id) || currentUser.isAdmin)){ %>
                         <br class="my-2">
                         <a id="<%=comment._id%>" class="btn btn-link" href="/campgrounds/<%=campground._id%>/comments/<%=comment._id%>/edit"><i class="fas fa-pencil-alt"></i></a>
                         <form class="d-inline mr-2" action="/campgrounds/<%=campground._id%>/comments/<%=comment._id%>?_method=DELETE"

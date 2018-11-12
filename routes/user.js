@@ -69,13 +69,8 @@ router.get('/:id/edit', middleware.isLoggedIn, middleware.checkProfileOwnership,
 
 // User update
 router.put('/:id', middleware.isLoggedIn, middleware.checkProfileOwnership, upload.single('photo'), (req, res) => {
-    var newUser = {
-        name: req.body.name,
-        email: req.body.email, // Delete later
-        photo: req.body.photo,
-        bio: req.body.bio,
-        isAdmin: false,
-    };
+    var newUser = req.body.user;
+    newUser.isAdmin = false;
     if (req.body.admin === process.env.ADMIN_CODE) {
         newUser.isAdmin = true;
     }
@@ -87,6 +82,10 @@ router.put('/:id', middleware.isLoggedIn, middleware.checkProfileOwnership, uplo
             return res.redirect('/campgrounds');
         }
         // console.log(updatedUser);
+        if (!req.file) {
+            updatedUser.save();
+            return res.redirect('/campgrounds');
+        }
         // upload image
         var publicId = updatedUser._id;
         cloudinary.v2.uploader.upload(req.file.path, {

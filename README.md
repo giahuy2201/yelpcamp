@@ -63,10 +63,10 @@ I always welcome everyone to fix me and make it more structured and organized.
 8. fix long comments
 9. fix campground,comment delete
 10. add cloudinary
+11. add favicon & title for each page
+12. add admin permission
 
 ### working on
 4. Make the site robust and defensive
-7. add admin permission
 9. fix choosing hours
-12. add email verification
-13. add favicon
+10. restyle to be responsive

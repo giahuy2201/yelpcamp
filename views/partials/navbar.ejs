@@ -1,7 +1,7 @@
 <!-- navbar from B -->
-<nav class="navbar navbar-expand-md navbar-dark bg-dark">
+<nav class="navbar navbar-expand-lg navbar-light fixed-top">
 <div class="container">
-    <a class="navbar-brand" href="/">YelpCamp</a>
+    <a class="navbar-brand" href="/campgrounds"><i class="fas fa-campground"></i> YelpCamp</a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
         aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
@@ -9,26 +9,44 @@
 
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav mr-auto">
-            <li class="nav-item active">
-                <a class="nav-link" href="/campgrounds">Home <span class="sr-only">(current)</span></a>
-            </li>
             <li class="nav-item">
                 <a class="nav-link" href="/about">About</a>
             </li>
         </ul>
+            <form class="my-2 mx-lg-3 my-lg-0" id="searchForm" style="display:flex">
+                <input class="form-control bg-light" type="search" placeholder="Looking for a campground?" aria-label="Search">
+            </form>
         <ul class="navbar-nav ml-auto">
-            <% if(!currentUser){ %>
             <li class="nav-item">
-                <a class="nav-link" href="/login"><i class="fas fa-sign-in-alt"></i> Join us</a>
+                <a class="nav-link" href="/explore">Explore</a>
+            </li>
+            <li class="nav-item mx-lg-2">
+                <a class="nav-link btn btn-outline-secondary btn-sm py-1 mt-lg-1" href="/campgrounds/new">Add a campground</a>
+            </li>
+            <% if(!currentUser){ %>
+            <div class="vdivider mx-2 mt-1 d-none d-lg-block"></div>
+            <li class="nav-item">
+                <a class="nav-link" href="/login">Login</a>
+            </li>
+            <li class="nav-item ml-lg-2">
+                <a class="nav-link btn btn-success btn-sm py-1 mt-lg-1 text-white" href="/register">Join us</a>
             </li>
             <% }else{ %>
-            <li class="nav-item">
-                <a class="nav-link" href="/users/<%=currentUser._id%>">signed in as
-                    <strong>
-                        <%=currentUser.name%></strong></a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" id="logoutButton" href="/logout"><i class="fas fa-sign-out-alt"></i> Logout</a>
+            <!-- currentUser -->
+            <li class="nav-item dropdown">
+                <a class="nav-link py-0" role="button" id="profileDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <strong class="align-middle text-dark">
+                        <%=currentUser.name%>
+                    </strong>
+                    <img class="userAvatar" src="<%=currentUser.photo%>">
+                </a>
+                <div class="dropdown-menu dropdown-menu-right text-right" aria-labelledby="profileDropdown">
+                    <a class="dropdown-item" href="/users/<%=currentUser._id%>">View profile</a>
+                    <a class="dropdown-item" href="/users/<%=currentUser._id%>/edit">Edit profile</a>
+                    <a class="dropdown-item" href="/users/<%=currentUser._id%>/change">Change password</a>
+                    <div class="dropdown-divider"></div>
+                    <a class="dropdown-item" id="logoutButton" href="/logout"><i class="fas fa-sign-out-alt"></i> Logout</a>
+                </div>
             </li>
             <% } %>
         </ul>

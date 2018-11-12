@@ -101,7 +101,7 @@ router.post('/reset', (req, res, next) => {
             }, function (err, foundUser) {
                 if (!foundUser) {
                     req.flash('error', 'No account with that email address exists.');
-                    return res.redirect('/users/forgot');
+                    return res.redirect('/forgot');
                 }
 
                 foundUser.resetPasswordToken = token;
@@ -126,7 +126,7 @@ router.post('/reset', (req, res, next) => {
                 subject: 'YelpCamp Password Reset',
                 text: 'You are receiving this because you (or someone else) requested the reset of you YelpCamp acount\'s password.\n' +
                     'Please click the following link, or paste it into your browser to compete the process\n' +
-                    'http://' + req.header('host') + '/users/reset/' + token + '\n\n' +
+                    'http://' + req.header('host') + '/reset/' + token + '\n\n' +
                     'If you did not request this, please ignore this email and you password will remain unchanged.',
             };
             smtpTransport.sendMail(mailOptions, function (err) {
@@ -138,7 +138,7 @@ router.post('/reset', (req, res, next) => {
         if (err) {
             return next(err);
         };
-        res.redirect('/users/forgot');
+        res.redirect('/forgot');
     });
 });
 
@@ -149,7 +149,7 @@ router.get('/reset/:token', (req, res) => {
     }, (err, foundUser) => {
         if (!foundUser) {
             req.flash('error', 'Password reset token is invalid or expired.');
-            return res.redirect('/users/forgot');
+            return res.redirect('/forgot');
         }
         res.render('reset', {
             token: req.params.token

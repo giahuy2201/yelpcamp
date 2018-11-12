@@ -59,3 +59,10 @@ I always welcome everyone to fix me and make it more structured and organized.
 4. Make the site robust and defensive
 5. Restyle edit, delete button
 6. restyle home page
+7. add admin permission
+8. fix long comments
+9. fix choosing hours
+10. add call feature
+11. only people other than author can rate campgrounds
+12. add email verification
+13. add favicon

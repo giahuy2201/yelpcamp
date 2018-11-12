@@ -1,3 +1,7 @@
+body {
+    padding-top: 60px;
+}
+
 .fa-key {
     color: gold;
     font-size: 0.6em;
@@ -24,6 +28,13 @@
 .media img {
     height: 45px;
     width: 45px;
+}
+
+.userAvatar {
+    height: 40px;
+    width: 40px;
+    border: 1px solid rgb(200, 200, 200);
+    border-radius: 50%;
 }
 
 .profilePhoto {
@@ -112,5 +123,45 @@ a:hover {
 
 select.form-control {
     width: 70px;
+    height: 30px;
+}
+
+.navbar {
+    box-shadow: 0 2px 8px -5px grey;
+    background: white;
+}
+
+.carousel-inner {
+    width: 100%;
+    max-height: 350px !important;
+}
+
+.carousel-caption {
+    /* vertical-align: middle; */
+    top: 20%;
+}
+
+#searchForm {
+    flex: 1;
+}
+
+input[type="search"] {
+    border-radius: 19px;
+}
+
+.nav-item .btn-outline-secondary {
+    background: white;
+    color: rgb(221, 221, 221);
+    border-color: rgb(221, 221, 221);
+}
+
+.nav-item .nav-link.btn-outline-secondary:hover {
+    background: white;
+    color: black;
+    border-color: black;
+}
+
+.vdivider {
+    border-left: 1px solid rgb(221, 221, 221);
     height: 30px;
 }

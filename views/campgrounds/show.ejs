@@ -1,9 +1,10 @@
 <% include ../partials/header %>
 <% include ../partials/navbar %>
-<% include ../partials/alerts %>
 
+<div class="container mainContainer">
+<% include ../partials/alerts %>
 <div class="row">
-    <div class="col-md-3 d-none d-lg-block">
+    <div class="col-lg-3">
         <div class="card">
             <div class="card-header p-1" id="addressHeading">
                 <h5 class="mb-0">
@@ -16,19 +17,26 @@
                 <div class="card-body" id="map"></div>
             </div>
         </div>
+        <div class="row">
         <!-- Website -->
         <% if(campground.website){ %>
+            <div class="col-6 col-lg-12">
             <div class="card card-header p-1 mt-3">
                 <a class="btn text-truncate text-left text-dark d-block" href="http://<%=campground.website%>">
                 <i class="fas fa-globe-americas"></i> <%=campground.website%></a>
             </div>
+            </div>
         <% } %>
-        <!-- Telephone -->
-        <div class="card card-header p-1 mt-3">
-            <a class="btn btn-link text-truncate text-left d-block">
-            <i class="fas fa-phone"></i> <%=campground.telephone%></a>
+            <!-- Telephone -->
+            <div class="col-6 col-lg-12">
+            <div class="card card-header p-1 mt-3">
+                <a class="btn btn-link text-truncate text-left d-block">
+                <i class="fas fa-phone"></i> <%=campground.telephone%></a>
+            </div>
+            </div>
         </div>
         <!-- hours -->
+        <% if(campground.hours){ %>
         <div class="card mt-3">
             <div class="card-header p-1" id="hoursHeading">
                 <h5 class="mb-0">
@@ -50,18 +58,19 @@
                     <% if(day != 'Sunday'){ %>
                         <hr class="my-2">
                     <% } %>
-                    <p class="w-50 d-inline-block m-0"><%=day%></p>
+                    <p class="d-inline-block m-0"><%=day%></p>
                     <% if(campground.hours[day]){ %>
-                        <p class="w-50 d-inline"><%=campground.hours[day].open.toTime()%> - <%=campground.hours[day].close.toTime()%></p>
+                        <p class="d-inline float-right"><%=campground.hours[day].open.toTime()%> - <%=campground.hours[day].close.toTime()%></p>
                     <% }else{ %>
-                        <p class="w-50 d-inline">Close.</p>
+                        <p class="d-inline float-right">Close.</p>
                     <% } %>
                     <% } %>
                 </div>
             </div>
         </div>
+        <% } %>
         <!-- Rating -->
-        <div class="card mt-3">
+        <div class="card my-3">
             <% if(campground.ratings){ %>
             <div class="card-body">
                 <h1 class="text-center" id="ratingAverage">
@@ -81,8 +90,8 @@
                 </span> review(s)</div>
             </div>
             <% } %>
-            <% if(currentUser){ %>
-            <div class="card-header" id="ratingHeading">
+            <% if(currentUser && !campground.author._id.equals(currentUser._id)){ %>
+            <div class="card-header d-none d-lg-block" id="ratingHeading">
                 <div class="text-center" id="userRating">
                     <% for(var i=1;i<=5;i++){ %>
                         <% if(campground.ratings && i<=Math.round(campground.ratings[currentUser._id.toString()])){ %>
@@ -96,7 +105,7 @@
             <% } %>
         </div>
     </div>
-    <div class="col-lg-9 col-12">
+    <div class="col-lg-9">
         <div class="card">
             <img class="card-img-top" src="<%=campground.image%>">
             <div class="card-body">
@@ -107,19 +116,34 @@
                 <div class="card-text">
                     <%=campground.description%>
                 </div>
+                <% if(currentUser){ %>
+                    <% if(campground.author._id.equals(currentUser._id) || currentUser.isAdmin){ %>
+                        <form class="d-inline float-right mt-2" action="/campgrounds/<%=campground._id%>?_method=DELETE" method="POST">
+                            <button class="btn btn-link" type="submit"><i class="fas fa-trash-alt"></i></button>
+                        </form>
+                        <a class="btn btn-link float-right mt-2" href="/campgrounds/<%=campground._id%>/edit"><i class="fas fa-edit"></i></a>
+                    <% }else{ %>
+                        <div class="reaction mt-3 mr-2 float-right">
+                            <a id="likeButton" href="/campgrounds/<%=campground._id%>/likes">
+                            <% if(campground.likes.indexOf(currentUser._id) == -1){ %>
+                                Like <i class="far fa-heart"></i>
+                            <% }else{ %>
+                                <%=campground.likes.length%> likes <i class="fas fa-heart"></i>
+                            <% } %>
+                            </a>
+                        </div>
+                    <% } %>
+                <% }else{ %>
+                    <a class="float-right mt-3 mr-2">
+                    <% if(campground.likes.length){ %>
+                        <%=campground.likes.length%> likes <i class="fas fa-heart"></i>
+                    <% } %>
+                    </a>
+                <% } %>
                 <p class="mt-3"><em>Created by <strong>
                             <a href="/users/<%=campground.author._id%>">
                                 <%=campground.author.name%></a></strong>
                         <%=campground.created.toAgo()%></em></p>
-                <% if(currentUser && campground.author._id.equals(currentUser._id)){ %>
-                <hr>
-                <div class="mt-2">
-                    <a class="btn btn-success btn-sm" href="/campgrounds/<%=campground._id%>/edit">Edit</a>
-                    <form class="d-inline float-right" action="/campgrounds/<%=campground._id%>?_method=DELETE" method="POST">
-                        <input class="btn btn-danger btn-sm" type="submit" value="Delete">
-                    </form>
-                </div>
-                <% } %>
             </div>
         </div>
         <!-- COMMENTS -->
@@ -130,20 +154,23 @@
                 <h5 class="float-left my-1">Comments</h5>
             </div>
             <hr>
-            <div id="newForm" class="d-none">
-            <form class="form mb-3" style="display:flex" action="/campgrounds/<%=campground._id%>/comments" method="POST">
-                <input type="text" class="form-control" id="textInput" name="comment[text]" placeholder="Enter your comment here" required>
-                <input class="btn btn-success ml-3" type="submit">
-            </form>
-            </div>
+            <div id="newForm"></div>
             <% if(campground.comments.length > 0){ %>
             <% campground.comments.forEach((comment)=>{ %>
-            <div class="media">
+            <div class="media mb-2">
                 <img class="mr-3 rounded-circle my-2" src="<%=comment.author.photo%>">
-                <div class="media-body">
-                    <p class="float-right">
+                <div class="media-body" id="m_<%=comment._id%>">
+                    <div class="modifyButton float-right">
                         <%=comment.created.toAgo()%>
-                    </p>
+                        <% if(currentUser && (comment.author._id.equals(currentUser._id) || currentUser.isAdmin)){ %>
+                        <br class="my-2">
+                        <a id="<%=comment._id%>" class="btn btn-link" href="/campgrounds/<%=campground._id%>/comments/<%=comment._id%>/edit"><i class="fas fa-pencil-alt"></i></a>
+                        <form class="d-inline mr-2" action="/campgrounds/<%=campground._id%>/comments/<%=comment._id%>?_method=DELETE"
+                            method="POST">
+                            <button class="btn btn-link" type="submit"><i class="fas fa-times"></i></button>
+                        </form>
+                        <% } %>
+                    </div>
                     <h5 class="mt-0">
                         <a href="/users/<%=comment.author._id%>"
                         <% if(comment.author.isAdmin){ %>
@@ -152,26 +179,19 @@
                         >
                             <%=comment.author.name%></a>
                     </h5>
-                    <p>
+                    <p class="d-inline-block mb-0">
                         <%=comment.text%>
                     </p>
-                    <% if(currentUser && comment.author._id.equals(currentUser._id)){ %>
-                    <div class="mt-2">
-                        <form class="d-inline float-right ml-2" action="/campgrounds/<%=campground._id%>/comments/<%=comment._id%>?_method=DELETE"
-                            method="POST">
-                            <input class="btn btn-danger btn-sm" type="submit" value="Delete">
-                        </form>
-                        <a class="btn btn-success btn-sm float-right" href="/campgrounds/<%=campground._id%>/comments/<%=comment._id%>/edit">Edit</a>
-                    </div>
-                    <% } %>
                 </div>
             </div>
+            
             <% }) %>
             <% }else{ %>
             <p>No comments found! Be the first person</p>
             <% } %>
         </div>
     </div>
+</div>
 </div>
 
 <script>

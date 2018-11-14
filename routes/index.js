@@ -1,5 +1,7 @@
 var express = require('express'),
-    passport = require('passport');
+    passport = require('passport'),
+    multer = require('multer'),
+    cloudinary = require('cloudinary');
 
 var async = require('async'),
     nodemailer = require('nodemailer'),
@@ -9,16 +11,36 @@ var async = require('async'),
 var User = require('../models/user'),
     middleware = require('../middleware');
 
+// Image upload settings
+var storage = multer.diskStorage({
+    filename: function (req, file, callback) {
+        callback(null, Date.now() + file.originalname);
+    }
+});
+var imageFilter = function (req, file, callback) {
+    // accept image only
+    if (!file.originalname.match(/\.(jpg|jpeg|png|gif)$/i)) {
+        return callback(new Error('Only image files are allowed!'), false);
+    }
+    callback(null, true);
+}
+var upload = multer({
+    storage: storage,
+    fileFilter: imageFilter
+});
+
 var router = express.Router();
 
 // Register route
 router.get('/register', (req, res) => {
-    res.render('register');
+    return res.render('register', {
+        title: 'Register',
+    });
 });
 
 // Register authentication
-router.post('/users', (req, res) => { // DOUBLE CHECK THIS
-    var newUser = new User({
+router.post('/users', upload.single('photo'), (req, res) => { // DOUBLE CHECK THIS
+    var newUser = new User({ // Won't work if use req.body.user as an argument
         name: req.body.name,
         username: req.body.username,
         email: req.body.email,
@@ -30,22 +52,35 @@ router.post('/users', (req, res) => { // DOUBLE CHECK THIS
     }
     User.register(newUser, req.body.password, (err, newUser) => {
         if (err || !newUser) {
-            req.flash('error', 'Something went wrong! Try again later');
-            console.log(err);
+            req.flash('error', err.message);
+            console.log(err.message);
             console.log('*** User create routing');
-            return res.redirect('back');
+            return res.redirect('/register');
         }
-        passport.authenticate('local')(req, res, () => {
-            // console.log(newUser);
-            req.flash('success', 'Successfully! Welcome to YelpCamp, ' + req.body.name);
-            res.redirect(middleware.beforeLogin);
-        })
+        // upload image
+        cloudinary.v2.uploader.upload(req.file.path, {
+            public_id: newUser._id,
+        }, (err, uploadedImage) => {
+            if (err) {
+                newUser.save();
+                req.flash('error', 'Something went wrong with your image!');
+                return res.redirect('/campgrounds');
+            }
+            newUser.photo = uploadedImage.secure_url;
+            newUser.save();
+            passport.authenticate('local')(req, res, () => {
+                req.flash('success', 'Successfully! Welcome to YelpCamp, ' + req.body.name);
+                return res.redirect(middleware.beforeLogin);
+            });
+        });
     })
 })
 
 // Login route
 router.get('/login', (req, res) => {
-    res.render('login');
+    return res.render('login', {
+        title: 'Login',
+    });
 });
 
 // Login authentication
@@ -53,7 +88,7 @@ router.post('/login', (req, res, next) => { // DIVE DEEP LATER
     passport.authenticate('local', (err, user, info) => {
         if (err) {
             req.flash('error', 'Something went wrong! Try again later');
-            console.log(err);
+            console.log(err.message);
             console.log('*** User login routing');
             return res.redirect('back');
         }
@@ -64,7 +99,7 @@ router.post('/login', (req, res, next) => { // DIVE DEEP LATER
         req.logIn(user, (err) => {
             if (err) {
                 req.flash('error', 'Something went wrong! Try again later');
-                console.log(err);
+                console.log(err.message);
                 console.log('*** User login routing');
                 return res.redirect('back');
             }
@@ -77,12 +112,14 @@ router.post('/login', (req, res, next) => { // DIVE DEEP LATER
 router.get('/logout', (req, res) => {
     req.logout();
     req.flash('success', 'Logged you out! Bye bye ');
-    res.redirect(middleware.beforeLogin); // back to what they were on
+    return res.redirect(middleware.beforeLogin); // back to what they were on
 });
 
 // Forgot password
 router.get('/forgot', (req, res) => {
-    res.render('forgot');
+    return res.render('forgot', {
+        title: 'Forgot Password',
+    });
 });
 
 // Reset password
@@ -101,7 +138,7 @@ router.post('/reset', (req, res, next) => {
             }, function (err, foundUser) {
                 if (!foundUser) {
                     req.flash('error', 'No account with that email address exists.');
-                    return res.redirect('/users/forgot');
+                    return res.redirect('/forgot');
                 }
 
                 foundUser.resetPasswordToken = token;
@@ -126,7 +163,7 @@ router.post('/reset', (req, res, next) => {
                 subject: 'YelpCamp Password Reset',
                 text: 'You are receiving this because you (or someone else) requested the reset of you YelpCamp acount\'s password.\n' +
                     'Please click the following link, or paste it into your browser to compete the process\n' +
-                    'http://' + req.header('host') + '/users/reset/' + token + '\n\n' +
+                    'http://' + req.header('host') + '/reset/' + token + '\n\n' +
                     'If you did not request this, please ignore this email and you password will remain unchanged.',
             };
             smtpTransport.sendMail(mailOptions, function (err) {
@@ -138,7 +175,7 @@ router.post('/reset', (req, res, next) => {
         if (err) {
             return next(err);
         };
-        res.redirect('/users/forgot');
+        res.redirect('/forgot');
     });
 });
 
@@ -149,14 +186,16 @@ router.get('/reset/:token', (req, res) => {
     }, (err, foundUser) => {
         if (!foundUser) {
             req.flash('error', 'Password reset token is invalid or expired.');
-            return res.redirect('/users/forgot');
+            return res.redirect('/forgot');
         }
-        res.render('reset', {
-            token: req.params.token
+        return res.render('reset', {
+            token: req.params.token,
+            title: 'Reset Password'
         });
     })
 });
 
+// Reset password
 router.post('/reset/:token', (req, res) => {
     async.waterfall([
         function (done) {
@@ -208,20 +247,25 @@ router.post('/reset/:token', (req, res) => {
     })
 });
 
-
 // Home page
 router.get('/', (req, res) => {
-    res.render('../views/landing');
+    return res.render('../views/landing', {
+        title: 'Yelpcamp',
+    });
 });
 
 // About page
 router.get('/about', (req, res) => {
-    res.render('../views/about');
+    return res.render('../views/about', {
+        title: 'About Author',
+    });
 });
 
 // Other page
-router.get('/:abc', (req, res) => {
-    res.send('Page not found');
+router.get('/*', (req, res) => {
+    return res.send('Page not found', {
+        title: 'Error',
+    });
 });
 
 module.exports = router;

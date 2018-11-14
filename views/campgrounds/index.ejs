@@ -1,31 +1,66 @@
 <% include ../partials/header %>
 <% include ../partials/navbar %>
-<% include ../partials/alerts %>
 
-<div class="jumbotron">
-    <h1 class="display-4"><i class="fas fa-campground"></i> Welcome to YelpCamp!</h1>
-    <p class="lead">This is a place where people around the world enjoy sharing their fantastic campgrounds.</p>
-    <hr class="my-4">
-    <!-- <p>A huge library of hand-picked campground all over the world.</p> -->
-    <a class="btn btn-primary btn-lg" href="#" role="button">Learn more</a>
-    <a class="float-right text-success" href="/campgrounds/new" role="button">Share a campground</a>
+<div class="container mainContainer">
+<% include ../partials/alerts %>
+<div id="carouselHome" class="carousel slide" data-ride="carousel">
+  <ol class="carousel-indicators d-none d-sm-flex">
+    <li data-target="#carouselHome" data-slide-to="0" class="active"></li>
+    <li data-target="#carouselHome" data-slide-to="1"></li>
+    <li data-target="#carouselHome" data-slide-to="2"></li>
+  </ol>
+  <div class="carousel-caption" id="captionCarousel">
+    <h1 class="display-4">YelpCamp</h1>
+    <p class="lead d-none d-sm-block">The ultimate library of fabulous amazing campgrounds created by camping lovers all over the world.</p>
+    <a class="btn btn-primary" href="/explore">Explore</a>
+  </div>
+  <div class="carousel-inner">
+    <% carousel.forEach((campground,i)=>{ %>
+    <% if(i==0){ %>
+        <div class="carousel-item active">
+    <% }else{ %>
+        <div class="carousel-item">
+    <% } %>
+      <img class="d-block w-100" src="<%=campground.image%>" alt="First slide">
+    </div>
+    <% }) %>
+    
+  </div>
 </div>
 
-<div class="row">
+<div class="row my-4">
     <% campgrounds.forEach((campground)=>{ %>
-    <div class="col-lg-4 col-md-6">
+    <div class="col-xl-3 col-lg-4 col-md-6">
         <a href="/campgrounds/<%=campground._id%>">
             <div class="card campgroundCard my-2">
                 <img class="card-img-top" src="<%=campground.image%>">
-                <div class="card-body text-dark">
-                    <h2 class="card-title text-center">
+                <div class="cardHover">
+                    <div class="likesHover">
+                    <% if(campground.likes.length){ %>
+                        <%=campground.likes.length%> <i class="fas fa-heart"></i>
+                    <% } %>
+                    <% if(campground.comments.length){ %>
+                        <%=campground.comments.length%> <i class="far fa-comment-alt"></i>
+                    <% } %>
+                    </div>
+                    <div class="nameHover">
+                        <h2><%=campground.name%></h2>
+                    </div>
+                    <div class="authorHover">
+                        <img src="<%=campground.author.photo%>" class="photoHover">
+                        <%=campground.author.name%>
+                    </div>
+                </div>
+                <div class="card-body text-dark p-1 bg-light d-lg-none d-block">
+                    <h5 class="card-title text-center m-0">
                         <%=campground.name%>
-                    </h2>
+                    </h5>
                 </div>
             </div>
         </a>
     </div>
     <% }) %>
+</div>
 </div>
 
 <% include ../partials/footer %>

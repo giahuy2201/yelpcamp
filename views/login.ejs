@@ -1,7 +1,10 @@
 <% include ./partials/header %>
-<% include ./partials/alerts %>
 
 <h1 class="text-center my-4">YelpCamp</h1>
+<div class="container">
+<div class="alertForm">
+    <% include ./partials/alerts %>
+</div>
 <div class="signinPanel">
     <form action="/login" method="POST">
         <h2>Sign in</h2>
@@ -22,6 +25,7 @@
     <p class="text-center text-mute">New to YelpCamp?</p>
     <a class="btn btn-outline-secondary btn-block" href="/register">Create your YelpCamp account</a>
 </div>
-    <a class="text-center d-block mt-3" href="/campgrounds">Go back</a>
+<a class="text-center d-block mt-3" href="<%=back%>">Go back</a>
+</div>
 
 <% include ./partials/footer %>

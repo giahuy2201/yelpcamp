@@ -1,3 +1,7 @@
+.mainContainer {
+    padding-top: 80px;
+}
+
 .fa-key {
     color: gold;
     font-size: 0.6em;
@@ -8,17 +12,45 @@
     font-size: 1.6em;
 }
 
+.fa-heart {
+    color: rgb(240, 84, 106);
+    font-size: 1.2em;
+}
+
+.fa-comment-alt {
+    font-size: 1.2em;
+}
+
 .admin {
     color: goldenrod;
-    font-size: 1.2em;
+}
+
+#captionCarousel {
+    text-shadow: 1px 1px 3px grey;
+
 }
 
 #map {
     height: 200px;
 }
+
 .media img {
     height: 45px;
     width: 45px;
+}
+
+.userAvatar {
+    height: 40px;
+    width: 40px;
+    border: 1px solid rgb(200, 200, 200);
+    border-radius: 50%;
+}
+
+.photoHover {
+    height: 30px;
+    width: 30px;
+    border: 1px solid rgb(200, 200, 200);
+    border-radius: 50%;
 }
 
 .profilePhoto {
@@ -38,6 +70,11 @@
     margin: 0 auto;
 }
 
+.alertForm {
+    max-width: 450px;
+    margin: 0 auto;
+}
+
 .signinPanel {
     /* background: pink; */
     max-width: 450px;
@@ -50,11 +87,34 @@
 .createCampgroundPanel {
     /* background: pink; */
     max-width: 500px;
-    margin: 5% auto;
-    margin-bottom: 0;
+    margin: 0 auto;
     border: 1px solid rgb(217, 217, 217);
     border-radius: 4px;
     padding: 20px;
+}
+
+a {
+    color: black;
+}
+
+.card-body a.btn-link,
+.card-body button.btn-link {
+    color: grey;
+}
+
+button i.fa-trash-alt,
+a i.fa-edit {
+    font-size: 1.2em;
+}
+
+a i.fa-edit:hover,
+a i.fa-pencil-alt:hover {
+    color: green;
+}
+
+button i.fa-trash-alt:hover,
+button i.fa-times:hover {
+    color: red;
 }
 
 a:hover {
@@ -84,4 +144,89 @@ a:hover {
 select.form-control {
     width: 70px;
     height: 30px;
+}
+
+.navbar {
+    box-shadow: 0 2px 8px -5px grey;
+    background: white;
+}
+
+.carousel-inner {
+    width: 100%;
+    max-height: 350px !important;
+}
+
+.carousel-caption {
+    /* vertical-align: middle; */
+    top: 20%;
+}
+
+#searchForm {
+    flex: 1;
+}
+
+input[type="search"] {
+    border-radius: 19px;
+}
+
+.nav-item .btn-outline-secondary {
+    background: white;
+    color: rgb(221, 221, 221);
+    border-color: rgb(221, 221, 221);
+}
+
+.nav-item .nav-link.btn-outline-secondary:hover {
+    background: white;
+    color: black;
+    border-color: black;
+}
+
+.vdivider {
+    border-left: 1px solid rgb(221, 221, 221);
+    height: 30px;
+}
+
+.card-img-top {
+    transition-duration: 1s;
+}
+
+.cardHover {
+    display: none;
+    text-align: center;
+}
+
+.campgroundCard:hover .card-img-top {
+    filter: brightness(80%);
+}
+
+.campgroundCard:hover .cardHover {
+    display: block;
+    color: white;
+}
+
+.nameHover {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.likesHover {
+    position: absolute;
+    top: 8px;
+    right: 16px;
+}
+
+.authorHover {
+    position: absolute;
+    bottom: 8px;
+    left: 10px;
+}
+
+.matched {
+    border: 2px solid green !important;
+}
+
+.nmatched {
+    border: 2px solid red !important;
 }

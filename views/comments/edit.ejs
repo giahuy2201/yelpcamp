@@ -1,15 +1,4 @@
-<% include ../partials/header %>
-<% include ../partials/navbar %>
-
-<form class="my-4" action="/campgrounds/<%=campgroundId%>/comments/<%=comment._id%>?_method=PUT" method="POST">
-    <h1 class="text-center">Edit a comment</h1>
-    <div class="form-group">
-        <label for="textInput">Text</label>
-        <input type="text" class="form-control" id="textInput" name="comment[text]" value="<%=comment.text%>" required>
-    </div>
-    <div class="form-group my-4">
-        <input class="btn btn-success" type="submit">
-    </div>
+<form class="form my-2" id="submitCommentForm" style="display:flex" action="/campgrounds/<%=campgroundId%>/comments/<%=comment._id%>?_method=PUT" method="POST">
+    <input type="text" class="form-control" id="textInput" name="comment[text]" value="<%=comment.text%>" required>
+    <input class="btn btn-success ml-3" type="submit">
 </form>
-
-<% include ../partials/footer %>

@@ -7,7 +7,9 @@ var express = require('express'),
     localStrategy = require('passport-local'),
     mongoose = require('mongoose'),
     flash = require('connect-flash'),
-    timeago = require('timeago.js');
+    timeago = require('timeago.js'),
+    cloudinary = require('cloudinary'),
+    favicon = require('serve-favicon');
 
 // include models
 var User = require('./models/user');
@@ -17,6 +19,13 @@ var middleware = require('./middleware');
 
 // libs for env
 require('dotenv').config();
+
+// Cloud image setting
+cloudinary.config({
+    cloud_name: process.env.CLOUD_NAME,
+    api_key: process.env.CLOUD_API_KEY,
+    api_secret: process.env.CLOUD_API_SECRET,
+});
 
 // include routes
 var campgroundRoute = require('./routes/campground'),
@@ -77,6 +86,9 @@ Date.prototype.inPeriod = function (open, close) {
     return false;
 };
 
+// add favicon
+app.use(favicon('public/favicon.ico'));
+
 // passport setup
 app.use(passport.initialize());
 app.use(passport.session());
@@ -87,7 +99,7 @@ passport.deserializeUser(User.deserializeUser());
 // some global variables available in all routes
 app.use((req, res, next) => {
     res.locals.currentUser = req.user;
-    res.locals.back = middleware.beforeLogin;
+    res.locals.back = middleware.beforeLogin; // get the go back url
     res.locals.error = req.flash('error');
     res.locals.success = req.flash('success');
     next();
@@ -96,7 +108,7 @@ app.use((req, res, next) => {
 // add routes files
 app.use('/campgrounds', campgroundRoute);
 app.use('/campgrounds/:id/comments', commentRoute);
-app.use('/campgrounds/:id/ratings', ratingRoute);
+app.use('/campgrounds/:id', ratingRoute);
 app.use('/users', userRoute);
 app.use('/', rootRoute);
 

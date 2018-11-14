@@ -262,10 +262,8 @@ router.get('/about', (req, res) => {
 });
 
 // Other page
-router.get('/*', (req, res) => {
-    return res.send('Page not found', {
-        title: 'Error',
-    });
+router.get('/:abc', (req, res) => {
+    return res.send('Page not found');
 });
 
 module.exports = router;

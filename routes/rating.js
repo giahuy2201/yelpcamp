@@ -13,7 +13,7 @@ router.get('/ratings', middleware.isLoggedIn, (req, res) => {
         Campground.findById(req.params.id, (err, foundCampground) => {
             if (err || !foundCampground) {
                 req.flash('error', 'Campground not found!');
-                console.log(err.message);
+                console.log(err);
                 console.log('*** Rating create routing');
                 return res.redirect('/campgrounds');
             }
@@ -37,7 +37,7 @@ router.post('/ratings', middleware.isLoggedIn, (req, res) => {
         Campground.findById(req.params.id, (err, foundCampground) => {
             if (err || !foundCampground) {
                 req.flash('error', 'Campground not found!');
-                console.log(err.message);
+                console.log(err);
                 console.log('*** Rating create routing');
                 return res.redirect('/campgrounds');
             }
@@ -85,7 +85,7 @@ router.post('/likes', middleware.isLoggedIn, (req, res) => {
         Campground.findById(req.params.id, (err, foundCampground) => {
             if (err || !foundCampground) {
                 req.flash('error', 'Campground not found!');
-                console.log(err.message);
+                console.log(err);
                 console.log('*** Rating create routing');
                 return res.redirect('/campgrounds');
             }

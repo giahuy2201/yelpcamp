@@ -61,7 +61,7 @@ router.get('/', (req, res) => {
     middleware.beforeLogin = req.originalUrl; // save url in case user want to do stuff with navbar
     Campground.find().populate('author').exec((err, campgrounds) => {
         if (err || !campgrounds) {
-            console.log(err.message);
+            console.log(err);
             console.log('*** Campground index routing');
             req.flash('error', 'Something went wrong! Try again later');
             return res.redirect('/campgrounds');
@@ -71,7 +71,7 @@ router.get('/', (req, res) => {
             limit: 3
         }, (err, randomCampgounds) => {
             if (err || !randomCampgounds) {
-                console.log(err.message);
+                console.log(err);
                 console.log("*** Find random campgrounds");
                 return;
             }
@@ -119,7 +119,7 @@ router.post('/', middleware.isLoggedIn, upload.single('image'), (req, res) => {
         User.findById(req.user._id, (err, foundUser) => {
             if (err || !foundUser) {
                 req.flash('error', 'User not found!');
-                console.log(err.message);
+                console.log(err);
                 console.log('*** Campground create routing');
                 return res.redirect('/campgrounds');
             }
@@ -128,7 +128,7 @@ router.post('/', middleware.isLoggedIn, upload.single('image'), (req, res) => {
             Campground.create(newCampground, (err, newCampground) => {
                 if (err || !newCampground) {
                     req.flash('error', 'Campground not found!');
-                    console.log(err.message);
+                    console.log(err);
                     console.log('*** Campground create routing');
                     return res.redirect('/campgrounds');
                 }
@@ -166,7 +166,7 @@ router.get('/:id', (req, res) => {
         path: 'author',
     }]).exec((err, foundCampground) => {
         if (err || !foundCampground) {
-            console.log(err.message);
+            console.log(err);
             console.log('*** Campground show routing');
             req.flash('error', 'Campground not found!');
             return res.redirect('/campgrounds');
@@ -184,7 +184,7 @@ router.get('/:id/edit', middleware.isLoggedIn, middleware.checkCampgroundOwnersh
     Campground.findById(req.params.id, (err, foundCampground) => {
         if (err || !foundCampground) {
             req.flash('error', 'Campground not found!');
-            console.log(err.message);
+            console.log(err);
             console.log('*** Campground edit routing');
             return res.redirect('/campgrounds');
         }
@@ -221,7 +221,7 @@ router.put('/:id', middleware.isLoggedIn, middleware.checkCampgroundOwnership, u
         Campground.findByIdAndUpdate(req.params.id, updatedCampground, (err, updatedCampground) => {
             if (err || !updatedCampground) {
                 req.flash('error', 'Campground not found!');
-                console.log(err.message);
+                console.log(err);
                 console.log('*** Campground update routing');
                 return res.redirect('/campgrounds');
             }
@@ -253,14 +253,14 @@ router.delete('/:id', middleware.isLoggedIn, middleware.checkCampgroundOwnership
     Campground.findById(req.params.id, (err, foundCampground) => {
         if (err || !foundCampground) {
             req.flash('error', 'Campground not found!');
-            console.log(err.message);
+            console.log(err);
             console.log('*** Campground delete routing');
             return res.redirect('/campgrounds');
         }
         User.findById(foundCampground.author._id, (err, foundUser) => {
             if (err || !foundUser) {
                 req.flash('error', 'Something went wrong!');
-                console.log(err.message);
+                console.log(err);
                 console.log('*** Campground delete in User routing');
                 return res.redirect('/campgrounds');
             }

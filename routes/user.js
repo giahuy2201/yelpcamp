@@ -33,7 +33,7 @@ router.get('/:id', (req, res) => {
     User.findById(req.params.id).populate('campgrounds').exec((err, foundUser) => {
         if (err || !foundUser) {
             req.flash('error', 'User not found!');
-            console.log(err.message);
+            console.log(err);
             console.log('*** User show routing');
             return res.redirect('/campgrounds');
         }
@@ -56,7 +56,7 @@ router.get('/:id/edit', middleware.isLoggedIn, middleware.checkProfileOwnership,
     User.findById(req.params.id, (err, foundUser) => {
         if (err || !foundUser) {
             req.flash('error', 'User not found!');
-            console.log(err.message);
+            console.log(err);
             console.log('*** User edit routing');
             return res.redirect('/campgrounds');
         }
@@ -77,7 +77,7 @@ router.put('/:id', middleware.isLoggedIn, middleware.checkProfileOwnership, uplo
     User.findByIdAndUpdate(req.params.id, newUser, (err, updatedUser) => {
         if (err || !updatedUser) {
             req.flash('error', 'User not found!');
-            console.log(err.message);
+            console.log(err);
             console.log('*** User update routing');
             return res.redirect('/campgrounds');
         }
@@ -116,7 +116,7 @@ router.post('/:id/change', middleware.isLoggedIn, middleware.checkProfileOwnersh
     User.findById(req.params.id, (err, foundUser) => {
         if (err || !foundUser) {
             req.flash('error', 'User not found!');
-            console.log(err.message);
+            console.log(err);
             console.log('*** User reset routing');
             return res.redirect('/campgrounds');
         }

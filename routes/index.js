@@ -53,7 +53,7 @@ router.post('/users', upload.single('photo'), (req, res) => { // DOUBLE CHECK TH
     User.register(newUser, req.body.password, (err, newUser) => {
         if (err || !newUser) {
             req.flash('error', err.message);
-            console.log(err.message);
+            console.log(err);
             console.log('*** User create routing');
             return res.redirect('/register');
         }
@@ -88,7 +88,7 @@ router.post('/login', (req, res, next) => { // DIVE DEEP LATER
     passport.authenticate('local', (err, user, info) => {
         if (err) {
             req.flash('error', 'Something went wrong! Try again later');
-            console.log(err.message);
+            console.log(err);
             console.log('*** User login routing');
             return res.redirect('back');
         }
@@ -99,7 +99,7 @@ router.post('/login', (req, res, next) => { // DIVE DEEP LATER
         req.logIn(user, (err) => {
             if (err) {
                 req.flash('error', 'Something went wrong! Try again later');
-                console.log(err.message);
+                console.log(err);
                 console.log('*** User login routing');
                 return res.redirect('back');
             }

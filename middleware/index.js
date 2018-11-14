@@ -25,7 +25,7 @@ middlewareObj.checkCampgroundOwnership = function (req, res, next) {
     Campground.findById(req.params.id).populate('author').exec((err, foundCampground) => {
         if (err || !foundCampground) {
             req.flash('error', 'Campground not found!');
-            console.log(err.message);
+            console.log(err);
             return res.redirect('/campgrounds');
         }
         if (foundCampground.author._id.equals(req.user._id) || req.user.isAdmin) { // authorized
@@ -42,7 +42,7 @@ middlewareObj.checkCommentOwnership = function (req, res, next) {
     Comment.findById(req.params.commentId).populate('author').exec((err, foundComment) => {
         if (err || !foundComment) {
             req.flash('error', 'Comment not found!');
-            console.log(err.message);
+            console.log(err);
             return res.redirect('/campgrounds/' + req.params.id);
         }
         if (foundComment.author._id.equals(req.user._id) || req.user.isAdmin) { // authorized
@@ -59,7 +59,7 @@ middlewareObj.checkProfileOwnership = function (req, res, next) {
     User.findById(req.params.id, (err, foundUser) => {
         if (err || !foundUser) {
             req.flash('error', 'User not found!');
-            console.log(err.message);
+            console.log(err);
             return res.redirect('/campgrounds');
         }
         if (foundUser._id.equals(req.user._id)) { // authorized

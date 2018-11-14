@@ -34,11 +34,11 @@
             <% }else{ %>
             <!-- currentUser -->
             <li class="nav-item dropdown">
-                <a class="nav-link py-0" role="button" id="profileDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <a class="nav-link py-3 py-lg-0" role="button" id="profileDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                     <strong class="align-middle text-dark">
                         <%=currentUser.name%>
                     </strong>
-                    <img class="userAvatar d-none d-lg-inline" src="<%=currentUser.photo%>">
+                    <img class="userAvatar" src="<%=currentUser.photo%>">
                 </a>
                 <div class="dropdown-menu dropdown-menu-right text-center text-lg-right" aria-labelledby="profileDropdown">
                     <a class="dropdown-item" href="/users/<%=currentUser._id%>">View profile</a>

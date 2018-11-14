@@ -74,3 +74,5 @@ I always welcome everyone to fix me and make it more structured and organized.
 ### working on
 1. check username, email availability realtime
 2. Not allow email edit
+3. log the err
+4. Default image & avatar

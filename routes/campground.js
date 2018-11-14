@@ -66,22 +66,36 @@ router.get('/', (req, res) => {
             req.flash('error', 'Something went wrong! Try again later');
             return res.redirect('/campgrounds');
         }
-        // get some random for carousel
-        Campground.findRandom({}, {}, {
-            limit: 3
-        }, (err, randomCampgounds) => {
-            if (err || !randomCampgounds) {
+        Campground.countDocuments((err, count) => {
+            if (err) {
                 console.log(err);
-                console.log("*** Find random campgrounds");
+                console.log("*** Count campgrounds");
                 return;
             }
-            // console.log(randomCampgounds);
-            return res.render('campgrounds/index', {
-                campgrounds: campgrounds,
-                carousel: randomCampgounds,
-                title: 'All Campgrounds',
-            });
-        })
+            if (!count) {
+                return res.render('campgrounds/index', {
+                    campgrounds: campgrounds,
+                    carousel: [],
+                    title: 'All Campgrounds',
+                });
+            } else {
+                // get some random for carousel
+                Campground.findRandom({}, {}, {
+                    limit: 3
+                }, (err, randomCampgounds) => {
+                    if (err || !randomCampgounds) {
+                        console.log(err);
+                        console.log("*** Find random campgrounds");
+                        return;
+                    }
+                    return res.render('campgrounds/index', {
+                        campgrounds: campgrounds,
+                        carousel: randomCampgounds,
+                        title: 'All Campgrounds',
+                    });
+                })
+            }
+        });
     })
 });
 

@@ -1,0 +1,4 @@
+<form class="form my-2" id="submitCommentForm" style="display:flex" action="/campgrounds/<%=campgroundId%>/comments/<%=comment._id%>?_method=PUT" method="POST">
+    <input type="text" class="form-control" id="textInput" name="comment[text]" value="<%=comment.text%>" required>
+    <input class="btn btn-success ml-3" type="submit">
+</form>

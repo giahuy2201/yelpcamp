@@ -33,7 +33,7 @@ router.get('/:id', (req, res) => {
     User.findById(req.params.id).populate('campgrounds').exec((err, foundUser) => {
         if (err || !foundUser) {
             req.flash('error', 'User not found!');
-            console.log(err);
+            console.log(err.message);
             console.log('*** User show routing');
             return res.redirect('/campgrounds');
         }
@@ -43,7 +43,7 @@ router.get('/:id', (req, res) => {
             likes += campground.likes.length;
         })
         // console.log(likes);
-        res.render('users/show', {
+        return res.render('users/show', {
             user: foundUser,
             likes: likes,
             title: foundUser.name,
@@ -56,11 +56,11 @@ router.get('/:id/edit', middleware.isLoggedIn, middleware.checkProfileOwnership,
     User.findById(req.params.id, (err, foundUser) => {
         if (err || !foundUser) {
             req.flash('error', 'User not found!');
-            console.log(err);
+            console.log(err.message);
             console.log('*** User edit routing');
             return res.redirect('/campgrounds');
         }
-        res.render('users/edit', {
+        return res.render('users/edit', {
             user: foundUser,
             title: foundUser.name + ' - Edit',
         });
@@ -77,7 +77,7 @@ router.put('/:id', middleware.isLoggedIn, middleware.checkProfileOwnership, uplo
     User.findByIdAndUpdate(req.params.id, newUser, (err, updatedUser) => {
         if (err || !updatedUser) {
             req.flash('error', 'User not found!');
-            console.log(err);
+            console.log(err.message);
             console.log('*** User update routing');
             return res.redirect('/campgrounds');
         }
@@ -87,26 +87,25 @@ router.put('/:id', middleware.isLoggedIn, middleware.checkProfileOwnership, uplo
             return res.redirect('/campgrounds');
         }
         // upload image
-        var publicId = updatedUser._id;
         cloudinary.v2.uploader.upload(req.file.path, {
-            public_id: publicId,
+            public_id: updatedUser._id,
             invalidate: true,
         }, (err, uploadedImage) => {
-            if (err) {
+            if (err || !uploadedImage) {
                 updatedUser.save();
                 req.flash('error', 'Something went wrong with your image!');
                 return res.redirect('/campgrounds');
             }
             updatedUser.photo = uploadedImage.secure_url;
             updatedUser.save();
-            return res.redirect('/campgrounds');
+            return res.redirect(middleware.beforeLogin);
         });
     })
 });
 
 // User change password
 router.get('/:id/change', middleware.isLoggedIn, middleware.checkProfileOwnership, (req, res) => {
-    res.render('users/change', {
+    return res.render('users/change', {
         userId: req.params.id,
         title: 'Chang Password',
     });
@@ -117,7 +116,7 @@ router.post('/:id/change', middleware.isLoggedIn, middleware.checkProfileOwnersh
     User.findById(req.params.id, (err, foundUser) => {
         if (err || !foundUser) {
             req.flash('error', 'User not found!');
-            console.log(err);
+            console.log(err.message);
             console.log('*** User reset routing');
             return res.redirect('/campgrounds');
         }
@@ -127,7 +126,7 @@ router.post('/:id/change', middleware.isLoggedIn, middleware.checkProfileOwnersh
                 return res.redirect('/campgrounds');
             }
             req.flash('success', 'Successfully changed your password');
-            res.redirect('/users/' + req.params.id);
+            return res.redirect(middleware.beforeLogin);
         })
     })
 })

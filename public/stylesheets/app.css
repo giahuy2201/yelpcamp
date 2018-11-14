@@ -186,18 +186,22 @@ input[type="search"] {
     height: 30px;
 }
 
+.card-img-top {
+    transition-duration: 1s;
+}
+
 .cardHover {
     display: none;
     text-align: center;
 }
 
 .campgroundCard:hover .card-img-top {
-    opacity: 0.3;
+    filter: brightness(80%);
 }
 
 .campgroundCard:hover .cardHover {
     display: block;
-    color: black;
+    color: white;
 }
 
 .nameHover {

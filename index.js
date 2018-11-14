@@ -99,7 +99,7 @@ passport.deserializeUser(User.deserializeUser());
 // some global variables available in all routes
 app.use((req, res, next) => {
     res.locals.currentUser = req.user;
-    res.locals.back = middleware.beforeLogin;
+    res.locals.back = middleware.beforeLogin; // get the go back url
     res.locals.error = req.flash('error');
     res.locals.success = req.flash('success');
     next();

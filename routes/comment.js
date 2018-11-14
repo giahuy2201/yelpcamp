@@ -1,4 +1,5 @@
-var express = require('express');
+var express = require('express'),
+    ejs = require('ejs');
 
 // include models
 var Comment = require('../models/comment'),
@@ -11,9 +12,34 @@ var router = express.Router({
 
 // Comment new
 router.get('/new', middleware.isLoggedIn, (req, res) => {
-    return res.send({
-        isLoggedIn: true,
-    });
+    if (req.xhr) {
+        Campground.findById(req.params.id, (err, foundCampground) => {
+            if (err || !foundCampground) {
+                req.flash('error', 'Campground not found!');
+                console.log(err.message);
+                console.log('*** Comment update routing');
+                return res.redirect('/campgrounds');
+            }
+            ejs.renderFile(__dirname + '/../views/comments/new.ejs', {
+                campgroundId: req.params.id
+            }, (err, newForm) => {
+                if (err) {
+                    req.flash('error', 'Something went wrong!');
+                    console.log(err.message);
+                    console.log('*** Comment new routing');
+                    return res.redirect('/campgrounds/' + req.params.id);
+                }
+                return res.send({
+                    isLoggedIn: true,
+                    form: newForm,
+                });
+            });
+
+        });
+    } else { // The Campground.find is synchronous, so else is needed to avoid ERR_HTTP_HEADER_SENT
+        req.flash('error', 'Huh! It\'s not a good action');
+        return res.redirect('/campgrounds/' + req.params.id);
+    }
 });
 
 // Comment create
@@ -22,15 +48,15 @@ router.post('/', middleware.isLoggedIn, (req, res) => {
     Campground.findById(req.params.id, (err, foundCampground) => {
         if (err || !foundCampground) {
             req.flash('error', 'Campground not found!');
-            console.log(err);
+            console.log(err.message);
             console.log('*** Comment create routing');
             return res.redirect('/campgrounds');
         }
-        // create a comment object
+        // create a comment 
         Comment.create(req.body.comment, (err, newComment) => {
             if (err || !newComment) {
                 req.flash('error', 'Campground not found!');
-                console.log(err);
+                console.log(err.message);
                 console.log('*** Comment create routing');
                 return res.redirect('/campgrounds');
             }
@@ -41,7 +67,7 @@ router.post('/', middleware.isLoggedIn, (req, res) => {
             foundCampground.comments.push(newComment);
             foundCampground.save();
             // go back
-            res.redirect('/campgrounds/' + req.params.id);
+            return res.redirect('/campgrounds/' + req.params.id);
         })
 
     })
@@ -49,41 +75,50 @@ router.post('/', middleware.isLoggedIn, (req, res) => {
 
 // Comment edit
 router.get('/:commentId/edit', middleware.isLoggedIn, middleware.checkCommentOwnership, (req, res) => {
-    Campground.findById(req.params.id, (err, foundCampground) => {
-        if (err || !foundCampground) {
-            req.flash('error', 'Campground not found!');
-            console.log(err);
-            console.log('*** Comment edit routing');
-            return res.redirect('/campgrounds');
-        }
+    // send an object with status isLoggedIn and the form object
+    if (req.xhr) {
         Comment.findById(req.params.commentId, (err, foundComment) => {
             if (err || !foundComment) {
                 req.flash('error', 'Comment not found!');
-                console.log(err);
+                console.log(err.message);
                 console.log('*** Comment edit routing');
                 return res.redirect('/campgrounds/' + req.params.id);
             }
-            res.render('comments/edit', {
+            ejs.renderFile(__dirname + '/../views/comments/edit.ejs', {
                 campgroundId: req.params.id,
-                comment: foundComment
+                comment: foundComment,
+            }, (err, editForm) => {
+                if (err) {
+                    req.flash('error', 'Something went wrong!');
+                    console.log(err.message);
+                    console.log('*** Comment edit routing');
+                    return res.redirect('/campgrounds/' + req.params.id);
+                }
+                return res.send({
+                    isLoggedIn: true,
+                    form: editForm,
+                });
             });
-        })
-    })
-})
+        });
+    } else {
+        req.flash('error', 'Huh! It\'s not a good action');
+        return res.redirect('/campgrounds/' + req.params.id);
+    }
+});
 
 // Comment update
 router.put('/:commentId', middleware.isLoggedIn, middleware.checkCommentOwnership, (req, res) => {
     Campground.findById(req.params.id, (err, foundCampground) => {
         if (err || !foundCampground) {
             req.flash('error', 'Campground not found!');
-            console.log(err);
+            console.log(err.message);
             console.log('*** Comment update routing');
             return res.redirect('/campgrounds');
         }
         Comment.findByIdAndUpdate(req.params.commentId, req.body.comment, (err, updatedComment) => {
             if (err || !updatedComment) {
                 req.flash('error', 'Comment not found!');
-                console.log(err);
+                console.log(err.message);
                 console.log('*** Comment update routing');
                 return res.redirect('/campgrounds');
             }
@@ -97,14 +132,14 @@ router.delete('/:commentId', middleware.isLoggedIn, middleware.checkCommentOwner
     Comment.findByIdAndRemove(req.params.commentId, (err) => {
         if (err) {
             req.flash('error', 'Comment not found!');
-            console.log(err);
+            console.log(err.message);
             console.log('*** Comment delete routing');
             return res.redirect('/campgrounds');
         }
         Campground.findById(req.params.id, (err, foundCampground) => {
             if (err) {
                 req.flash('error', 'Campground not found!');
-                console.log(err);
+                console.log(err.message);
                 console.log('*** Comment delete in Camgpround routing');
                 return res.redirect('/campgrounds');
             }

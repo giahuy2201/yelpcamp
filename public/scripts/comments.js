@@ -1,50 +1,37 @@
 $(document).ready(function () {
 
-    function showAlert(message) {
-        $('#errorAlert').removeClass('d-none');
-        $('#errorAlert').addClass('d-block');
-
-        $('#errorAlert').text(message);
-    }
-
+    // when one clicks add coment
     $('#addCommentButton').click(function (e) {
         e.preventDefault();
-        var url = this.href;
-        $.ajax({
-            url: url,
-            method: 'GET',
+        $.ajax({ // ask for the newForm
+            url: this.href,
             contentType: 'application/json',
             success: function (data) {
                 if (data.isLoggedIn) {
-                    $('#newForm').toggleClass('d-none');
+                    $('#newForm').html(data.form);
                 } else {
-                    showAlert('You need to be logged in to do that!!!');
-                    $('html,body').scrollTop(0);
+                    // click the login button
+                    $('a[href="/login"]')[0].click();
                 }
-                console.log(data);
             }
         });
     });
 
+    // when the edit button is clicked
     $('.modifyButton a').click(function (e) {
         e.preventDefault();
         var id = $(this).attr('id');
-        $('#editForm_' + id).removeClass('d-none');
-        $(this).parent().parent().parent().addClass('d-none');
-        console.log(id);
-        // $.ajax({
-        //     url: url,
-        //     method: 'GET',
-        //     contentType: 'application/json',
-        //     success: function (data) {
-        //         if (data.isLoggedIn) {
-        //             $('#newForm').toggleClass('d-none');
-        //         } else {
-        //             showAlert('You need to be logged in to do that!!!');
-        //             $('html,body').scrollTop(0);
-        //         }
-        //         console.log(data);
-        //     }
-        // });
+        $.ajax({ // ask for the editForm
+            url: this.href,
+            contentType: 'application/json',
+            success: function (data) {
+                if (data.isLoggedIn) {
+                    $('#m_' + id).html(data.form);
+                } else {
+                    // click the login button
+                    $('a[href="/login"]')[0].click();
+                }
+            }
+        });
     });
 })

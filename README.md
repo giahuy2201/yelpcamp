@@ -65,8 +65,12 @@ I always welcome everyone to fix me and make it more structured and organized.
 10. add cloudinary
 11. add favicon & title for each page
 12. add admin permission
+13. fix choosing hours
+14. restyle to be responsive
+15. Improve the logic, routing
+
+## yelpcamp 6.4.0
 
 ### working on
-4. Make the site robust and defensive
-9. fix choosing hours
-10. restyle to be responsive
+1. check username, email availability realtime
+2. Not allow email edit

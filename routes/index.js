@@ -33,14 +33,14 @@ var router = express.Router();
 
 // Register route
 router.get('/register', (req, res) => {
-    res.render('register', {
+    return res.render('register', {
         title: 'Register',
     });
 });
 
 // Register authentication
 router.post('/users', upload.single('photo'), (req, res) => { // DOUBLE CHECK THIS
-    var newUser = new User({
+    var newUser = new User({ // Won't work if use req.body.user as an argument
         name: req.body.name,
         username: req.body.username,
         email: req.body.email,
@@ -52,15 +52,14 @@ router.post('/users', upload.single('photo'), (req, res) => { // DOUBLE CHECK TH
     }
     User.register(newUser, req.body.password, (err, newUser) => {
         if (err || !newUser) {
-            req.flash('error', 'Something went wrong! Try again later');
-            console.log(err);
+            req.flash('error', err.message);
+            console.log(err.message);
             console.log('*** User create routing');
-            return res.redirect('back');
+            return res.redirect('/register');
         }
         // upload image
-        var publicId = newUser._id;
         cloudinary.v2.uploader.upload(req.file.path, {
-            public_id: publicId,
+            public_id: newUser._id,
         }, (err, uploadedImage) => {
             if (err) {
                 newUser.save();
@@ -70,17 +69,16 @@ router.post('/users', upload.single('photo'), (req, res) => { // DOUBLE CHECK TH
             newUser.photo = uploadedImage.secure_url;
             newUser.save();
             passport.authenticate('local')(req, res, () => {
-                // console.log(newUser);
                 req.flash('success', 'Successfully! Welcome to YelpCamp, ' + req.body.name);
                 return res.redirect(middleware.beforeLogin);
-            })
+            });
         });
     })
 })
 
 // Login route
 router.get('/login', (req, res) => {
-    res.render('login', {
+    return res.render('login', {
         title: 'Login',
     });
 });
@@ -90,7 +88,7 @@ router.post('/login', (req, res, next) => { // DIVE DEEP LATER
     passport.authenticate('local', (err, user, info) => {
         if (err) {
             req.flash('error', 'Something went wrong! Try again later');
-            console.log(err);
+            console.log(err.message);
             console.log('*** User login routing');
             return res.redirect('back');
         }
@@ -101,7 +99,7 @@ router.post('/login', (req, res, next) => { // DIVE DEEP LATER
         req.logIn(user, (err) => {
             if (err) {
                 req.flash('error', 'Something went wrong! Try again later');
-                console.log(err);
+                console.log(err.message);
                 console.log('*** User login routing');
                 return res.redirect('back');
             }
@@ -114,12 +112,12 @@ router.post('/login', (req, res, next) => { // DIVE DEEP LATER
 router.get('/logout', (req, res) => {
     req.logout();
     req.flash('success', 'Logged you out! Bye bye ');
-    res.redirect(middleware.beforeLogin); // back to what they were on
+    return res.redirect(middleware.beforeLogin); // back to what they were on
 });
 
 // Forgot password
 router.get('/forgot', (req, res) => {
-    res.render('forgot', {
+    return res.render('forgot', {
         title: 'Forgot Password',
     });
 });
@@ -190,13 +188,14 @@ router.get('/reset/:token', (req, res) => {
             req.flash('error', 'Password reset token is invalid or expired.');
             return res.redirect('/forgot');
         }
-        res.render('reset', {
+        return res.render('reset', {
             token: req.params.token,
             title: 'Reset Password'
         });
     })
 });
 
+// Reset password
 router.post('/reset/:token', (req, res) => {
     async.waterfall([
         function (done) {
@@ -248,24 +247,23 @@ router.post('/reset/:token', (req, res) => {
     })
 });
 
-
 // Home page
 router.get('/', (req, res) => {
-    res.render('../views/landing', {
+    return res.render('../views/landing', {
         title: 'Yelpcamp',
     });
 });
 
 // About page
 router.get('/about', (req, res) => {
-    res.render('../views/about', {
+    return res.render('../views/about', {
         title: 'About Author',
     });
 });
 
 // Other page
-router.get('/:abc', (req, res) => {
-    res.send('Page not found', {
+router.get('/*', (req, res) => {
+    return res.send('Page not found', {
         title: 'Error',
     });
 });

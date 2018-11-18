@@ -40,22 +40,6 @@ var upload = multer({
 
 var router = express.Router();
 
-// Search page
-router.get('/search', (req, res) => {
-    middleware.beforeLogin = req.originalUrl; // save url in case user want to do stuff with navbar
-    return res.render('../views/search', {
-        title: 'Search Campgrounds',
-    });
-});
-
-// Explore page
-router.get('/explore', (req, res) => {
-    middleware.beforeLogin = req.originalUrl; // save url in case user want to do stuff with navbar
-    return res.render('../views/explore', {
-        title: 'Explore Campgrounds',
-    });
-});
-
 // Campgrounds page
 router.get('/', (req, res) => {
     middleware.beforeLogin = req.originalUrl; // save url in case user want to do stuff with navbar

@@ -9,6 +9,7 @@ var async = require('async'),
 
 // include model
 var User = require('../models/user'),
+    Campground = require('../models/campground'),
     middleware = require('../middleware');
 
 // Image upload settings
@@ -30,6 +31,69 @@ var upload = multer({
 });
 
 var router = express.Router();
+
+// Search page
+router.get('/search', (req, res) => {
+    middleware.beforeLogin = req.originalUrl; // save url in case user want to do stuff with navbar
+    // var q = (req.query.q).substring(1); // ignore the first character to avoid missing Capitial words.
+    var q = (req.query.q);
+    Campground.find({
+        $or: [{
+            name: {
+                $regex: q // check if name contain this word q
+            }
+        }, {
+            description: {
+                $regex: q
+            }
+        }, {
+            location: {
+                $regex: q
+            }
+        }]
+    }, (err, campgrounds) => {
+        // console.log(campgrounds);
+        if (err) {
+            req.flash('error', 'Something went wrong! Try again later');
+            console.log(err);
+            console.log('*** Campground search routing');
+            return res.redirect('back');
+        }
+        // find users too
+        User.find({
+            $or: [{
+                name: {
+                    $regex: q // check if name contain this word q
+                }
+            }, {
+                bio: {
+                    $regex: q
+                }
+            }]
+        }, (err, users) => {
+            if (err) {
+                req.flash('error', 'Something went wrong! Try again later');
+                console.log(err);
+                console.log('*** User search routing');
+                return res.redirect('back');
+            }
+            return res.render('../views/search', {
+                campgrounds: campgrounds,
+                users: users,
+                q: req.query.q,
+                title: 'Search Campgrounds',
+            });
+        })
+    });
+});
+
+// Explore page
+router.get('/explore', (req, res) => {
+    middleware.beforeLogin = req.originalUrl; // save url in case user want to do stuff with navbar
+    return res.render('../views/explore', {
+        title: 'Explore Campgrounds',
+    });
+});
 
 // Register route
 router.get('/register', (req, res) => {

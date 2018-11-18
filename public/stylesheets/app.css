@@ -230,3 +230,8 @@ input[type="search"] {
 .nmatched {
     border: 2px solid red !important;
 }
+
+.userCard .media img {
+    height: 64px;
+    width: 64px;
+}

@@ -70,9 +70,19 @@ I always welcome everyone to fix me and make it more structured and organized.
 15. Improve the logic, routing
 
 ## yelpcamp 6.4.0
+1. Search feature
 
 ### working on
 1. check username, email availability realtime
 2. Not allow email edit
 3. log the err
 4. Default image & avatar
+6. Explore feature
+7. optimize image size
+8. implement promise
+9. implement async/await
+10. restrict the image size
+11. remove the caption of campgrounds on mobile
+12. align search placeholder
+13. Index campground reversely
+

@@ -2,7 +2,187 @@
 <% include ./partials/navbar %>
 
 <div class="container mainContainer">
-    <h1>Currently In Development</h1>
+    <h1 class="text-center">Explore</h1>
+    <p class="text-center my-4 count">
+    <% if(campgroundsLength){ %>
+        <%=campgroundsLength%> campground(s) 
+    <% } if(usersLength){ %>
+        <%=usersLength%> user(s) 
+    <% } if(likesLength){ %>
+        <%=likesLength%> like(s) 
+    <% } if(commentsLength){ %>
+        <%=commentsLength%> comment(s) 
+    <% } %>
+    </p>
+    <!-- High contrubution -->
+    <div class="row my-4">
+        <div class="col-xl-3 col-lg-4 col-md-6">
+            <div class="labelBox d-flex justify-content-center align-items-center">
+                <h3 class="p-3 text-center">Top 3 contributing users</h3>
+            </div>
+        </div>
+        <% contributingUsers.forEach((user)=>{ %>
+        <div class="col-xl-3 col-lg-4 col-md-6">
+        <a href="/users/<%=user._id%>">
+            <div class="userCard my-2 bg-light">
+                <div class="media p-3">
+                    <img class="align-self-center mr-3 rounded-circle" src="<%=user.photo%>">
+                    <div class="media-body">
+                        <h5 class="mt-0">
+                        <a href="/users/<%=user._id%>"
+                        <% if(user.isAdmin){ %>
+                            class="admin"
+                        <%}%>
+                        >
+                            <%=user.name%></a>
+                        </h5>
+                        <p class="d-inline-block mb-0">
+                            <%=user.bio.substring(0,24)%> ...
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </a>
+        </div>
+        <% }) %>
+    </div>
+    <!-- High likes -->
+    <div class="row my-4">
+        <div class="col-xl-3 col-lg-4 col-md-6">
+            <div class="labelBox d-flex justify-content-center align-items-center">
+                <h3 class="p-3 text-center">Top 3 liked users</h3>
+            </div>
+        </div>
+        <% likedUsers.forEach((user)=>{ %>
+        <div class="col-xl-3 col-lg-4 col-md-6">
+        <a href="/users/<%=user._id%>">
+            <div class="userCard my-2 bg-light">
+                <div class="media p-3">
+                    <img class="align-self-center mr-3 rounded-circle" src="<%=user.photo%>">
+                    <div class="media-body">
+                        <h5 class="mt-0">
+                        <a href="/users/<%=user._id%>"
+                        <% if(user.isAdmin){ %>
+                            class="admin"
+                        <%}%>
+                        >
+                            <%=user.name%></a>
+                        </h5>
+                        <p class="d-inline-block mb-0">
+                            <%=user.bio.substring(0,24)%> ...
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </a>
+        </div>
+        <% }) %>
+    </div>
+    <% if(campgroundsLength){ %>
+        <hr>
+    <% } %>
+    <!-- High likes -->
+    <div class="row my-4">
+        <div class="col-xl-3 col-lg-4 col-md-6">
+            <div class="labelBox d-flex justify-content-center align-items-center">
+                <h2 class="p-3 text-center">Top 3 liked</h2>
+            </div>
+        </div>
+        <% likedCampgrounds.forEach((campground)=>{ %>
+        <div class="col-xl-3 col-lg-4 col-md-6">
+            <a href="/campgrounds/<%=campground._id%>">
+                <div class="card campgroundCard my-2">
+                    <img class="card-img-top" src="<%=campground.image%>">
+                    <div class="cardHover">
+                        <div class="likesHover">
+                        <% if(campground.likesLength){ %>
+                            <%=campground.likesLength%> <i class="fas fa-heart"></i>
+                        <% } %>
+                        <% if(campground.commentsLength){ %>
+                            <%=campground.commentsLength%> <i class="far fa-comment-alt"></i>
+                        <% } %>
+                        </div>
+                        <div class="nameHover">
+                            <h2><%=campground.name%></h2>
+                        </div>
+                        <div class="authorHover">
+                            <img src="<%=campground.author.photo%>" class="photoHover">
+                            <%=campground.author.name%>
+                        </div>
+                    </div>
+                </div>
+            </a>
+        </div>
+        <% }) %>
+    </div>
+    <!-- High rated -->
+    <div class="row my-4">
+        <div class="col-xl-3 col-lg-4 col-md-6">
+            <div class="labelBox d-flex justify-content-center align-items-center">
+                <h2 class="p-3 text-center">Top 3 high rated</h2>
+            </div>
+        </div>
+        <% ratedCampgrounds.forEach((campground)=>{ %>
+        <div class="col-xl-3 col-lg-4 col-md-6">
+            <a href="/campgrounds/<%=campground._id%>">
+                <div class="card campgroundCard my-2">
+                    <img class="card-img-top" src="<%=campground.image%>">
+                    <div class="cardHover">
+                        <div class="likesHover">
+                        <% if(campground.likesLength){ %>
+                            <%=campground.likesLength%> <i class="fas fa-heart"></i>
+                        <% } %>
+                        <% if(campground.commentsLength){ %>
+                            <%=campground.commentsLength%> <i class="far fa-comment-alt"></i>
+                        <% } %>
+                        </div>
+                        <div class="nameHover">
+                            <h2><%=campground.name%></h2>
+                        </div>
+                        <div class="authorHover">
+                            <img src="<%=campground.author.photo%>" class="photoHover">
+                            <%=campground.author.name%>
+                        </div>
+                    </div>
+                </div>
+            </a>
+        </div>
+        <% }) %>
+    </div>
+    <!-- High commented -->
+    <div class="row my-4">
+        <div class="col-xl-3 col-lg-4 col-md-6">
+            <div class="labelBox d-flex justify-content-center align-items-center">
+                <h2 class="p-3 text-center">Top 3 most comments</h2>
+            </div>
+        </div>
+        <% commentedCampgrounds.forEach((campground)=>{ %>
+        <div class="col-xl-3 col-lg-4 col-md-6">
+            <a href="/campgrounds/<%=campground._id%>">
+                <div class="card campgroundCard my-2">
+                    <img class="card-img-top" src="<%=campground.image%>">
+                    <div class="cardHover">
+                        <div class="likesHover">
+                        <% if(campground.likesLength){ %>
+                            <%=campground.likesLength%> <i class="fas fa-heart"></i>
+                        <% } %>
+                        <% if(campground.commentsLength){ %>
+                            <%=campground.commentsLength%> <i class="far fa-comment-alt"></i>
+                        <% } %>
+                        </div>
+                        <div class="nameHover">
+                            <h2><%=campground.name%></h2>
+                        </div>
+                        <div class="authorHover">
+                            <img src="<%=campground.author.photo%>" class="photoHover">
+                            <%=campground.author.name%>
+                        </div>
+                    </div>
+                </div>
+            </a>
+        </div>
+        <% }) %>
+    </div>
 </div>
 
 <% include ./partials/footer %>

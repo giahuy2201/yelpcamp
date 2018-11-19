@@ -28,4 +28,27 @@ $(document).ready(() => {
         }
     })
 
+    // check username
+    // $('#usernameInput').on('input', () => {
+    //     console.log(window.location.origin);
+    //     $.ajax({
+    //         url: window.location.origin + '/username',
+    //         method: 'GET',
+    //         contentType: 'application/json',
+    //         success: function (user) {
+    //             console.log(user);
+    //             if (user.exist) {
+    //                 $('#usernameInput').addClass('nmatched');
+    //                 $('#usernameInput').removeClass('matched');
+    //                 $('#usernameInput').tooltip('show');
+    //                 $('input[type="submit"]').prop('disabled', true);
+    //             } else {
+    //                 $('#usernameInput').addClass('matched');
+    //                 $('#usernameInput').removeClass('nmatched');
+    //                 $('#usernameInput').tooltip('dispose');
+    //                 $('input[type="submit"]').prop('disabled', false);
+    //             }
+    //         }
+    //     });
+    // });
 });

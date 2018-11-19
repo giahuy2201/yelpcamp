@@ -235,3 +235,14 @@ input[type="search"] {
     height: 64px;
     width: 64px;
 }
+
+.count {
+    letter-spacing: 2px;
+    /* word-spacing: 10px; */
+}
+
+.labelBox {
+    border: 2px solid black;
+    background: rgb(245, 245, 245);
+    height: 100%;
+}

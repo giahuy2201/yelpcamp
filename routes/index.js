@@ -90,8 +90,85 @@ router.get('/search', (req, res) => {
 // Explore page
 router.get('/explore', (req, res) => {
     middleware.beforeLogin = req.originalUrl; // save url in case user want to do stuff with navbar
-    return res.render('../views/explore', {
-        title: 'Explore Campgrounds',
+    Campground.find().exec((err, campgrounds) => {
+        if (err) {
+            req.flash('error', 'Something went wrong! Try again later');
+            console.log(err);
+            console.log('*** Campgrounds find routing');
+            return res.redirect('back');
+        }
+        Campground.find().sort({
+            "likesLength": -1
+        }).limit(3).populate('author').exec((err, likedCampgrounds) => {
+            if (err) {
+                req.flash('error', 'Something went wrong! Try again later');
+                console.log(err);
+                console.log('*** Campground likes sort routing');
+                return res.redirect('back');
+            }
+            // console.log(likedCampgrounds);
+            Campground.find().sort({
+                "ratingsAverage": -1
+            }).limit(3).populate('author').exec((err, ratedCampgrounds) => {
+                if (err) {
+                    req.flash('error', 'Something went wrong! Try again later');
+                    console.log(err);
+                    console.log('*** Campground rated sort routing');
+                    return res.redirect('back');
+                }
+                Campground.find().sort({
+                    "commentsLength": -1
+                }).limit(3).populate('author').exec((err, commentedCampgrounds) => {
+                    if (err) {
+                        req.flash('error', 'Something went wrong! Try again later');
+                        console.log(err);
+                        console.log('*** Campground commented sort routing');
+                        return res.redirect('back');
+                    }
+                    User.find().exec((err, users) => {
+                        if (err) {
+                            req.flash('error', 'Something went wrong! Try again later');
+                            console.log(err);
+                            console.log('*** Users find routing');
+                            return res.redirect('back');
+                        }
+                        User.find().sort({
+                            "likesLength": -1
+                        }).limit(3).exec((err, likedUsers) => {
+                            if (err) {
+                                req.flash('error', 'Something went wrong! Try again later');
+                                console.log(err);
+                                console.log('*** User likes sort routing');
+                                return res.redirect('back');
+                            }
+                            User.find().sort({
+                                "campgroundsLength": -1
+                            }).limit(3).exec((err, contributingUsers) => {
+                                if (err) {
+                                    req.flash('error', 'Something went wrong! Try again later');
+                                    console.log(err);
+                                    console.log('*** User creating sort routing');
+                                    return res.redirect('back');
+                                }
+
+                                return res.render('../views/explore', {
+                                    campgroundsLength: campgrounds.length,
+                                    likesLength: count(campgrounds, 'likesLength'),
+                                    likedCampgrounds: likedCampgrounds,
+                                    ratedCampgrounds: ratedCampgrounds,
+                                    commentsLength: count(campgrounds, 'commentsLength'),
+                                    commentedCampgrounds: commentedCampgrounds,
+                                    usersLength: users.length,
+                                    likedUsers: likedUsers,
+                                    contributingUsers: contributingUsers,
+                                    title: 'Explore Campgrounds',
+                                });
+                            });
+                        });
+                    });
+                });
+            });
+        });
     });
 });
 
@@ -311,6 +388,47 @@ router.post('/reset/:token', (req, res) => {
     })
 });
 
+// Username availability check
+router.get('/username', (req, res) => {
+    if (req.xhr) { // for ajax too
+        User.findOne({
+            username: req.body.username
+        }, (err, foundUser) => {
+            var exist = true;
+            if (foundUser) {
+                exist = false;
+            }
+            console.log(foundUser);
+            return res.send({
+                exist: exist
+            });
+        });
+    } else {
+        req.flash('error', 'Huh! It\'s not a good action');
+        return res.redirect('/campgrounds');
+    }
+});
+
+// Email availability check
+// router.get('/email', (req, res) => {
+//     if (req.xhr) { // for ajax too
+//         User.find({
+//             email: req.body.email
+//         }, (err, foundUsers) => {
+//             var exist = true;
+//             if (foundUsers.length) {
+//                 exist = false;
+//             }
+//             return res.send({
+//                 exist: exist
+//             });
+//         });
+//     } else {
+//         req.flash('error', 'Huh! It\'s not a good action');
+//         return res.redirect('/campgrounds');
+//     }
+// });
+
 // Home page
 router.get('/', (req, res) => {
     return res.render('../views/landing', {
@@ -329,5 +447,15 @@ router.get('/about', (req, res) => {
 router.get('/:abc', (req, res) => {
     return res.send('Page not found');
 });
+
+function count(array, field) { // calculate the sum of field in all object element in array
+    var sum = 0;
+    for (const obj of array) {
+        if (obj[field]) {
+            sum += obj[field];
+        }
+    }
+    return sum;
+}
 
 module.exports = router;

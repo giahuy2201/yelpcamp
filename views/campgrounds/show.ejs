@@ -74,11 +74,11 @@
             <% if(campground.ratings){ %>
             <div class="card-body">
                 <h1 class="text-center" id="ratingAverage">
-                    <%=campground.ratings.average%>
+                    <%=campground.ratingsAverage%>
                 </h1>
                 <div class="mt-0 text-center">
                 <% for(var i=1;i<=5;i++){ %>
-                    <% if(i<=Math.round(campground.ratings.average)){ %>
+                    <% if(i<=Math.round(campground.ratingsAverage)){ %>
                         <i class="fas fa-star"></i>
                     <% }else{ %>
                         <i class="far fa-star"></i>
@@ -86,7 +86,7 @@
                 <% } %>
                 </div>
                 <div class="text-center">Based on <span id="ratingNumber">
-                    <%=campground.ratings.number%>
+                    <%=campground.ratingsLength%>
                 </span> review(s)</div>
             </div>
             <% } %>
@@ -107,7 +107,7 @@
     </div>
     <div class="col-lg-9">
         <div class="card">
-            <img class="card-img-top" src="<%=campground.image%>">
+            <img class="card-img-top" src="<%=campground.hresImage%>">
             <div class="card-body">
                 <h5 class="float-right">$<%=campground.price%>/night</h5>
                 <h4 class="card-title">

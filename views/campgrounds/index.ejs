@@ -22,7 +22,7 @@
   <div class="carousel-caption" id="captionCarousel">
     <h1 class="display-4">YelpCamp</h1>
     <p class="lead d-none d-sm-block">The ultimate library of fabulous amazing campgrounds created by camping lovers all over the world.</p>
-    <a class="btn btn-primary" href="/campgrounds/explore">Explore</a>
+    <a class="btn btn-primary" href="/explore">Explore</a>
   </div>
   <div class="carousel-inner">
     <% carousel.forEach((campground,i)=>{ %>
@@ -31,7 +31,7 @@
     <% }else{ %>
         <div class="carousel-item">
     <% } %>
-      <img class="d-block w-100" src="<%=campground.image%>" alt="First slide">
+      <img class="d-block w-100" src="<%=campground.hresImage%>" alt="First slide">
     </div>
     <% }) %>
     
@@ -47,11 +47,11 @@
                 <img class="card-img-top" src="<%=campground.image%>">
                 <div class="cardHover">
                     <div class="likesHover">
-                    <% if(campground.likes.length){ %>
-                        <%=campground.likes.length%> <i class="fas fa-heart"></i>
+                    <% if(campground.likesLength){ %>
+                        <%=campground.likesLength%> <i class="fas fa-heart"></i>
                     <% } %>
-                    <% if(campground.comments.length){ %>
-                        <%=campground.comments.length%> <i class="far fa-comment-alt"></i>
+                    <% if(campground.commentsLength){ %>
+                        <%=campground.commentsLength%> <i class="far fa-comment-alt"></i>
                     <% } %>
                     </div>
                     <div class="nameHover">
@@ -61,11 +61,6 @@
                         <img src="<%=campground.author.photo%>" class="photoHover">
                         <%=campground.author.name%>
                     </div>
-                </div>
-                <div class="card-body text-dark p-1 bg-light d-lg-none d-block">
-                    <h5 class="card-title text-center m-0">
-                        <%=campground.name%>
-                    </h5>
                 </div>
             </div>
         </a>

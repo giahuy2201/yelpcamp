@@ -132,6 +132,7 @@ router.post('/', middleware.isLoggedIn, upload.single('image'), (req, res) => {
                 }
                 // update campgrounds
                 foundUser.campgrounds.push(newCampground);
+                foundUser.campgroundsLength = foundUser.campgrounds.length;
                 foundUser.save();
                 // upload image
                 cloudinary.v2.uploader.upload(req.file.path, {
@@ -142,7 +143,8 @@ router.post('/', middleware.isLoggedIn, upload.single('image'), (req, res) => {
                         newCampground.save();
                         return res.redirect('/campgrounds');
                     }
-                    newCampground.image = uploadedImage.secure_url; // save image url
+                    newCampground.image = (uploadedImage.secure_url).replace('/upload', '/upload/w_450,h_300,c_fill'); // save image url
+                    newCampground.hresImage = uploadedImage.secure_url; // image with high resolution & no crop
                     newCampground.save();
                     req.flash('success', 'Your campground was added!');
                     return res.redirect('/campgrounds');
@@ -266,6 +268,7 @@ router.delete('/:id', middleware.isLoggedIn, middleware.checkCampgroundOwnership
             var campgroundIndex = foundUser.campgrounds.indexOf(req.params.id);
             // console.log(campgroundIndex);
             foundUser.campgrounds.splice(campgroundIndex, 1);
+            foundUser.campgroundsLength = foundUser.campgrounds.length;
             foundUser.save();
             Campground.deleteOne(foundCampground, (err) => {
                 // console.log(foundUser);

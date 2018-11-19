@@ -43,7 +43,9 @@ var router = express.Router();
 // Campgrounds page
 router.get('/', (req, res) => {
     middleware.beforeLogin = req.originalUrl; // save url in case user want to do stuff with navbar
-    Campground.find().populate('author').exec((err, campgrounds) => {
+    Campground.find().sort({
+        created: -1
+    }).populate('author').exec((err, campgrounds) => {
         if (err || !campgrounds) {
             console.log(err);
             console.log('*** Campground index routing');

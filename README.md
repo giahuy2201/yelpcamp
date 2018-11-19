@@ -76,14 +76,13 @@ I always welcome everyone to fix me and make it more structured and organized.
 4. restrict the image size
 5. remove the caption of campgrounds on mobile
 6. Not allow email edit
+7. align search placeholder
+8. Index campground reversely
 
 ### working on
 1. check username, email availability realtime
 3. log the err
-4. Default image & avatar
 8. implement promise
 9. implement async/await
-12. align search placeholder
-13. Index campground reversely
 14. Add footer
 

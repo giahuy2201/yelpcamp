@@ -389,36 +389,16 @@ router.post('/reset/:token', (req, res) => {
 });
 
 // Username availability check
-router.get('/username', (req, res) => {
-    if (req.xhr) { // for ajax too
-        User.findOne({
-            username: req.body.username
-        }, (err, foundUser) => {
-            var exist = true;
-            if (foundUser) {
-                exist = false;
-            }
-            console.log(foundUser);
-            return res.send({
-                exist: exist
-            });
-        });
-    } else {
-        req.flash('error', 'Huh! It\'s not a good action');
-        return res.redirect('/campgrounds');
-    }
-});
-
-// Email availability check
-// router.get('/email', (req, res) => {
+// router.get('/username', (req, res) => {
 //     if (req.xhr) { // for ajax too
-//         User.find({
-//             email: req.body.email
-//         }, (err, foundUsers) => {
+//         User.findOne({
+//             username: req.body.username
+//         }, (err, foundUser) => {
 //             var exist = true;
-//             if (foundUsers.length) {
+//             if (foundUser) {
 //                 exist = false;
 //             }
+//             console.log(foundUser);
 //             return res.send({
 //                 exist: exist
 //             });

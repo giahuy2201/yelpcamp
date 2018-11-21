@@ -187,6 +187,7 @@ router.post('/users', upload.single('photo'), (req, res) => { // DOUBLE CHECK TH
         email: req.body.email,
         photo: req.body.photo,
         bio: req.body.bio,
+        likesLength: 0,
     });
     if (req.body.admin === process.env.ADMIN_CODE) {
         newUser.isAdmin = true;

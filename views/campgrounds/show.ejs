@@ -4,8 +4,8 @@
 <div class="container mainContainer">
 <% include ../partials/alerts %>
 <div class="row">
-    <div class="col-lg-3">
-        <div class="card">
+    <div class="col-lg-3 order-2 order-lg-1">
+        <div class="card mt-lg-0 mt-3">
             <div class="card-header p-1" id="addressHeading">
                 <h5 class="mb-0">
                     <a class="btn btn-link text-truncate text-left d-block"  data-toggle="collapse" data-target="#mapCollapse" aria-expanded="true" aria-controls="mapCollapse">
@@ -28,10 +28,14 @@
             </div>
         <% } %>
             <!-- Telephone -->
-            <div class="col-6 col-lg-12">
+            <div class="
+            <% if(campground.website){ %>
+                col-6
+            <% } %>
+                col-lg-12">
             <div class="card card-header p-1 mt-3">
-                <a class="btn btn-link text-truncate text-left d-block">
-                <i class="fas fa-phone"></i> <%=campground.telephone%></a>
+                <div class="btn text-truncate text-left text-dark d-block" href="<%=campground.telephone%>">
+                <i class="fas fa-phone"></i> <%=campground.telephone%></div>
             </div>
             </div>
         </div>
@@ -70,7 +74,7 @@
         </div>
         <% } %>
         <!-- Rating -->
-        <div class="card my-3">
+        <div class="card mt-3">
             <% if(campground.ratings){ %>
             <div class="card-body">
                 <h1 class="text-center" id="ratingAverage">
@@ -105,7 +109,7 @@
             <% } %>
         </div>
     </div>
-    <div class="col-lg-9">
+    <div class="col-lg-9 order-1 order-lg-2">
         <div class="card">
             <img class="card-img-top" src="<%=campground.hresImage%>">
             <div class="card-body">
@@ -146,8 +150,10 @@
                         <%=campground.created.toAgo()%></em></p>
             </div>
         </div>
-        <!-- COMMENTS -->
-        <div class="card card-body my-4 bg-light">
+    </div>
+    <!-- COMMENTS -->
+    <div class="col-lg-9 ml-auto order-3 order-lg-3">
+        <div class="card card-body my-3 bg-light">
             <div class="text-right">
                 <a class="btn btn-success" id="addCommentButton" href="/campgrounds/<%=campground._id%>/comments/new">Add
                     new comment</a>

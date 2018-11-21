@@ -5,6 +5,7 @@ var random = require('mongoose-simple-random');
 var campgroundSchema = new mongoose.Schema({
     name: String,
     image: String,
+    hresImage: String,
     price: Number,
     description: String,
     website: String,
@@ -17,13 +18,16 @@ var campgroundSchema = new mongoose.Schema({
         default: Date.now,
     },
     likes: [String], // store user id who liked this
-    ratings: {},
-    // object (username) as a key
+    likesLength: Number,
+    ratings: {}, // object (username) as a key
+    ratingsAverage: Number,
+    ratingsLength: Number,
     hours: {}, // doublecheck later
     comments: [{
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Comment'
     }],
+    commentsLength: Number,
     author: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User'

@@ -40,26 +40,12 @@ var upload = multer({
 
 var router = express.Router();
 
-// Search page
-router.get('/search', (req, res) => {
-    middleware.beforeLogin = req.originalUrl; // save url in case user want to do stuff with navbar
-    return res.render('../views/search', {
-        title: 'Search Campgrounds',
-    });
-});
-
-// Explore page
-router.get('/explore', (req, res) => {
-    middleware.beforeLogin = req.originalUrl; // save url in case user want to do stuff with navbar
-    return res.render('../views/explore', {
-        title: 'Explore Campgrounds',
-    });
-});
-
 // Campgrounds page
 router.get('/', (req, res) => {
     middleware.beforeLogin = req.originalUrl; // save url in case user want to do stuff with navbar
-    Campground.find().populate('author').exec((err, campgrounds) => {
+    Campground.find().sort({
+        created: -1
+    }).populate('author').exec((err, campgrounds) => {
         if (err || !campgrounds) {
             console.log(err);
             console.log('*** Campground index routing');
@@ -148,6 +134,7 @@ router.post('/', middleware.isLoggedIn, upload.single('image'), (req, res) => {
                 }
                 // update campgrounds
                 foundUser.campgrounds.push(newCampground);
+                foundUser.campgroundsLength = foundUser.campgrounds.length;
                 foundUser.save();
                 // upload image
                 cloudinary.v2.uploader.upload(req.file.path, {
@@ -158,7 +145,8 @@ router.post('/', middleware.isLoggedIn, upload.single('image'), (req, res) => {
                         newCampground.save();
                         return res.redirect('/campgrounds');
                     }
-                    newCampground.image = uploadedImage.secure_url; // save image url
+                    newCampground.image = (uploadedImage.secure_url).replace('/upload', '/upload/w_450,h_300,c_fill'); // save image url
+                    newCampground.hresImage = uploadedImage.secure_url; // image with high resolution & no crop
                     newCampground.save();
                     req.flash('success', 'Your campground was added!');
                     return res.redirect('/campgrounds');
@@ -253,7 +241,8 @@ router.put('/:id', middleware.isLoggedIn, middleware.checkCampgroundOwnership, u
                     req.flash('error', 'Something went wrong with your image!');
                     return res.redirect('/campgrounds');
                 }
-                updatedCampground.image = uploadedImage.secure_url; // save image url
+                updatedCampground.image = (uploadedImage.secure_url).replace('/upload', '/upload/w_450,h_300,c_fill'); // save image url
+                updatedCampground.hresImage = uploadedImage.secure_url; // image with high resolution & no crop
                 updatedCampground.save();
                 return res.redirect('/campgrounds/' + req.params.id);
             });
@@ -282,6 +271,7 @@ router.delete('/:id', middleware.isLoggedIn, middleware.checkCampgroundOwnership
             var campgroundIndex = foundUser.campgrounds.indexOf(req.params.id);
             // console.log(campgroundIndex);
             foundUser.campgrounds.splice(campgroundIndex, 1);
+            foundUser.campgroundsLength = foundUser.campgrounds.length;
             foundUser.save();
             Campground.deleteOne(foundCampground, (err) => {
                 // console.log(foundUser);

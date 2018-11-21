@@ -8,6 +8,11 @@ var userSchema = new mongoose.Schema({
         unique: true,
         required: true
     },
+    username: {
+        type: String,
+        unique: true,
+        required: true
+    },
     email: {
         type: String,
         unique: true,
@@ -19,6 +24,8 @@ var userSchema = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Campground'
     }],
+    campgroundsLength: Number,
+    likesLength: Number,
     resetPasswordToken: String,
     resetPasswordExpires: Date,
     isAdmin: {

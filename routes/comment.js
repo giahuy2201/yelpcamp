@@ -20,7 +20,7 @@ router.get('/new', middleware.isLoggedIn, (req, res) => {
                 console.log('*** Comment update routing');
                 return res.redirect('/campgrounds');
             }
-            ejs.renderFile(__dirname + '/../views/comments/new.ejs', {
+            ejs.renderFile(__dirname + '/../views/comments/new.ejs', { // use ejs to get the ejs rendered String for ajax
                 campgroundId: req.params.id
             }, (err, newForm) => {
                 if (err) {
@@ -65,6 +65,7 @@ router.post('/', middleware.isLoggedIn, (req, res) => {
             newComment.save();
             // update the campground's comments
             foundCampground.comments.push(newComment);
+            foundCampground.commentsLength = foundCampground.comments.length; // update the length of comments array
             foundCampground.save();
             // go back
             return res.redirect('/campgrounds/' + req.params.id);

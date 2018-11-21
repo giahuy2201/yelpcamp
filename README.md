@@ -1,8 +1,5 @@
 # YelpCamp
-This is a learning project from Udemy I continue to developed in my own way. I have added more stuff to make it look nice and worth exists.
-Check out my product here:
-https://yelpcamp2201.herokuapp.com/
-I always welcome everyone to fix me and make it more structured and organized.
+This is a learning project from Udemy I continue to developed in my own way. I have added more stuff to make it look nice and worth exists. I always welcome everyone to fix me and make it more structured and organized.
 
 ## yelpcamp 1.0.0
 1. add basic structure (routes, views)
@@ -70,9 +67,14 @@ I always welcome everyone to fix me and make it more structured and organized.
 15. Improve the logic, routing
 
 ## yelpcamp 6.4.0
+1. Search feature
+2. Explore feature
+3. optimize image size
+4. restrict the image size
+5. remove the caption of campgrounds on mobile
+6. Not allow email edit
+7. align search placeholder
+8. Index campground reversely
+9. fix safari displace hours select
+10. fix order of cards in show page
 
-### working on
-1. check username, email availability realtime
-2. Not allow email edit
-3. log the err
-4. Default image & avatar

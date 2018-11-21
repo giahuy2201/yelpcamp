@@ -1,7 +1,8 @@
 var express = require('express');
 
 var middleware = require('../middleware'),
-    Campground = require('../models/campground');
+    Campground = require('../models/campground'),
+    User = require('../models/user');
 
 var router = express.Router({
     mergeParams: true
@@ -9,7 +10,7 @@ var router = express.Router({
 
 // Rating get
 router.get('/ratings', middleware.isLoggedIn, (req, res) => {
-    if (req.xhr) {
+    if (req.xhr) { // for ajax
         Campground.findById(req.params.id, (err, foundCampground) => {
             if (err || !foundCampground) {
                 req.flash('error', 'Campground not found!');
@@ -33,7 +34,7 @@ router.get('/ratings', middleware.isLoggedIn, (req, res) => {
 
 // Rating create
 router.post('/ratings', middleware.isLoggedIn, (req, res) => {
-    if (req.xhr) {
+    if (req.xhr) { // for ajax
         Campground.findById(req.params.id, (err, foundCampground) => {
             if (err || !foundCampground) {
                 req.flash('error', 'Campground not found!');
@@ -63,15 +64,15 @@ router.post('/ratings', middleware.isLoggedIn, (req, res) => {
             }
 
             // console.log('sum ' + sum);
-            updatedRatings['number'] = Object.keys(updatedRatings).length;
+            foundCampground.ratingsLength = Object.keys(updatedRatings).length;
             // console.log('length ' + updatedRatings['number']);
-            updatedRatings['average'] = Math.round((sum / updatedRatings['number']) * 10) / 10;
+            foundCampground.ratingsAverage = Math.round((sum / foundCampground.ratingsLength) * 10) / 10;
             // console.log('average ' + updatedRatings['average']);
             foundCampground.ratings = updatedRatings;
             foundCampground.save();
             return res.send({
-                average: foundCampground.ratings['average'],
-                number: foundCampground.ratings['number'],
+                average: foundCampground.ratingsAverage,
+                number: foundCampground.ratingsLength,
             });
         });
     } else {
@@ -81,7 +82,7 @@ router.post('/ratings', middleware.isLoggedIn, (req, res) => {
 });
 
 router.post('/likes', middleware.isLoggedIn, (req, res) => {
-    if (req.xhr) {
+    if (req.xhr) { // for ajax too
         Campground.findById(req.params.id, (err, foundCampground) => {
             if (err || !foundCampground) {
                 req.flash('error', 'Campground not found!');
@@ -89,23 +90,32 @@ router.post('/likes', middleware.isLoggedIn, (req, res) => {
                 console.log('*** Rating create routing');
                 return res.redirect('/campgrounds');
             }
-            var liked = true;
-            var likes = foundCampground.likes;
-            // console.log(likes);
-            var present = likes.indexOf(req.user._id);
-            // console.log(present);
-            if (present != -1) {
-                likes.splice(present, 1);
-                liked = false;
-            } else {
-                likes.push(req.user._id);
-            }
-            foundCampground.likes = likes;
-            foundCampground.save();
-            return res.send({
-                number: likes.length,
-                liked: liked,
-                isLoggedIn: true,
+            User.findById(foundCampground.author._id).populate('campgrounds').exec((err, foundUser) => {
+                var liked = true; // consider this user likes the campground be default
+                var likes = foundCampground.likes;
+                // console.log(likes);
+                var present = likes.indexOf(req.user._id);
+                // console.log(present);
+                if (present != -1) { // if he unlikes
+                    likes.splice(present, 1);
+                    liked = false;
+                } else {
+                    likes.push(req.user._id);
+                }
+                foundCampground.likes = likes;
+                foundCampground.likesLength = foundCampground.likes.length;
+                foundCampground.save();
+                if (liked) {
+                    foundUser.likesLength++;
+                } else {
+                    foundUser.likesLength--;
+                }
+                foundUser.save();
+                return res.send({
+                    number: likes.length,
+                    liked: liked,
+                    isLoggedIn: true,
+                });
             });
         });
     } else {
@@ -113,5 +123,15 @@ router.post('/likes', middleware.isLoggedIn, (req, res) => {
         return res.redirect('/campgrounds/' + req.params.id);
     }
 });
+
+function count(array, field) { // calculate the sum of field in all object element in array
+    var sum = 0;
+    for (const obj of array) {
+        if (obj[field]) {
+            sum += obj[field];
+        }
+    }
+    return sum;
+}
 
 module.exports = router;

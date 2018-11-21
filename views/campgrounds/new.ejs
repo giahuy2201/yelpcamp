@@ -52,18 +52,18 @@
                             <% if(day != 'Sunday'){ %>
                                 <hr class="my-2">
                             <% } %>
-                            <div class="d-inline-block">
+                            <div class="d-block d-sm-inline-block">
                                 <input type="checkbox" class="form-check-input ml-1" name="dayCheck[<%=day%>]">
                                 <label class="my-0 ml-4 mr-3"><%=day%></label>
                             </div>
-                            <div class="d-inline float-right">
-                                <select class="form-control d-inline-block" name="dayOpenTime[<%=day%>]">
+                            <div class="d-block d-sm-inline float-sm-right">
+                                <select class="d-inline-block" name="dayOpenTime[<%=day%>]">
                                 <% for(var h=6;h<12;h+=0.5){ %>
                                     <option value="<%=h%>"><%=h.toString().toTime()%></option>
                                 <% } %>
                                 </select>
                                  - 
-                                <select class="form-control d-inline-block" name="dayCloseTime[<%=day%>]">
+                                <select class="d-inline-block" name="dayCloseTime[<%=day%>]">
                                 <% for(var h=12;h<23;h+=0.5){ %>
                                     <option value="<%=h%>"><%=h.toString().toTime()%></option>
                                 <% } %>

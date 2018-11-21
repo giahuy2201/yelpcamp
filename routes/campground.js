@@ -241,7 +241,8 @@ router.put('/:id', middleware.isLoggedIn, middleware.checkCampgroundOwnership, u
                     req.flash('error', 'Something went wrong with your image!');
                     return res.redirect('/campgrounds');
                 }
-                updatedCampground.image = uploadedImage.secure_url; // save image url
+                updatedCampground.image = (uploadedImage.secure_url).replace('/upload', '/upload/w_450,h_300,c_fill'); // save image url
+                updatedCampground.hresImage = uploadedImage.secure_url; // image with high resolution & no crop
                 updatedCampground.save();
                 return res.redirect('/campgrounds/' + req.params.id);
             });

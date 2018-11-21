@@ -51,7 +51,7 @@ router.get('/search', (req, res) => {
                 $regex: q
             }
         }]
-    }, (err, campgrounds) => {
+    }).populate('author').exec((err, campgrounds) => {
         // console.log(campgrounds);
         if (err) {
             req.flash('error', 'Something went wrong! Try again later');

@@ -78,11 +78,7 @@ I always welcome everyone to fix me and make it more structured and organized.
 6. Not allow email edit
 7. align search placeholder
 8. Index campground reversely
+9. fix safari displace hours select
 
 ### working on
-1. check username, email availability realtime
-3. log the err
-8. implement promise
-9. implement async/await
-14. Add footer
-
+1. fix order of cards in show page
